@@ -1,8 +1,5 @@
 TEMPLATE = app
 
-
-CONFIG += c++14
-
 QT += qml \
     quick \
     quickcontrols2 \
@@ -54,6 +51,13 @@ ICON = Resources/icon.png
 win32: RC_FILE = Resources/FlicsFacts.rc
 
 DEFINES += QT_USE_QSTRINGBUILDER
+
+CONFIG += c++14
+
+gcc|clang {
+    QMAKE_CXXFLAGS += -std=c++1y
+}
+
 
 include(deployment.pri)
 

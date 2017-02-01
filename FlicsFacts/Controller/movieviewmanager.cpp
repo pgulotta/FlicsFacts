@@ -12,7 +12,7 @@ const QString gRequest { "http://www.omdbapi.com/?t=%1&y=&plot=full&tomatoes=tru
 MovieViewManager::MovieViewManager(QObject *parent) :
     QObject(parent),
     m_appName(QApplication::applicationName()),
-    m_appVersion("1.01"),
+    m_appVersion("1.02"),
     mShareResponsesFormatterformatter(parent),
     mShareResponsesWatcher(parent),
     mOmdbResponseParser(parent, *this)
