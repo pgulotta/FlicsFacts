@@ -49,6 +49,10 @@ DISTFILES += \
 	
 RESOURCES += qml.qrc
 
+ICON = Resources/icon.png
+
+win32: RC_FILE = Resources/FlicsFacts.rc
+
 DEFINES += QT_USE_QSTRINGBUILDER
 
 include(deployment.pri)

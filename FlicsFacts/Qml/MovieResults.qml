@@ -223,6 +223,7 @@ TabView {
         target: MovieViewManager
         onRequestCreated: {
             var tab = tabViewId.insertTab(responseId, tabTitle, tabComponentId)
+            currentIndex = responseId
             selectTab(tab)
         }
     }
@@ -237,9 +238,9 @@ TabView {
         if (currentTab === undefined) {
             currentTitle = ""
         } else {
+            currentTitle = currentTab.title
             currentTab.active = false
             currentTab.active = true
-            currentTitle = currentTab.title
         }
     }
 
