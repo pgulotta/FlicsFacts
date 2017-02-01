@@ -2,12 +2,11 @@
 
 #include <../FlicsFacts/Model/movieresponse.hpp>
 #include <QObject>
-#include <QString>
 #include <vector>
 #include <iterator>
 #include <memory>
 
-
+class QString;
 
 class ShareResponsesFormatter : public QObject
 {
@@ -24,7 +23,7 @@ public:
     QString formatAsText(std::vector<std::unique_ptr<MovieResponse> >::const_iterator begin, std::vector<std::unique_ptr<MovieResponse> >::const_iterator end);
 
 private:
-    void formatField(const QString &key, const QString &value, QString &formattedText);
+    static inline void formatField(const QString &key, const QString &value, QString &formattedText);
 
 private:
     QString mFormattedResponses;

@@ -1,10 +1,6 @@
 #include "shareresponsesformatter.hpp"
-#include <QStringBuilder>
-#include <QTextDocument>
-#include <QTextDocumentFragment>
-#include <QTextDocumentWriter>
+#include <QString>
 #include <QDebug>
-
 
 ShareResponsesFormatter::ShareResponsesFormatter(QObject *parent) :
     QObject(parent)
@@ -20,7 +16,7 @@ QString ShareResponsesFormatter::formatAsText(std::vector<std::unique_ptr<MovieR
                                               std::vector<std::unique_ptr<MovieResponse> >::const_iterator cend)
 {
     QString text(1024);
-    std::for_each(cbegin, cend, [&]  (auto&& movieResponse)
+    std::for_each(cbegin, cend, [&]  ( auto&& movieResponse)
     {
         if ( movieResponse->Title.size() >0)
         {
