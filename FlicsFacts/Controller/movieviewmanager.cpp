@@ -11,8 +11,9 @@ const QString gRequest { "http://www.omdbapi.com/?t=%1&y=&plot=full&tomatoes=tru
 
 MovieViewManager::MovieViewManager(QObject *parent) :
     QObject(parent),
+    m_requestFailed(tr("This request was unsuccessful.")),
     m_appName(QApplication::applicationName()),
-    m_appVersion("1.04"),
+    m_appVersion("1.05"),
     mShareResponsesFormatterformatter(parent),
     mShareResponsesWatcher(parent),
     mOmdbResponseParser(parent, *this)
@@ -80,8 +81,8 @@ void MovieViewManager::onNetworkReply(QNetworkReply *networkReply)
     int responseId = networkReply->request().attribute(QNetworkRequest::Attribute::User).toInt();
     if ( networkReply->error())
     {
-        setStatus ( responseId, QString (tr("This request was unsuccessful.\n%1")).
-                    arg( networkReply->errorString()));
+        auto errorMessage = networkReply->errorString().length() > 50    ? "" : networkReply->errorString();
+        setStatus ( responseId, QString ("%1\n%2").arg(m_requestFailed).arg( errorMessage));
         emit responseReceived(responseId);
     }
     else

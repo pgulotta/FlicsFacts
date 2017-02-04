@@ -16,7 +16,7 @@ struct MovieResponse;
 class MovieViewManager : public QObject
 {
 Q_OBJECT
-
+Q_PROPERTY(QString requestFailed READ requestFailed CONSTANT )
 Q_PROPERTY(QString appName READ appName CONSTANT )
 Q_PROPERTY(QString appVersion READ appVersion CONSTANT )
 Q_PROPERTY(QString appNameVersion READ appNameVersion CONSTANT )
@@ -91,10 +91,16 @@ public:
         return m_titleRequest;
     }
 
+    QString requestFailed() const
+    {
+        return m_requestFailed;
+    }
+
 private:
     QString formatUrl(QString movieTitle);
 
 private:
+    QString m_requestFailed;
     QString m_appName;
     QString m_appVersion;
     QString m_titleRequest;
@@ -103,5 +109,6 @@ private:
     ShareResponsesFormatter mShareResponsesFormatterformatter;
     QFutureWatcher<QString> mShareResponsesWatcher;
     OmdbResponseParser mOmdbResponseParser;
+
 };
 

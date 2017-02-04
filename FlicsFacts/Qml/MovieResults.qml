@@ -195,7 +195,7 @@ TabView {
 
     onCurrentIndexChanged: {
         var status = MovieViewManager.status(currentIndex)
-        if (status.startsWith("This request was unsuccessful.")) {
+        if (status.startsWith(MovieViewManager.requestFailed)) {
 
             var currentTab = getTab(currentIndex)
             if (currentTab !== undefined) {
