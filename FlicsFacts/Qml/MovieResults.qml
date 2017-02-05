@@ -42,7 +42,6 @@ TabView {
             color: Material.background
         }
     }
-
     Component {
         id: tabComponentId
 
@@ -139,7 +138,6 @@ TabView {
                 }
                 GridTitleLabel {
                     text: qsTr("Genre")
-
                 }
                 GridItemLabel {
                     text: MovieViewManager.genre(currentIndex)
@@ -200,7 +198,7 @@ TabView {
             var currentTab = getTab(currentIndex)
             if (currentTab !== undefined) {
                 MovieViewManager.queryMovieDetails(currentIndex,
-                                                      currentTab.title)
+                                                   currentTab.title)
             }
         } else {
             refreshTab()
@@ -212,6 +210,7 @@ TabView {
             currentIndex = responseId
             var currentTab = getTab(currentIndex)
             selectTab(currentTab)
+            titleRequestId.forceActiveFocus()
         }
     }
     Connections {

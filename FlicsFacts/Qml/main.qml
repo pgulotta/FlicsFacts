@@ -33,7 +33,6 @@ ApplicationWindow {
 
     header: ToolBar {
         id: topToolbarId
-        focus: true
         Material.elevation: 4
         RowLayout {
             anchors.fill: parent
