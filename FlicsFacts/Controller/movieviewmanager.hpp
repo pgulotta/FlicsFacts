@@ -28,10 +28,10 @@ public slots:
     void onShareResponsesFormatted();
 
 signals:
-    void requestCreated(QString tabTitle,  int responseId);
+    void requestCreated(const QString&  tabTitle,  int responseId);
     void responseReceived(int responseId);
-    void titleRequestChanged(QString titleRequest);
-    void displayTextMessage(QString title, QString message);
+    void titleRequestChanged(const QString&  titleRequest);
+    void displayTextMessage(const QString&  title, QString message);
 
 public:
     Q_INVOKABLE QString year(int responseId) const;
@@ -48,28 +48,28 @@ public:
     Q_INVOKABLE QString tomatoRating(int responseId) const;
     Q_INVOKABLE QString status(int responseId) const;
     Q_INVOKABLE void shareMovieResponses();
-    Q_INVOKABLE void findFlicSelected(QString movieTitle);
-    Q_INVOKABLE void queryMovieDetails(int responseId, QString movieTitle);
+    Q_INVOKABLE void findFlicSelected(const QString& movieTitle);
+    Q_INVOKABLE void queryMovieDetails(int responseId, const QString& movieTitle);
     Q_INVOKABLE int removeSelectedMovie(int responseId);
 
 
     explicit MovieViewManager(QObject *parent = 0);
     explicit MovieViewManager(const MovieViewManager& rhs) = delete;
     MovieViewManager& operator= (const MovieViewManager& rhs) = delete;
-    void setYear(int responseId, QString year);
-    void setTitle(int responseId,QString title);
-    void setPoster(int responseId,QString poster);
-    void setGenre(int responseId, QString genre);
-    void setImdbRating(int responseId,QString imdbRating);
-    void setTomatoRating(int responseId,QString tomatoRating);
-    void setWebsite(int responseId,QString website);
-    void setRated(int responseId,QString rated);
-    void setReleased(int responseId,QString released);
-    void setRuntime(int responseId,QString runtime);
-    void setActors(int responseId,QString actors);
-    void setPlot(int responseId,QString plot);
-    void setStatus(int responseId,QString status);
-    void setTitleRequest(QString titleRequest);
+    void setYear(int responseId, const QString&  year);
+    void setTitle(int responseId,const QString&  title);
+    void setPoster(int responseId,const QString&  poster);
+    void setGenre(int responseId, const QString&  genre);
+    void setImdbRating(int responseId,const QString&  imdbRating);
+    void setTomatoRating(int responseId,const QString&  tomatoRating);
+    void setWebsite(int responseId,const QString&  website);
+    void setRated(int responseId,const QString&  rated);
+    void setReleased(int responseId,const QString&  released);
+    void setRuntime(int responseId,const QString&  runtime);
+    void setActors(int responseId,const QString&  actors);
+    void setPlot(int responseId,const QString&  plot);
+    void setStatus(int responseId,const QString& status);
+    void setTitleRequest(const QString&  titleRequest);
 
     QString appName() const
     {
@@ -97,7 +97,7 @@ public:
     }
 
 private:
-    QString formatUrl(QString movieTitle);
+    QString formatUrl(const QString& movieTitle);
 
 private:
     QString m_requestFailed;
