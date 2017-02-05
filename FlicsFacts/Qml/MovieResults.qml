@@ -199,7 +199,7 @@ TabView {
 
             var currentTab = getTab(currentIndex)
             if (currentTab !== undefined) {
-                MovieViewManager.refreshSelectedMovie(currentIndex,
+                MovieViewManager.queryMovieDetails(currentIndex,
                                                       currentTab.title)
             }
         } else {

@@ -49,7 +49,7 @@ public:
     Q_INVOKABLE QString status(int responseId) const;
     Q_INVOKABLE void shareMovieResponses();
     Q_INVOKABLE void findFlicSelected(QString movieTitle);
-    Q_INVOKABLE void refreshSelectedMovie(int responseId, QString movieTitle);
+    Q_INVOKABLE void queryMovieDetails(int responseId, QString movieTitle);
     Q_INVOKABLE int removeSelectedMovie(int responseId);
 
 

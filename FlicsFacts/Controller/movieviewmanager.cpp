@@ -7,13 +7,13 @@
 #include <QDebug>
 
 
-const QString gRequest { "http://www.omdbapi.com/?t=%1&y=&plot=full&tomatoes=true&r=json"};
+const QString gRequest { "http://www.omdbapi.com/?s=%1&y=&plot=full&tomatoes=true&r=json"};
 
 MovieViewManager::MovieViewManager(QObject *parent) :
     QObject(parent),
     m_requestFailed(tr("This request was unsuccessful.")),
     m_appName(QApplication::applicationName()),
-    m_appVersion("1.05"),
+    m_appVersion("1.06"),
     mShareResponsesFormatterformatter(parent),
     mShareResponsesWatcher(parent),
     mOmdbResponseParser(parent, *this)
@@ -32,10 +32,7 @@ void MovieViewManager::findFlicSelected(QString movieTitle)
     mMovieResponses.emplace_back( std::make_unique<MovieResponse>() );
     emit requestCreated(movieTitle, responseIndex);
 
-    auto request = QNetworkRequest(formatUrl(movieTitle));
-    request.setAttribute(QNetworkRequest::Attribute::User, QVariant(responseIndex ));
-    mNetworkAccessManager.get(request);
-
+    queryMovieDetails(responseIndex, movieTitle);
 }
 
 QString MovieViewManager::formatUrl(QString movieTitle)
@@ -69,11 +66,12 @@ void MovieViewManager::onShareResponsesFormatted()
     }
 }
 
-void MovieViewManager::refreshSelectedMovie(int responseId, QString movieTitle)
+void MovieViewManager::queryMovieDetails(int responseId, QString movieTitle)
 {
     auto request = QNetworkRequest( formatUrl(movieTitle));
     request.setAttribute(QNetworkRequest::Attribute::User, QVariant(responseId ));
     mNetworkAccessManager.get(request);
+    qDebug() << "MovieViewManager::queryMovieDetails: id="<< responseId << "  url=" << request.url();
 }
 
 void MovieViewManager::onNetworkReply(QNetworkReply *networkReply)
@@ -84,6 +82,7 @@ void MovieViewManager::onNetworkReply(QNetworkReply *networkReply)
         auto errorMessage = networkReply->errorString().length() > 50    ? "" : networkReply->errorString();
         setStatus ( responseId, QString ("%1\n%2").arg(m_requestFailed).arg( errorMessage));
         emit responseReceived(responseId);
+        qDebug() << "MovieViewManager::onNetworkReply: failed: " << networkReply->errorString();
     }
     else
     {
