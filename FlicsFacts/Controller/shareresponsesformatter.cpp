@@ -3,7 +3,8 @@
 #include <QDebug>
 
 ShareResponsesFormatter::ShareResponsesFormatter(QObject *parent) :
-    QObject(parent), mFormattedResponses(1024)
+    QObject{parent},
+    mFormattedResponses{1024}
 {
 }
 

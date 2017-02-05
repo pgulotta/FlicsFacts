@@ -10,13 +10,13 @@
 const QString gRequest { "http://www.omdbapi.com/?s=%1&y=&plot=full&tomatoes=true&r=json"};
 
 MovieViewManager::MovieViewManager(QObject *parent) :
-    QObject(parent),
-    m_requestFailed(tr("This request was unsuccessful.")),
-    m_appName(QApplication::applicationName()),
-    m_appVersion("1.06"),
-    mShareResponsesFormatterformatter(parent),
-    mShareResponsesWatcher(parent),
-    mOmdbResponseParser(parent, *this)
+    QObject{parent},
+    m_requestFailed{tr("This request was unsuccessful.")},
+    m_appName{QApplication::applicationName()},
+    m_appVersion{"1.06"},
+    mShareResponsesFormatterformatter{parent},
+    mShareResponsesWatcher{parent},
+    mOmdbResponseParser{parent, *this}
 {
     connect(&mNetworkAccessManager, &QNetworkAccessManager::finished, this, &MovieViewManager::onNetworkReply);
     connect(&mShareResponsesWatcher, &QFutureWatcher<QString>::finished, this, &MovieViewManager::onShareResponsesFormatted);
@@ -25,6 +25,7 @@ MovieViewManager::MovieViewManager(QObject *parent) :
 
 void MovieViewManager::findFlicSelected(QString movieTitle)
 {
+    qDebug() << "MovieViewManager::findFlicSelected: movieTitle="<< movieTitle;
     if (movieTitle.isEmpty())
         return;
 

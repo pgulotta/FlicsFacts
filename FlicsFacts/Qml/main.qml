@@ -20,7 +20,7 @@ ApplicationWindow {
     readonly property int fontSizeSmall: 14
     readonly property string omdbLink: "http://www.omdbapi.com/"
     readonly property string qtLink: "http://www.qt.io/"
-    readonly property string websiteLink: "http://sites.google.com/view/flicsfacts-26apps/home"
+    readonly property string websiteLink: "http://sites.google.com/view/flicsfacts/home"
     property alias tabViewCurrentIndex: movieResultsId.currentIndex
     property alias tabViewCurrentTitle: movieResultsId.currentTitle
 
@@ -58,11 +58,11 @@ ApplicationWindow {
                     anchors.right: searchTextRectId.right
                     anchors.rightMargin: textMargin
                     text: MovieViewManager.titleRequest
-
                     Keys.onReturnPressed: {
                         Qt.inputMethod.hide()
                         processSearchRequest()
                     }
+                    onFocusChanged: Qt.inputMethod.hide()
                 }
             }
             ToolButton {
@@ -77,6 +77,7 @@ ApplicationWindow {
                 }
                 onClicked: {
                     processSearchRequest()
+                    onFocusChanged: Qt.inputMethod.hide()
                 }
             }
             ToolButton {
@@ -96,6 +97,7 @@ ApplicationWindow {
                         tabViewCurrentTitle = ""
                     movieResultsId.deleteTab(tabViewCurrentIndex)
                     movieResultsId.refreshTab()
+                    onFocusChanged: Qt.inputMethod.hide()
                 }
             }
             ToolButton {
@@ -110,6 +112,7 @@ ApplicationWindow {
                 }
                 onClicked: {
                     MovieViewManager.shareMovieResponses()
+                    onFocusChanged: Qt.inputMethod.hide()
                 }
             }
             ToolButton {

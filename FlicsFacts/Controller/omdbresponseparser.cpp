@@ -9,8 +9,8 @@
 
 
 OmdbResponseParser::OmdbResponseParser(QObject *parent, MovieViewManager& movieViewManager) :
-    QObject(parent),
-    mMovieViewManager(movieViewManager)
+    QObject{parent},
+    mMovieViewManager{movieViewManager}
 {
 }
 

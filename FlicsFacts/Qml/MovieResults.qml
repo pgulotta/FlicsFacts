@@ -42,9 +42,9 @@ TabView {
             color: Material.background
         }
     }
+
     Component {
         id: tabComponentId
-
         Item {
             anchors.top: parent === null ? tabComponentId.top : parent.top
             anchors.topMargin: tabHeight + textMargin
@@ -188,6 +188,7 @@ TabView {
     }
 
     Component.onCompleted: {
+        titleRequestId.forceActiveFocus()
         Qt.inputMethod.hide()
     }
 
@@ -203,6 +204,7 @@ TabView {
         } else {
             refreshTab()
         }
+        Qt.inputMethod.hide()
     }
     Connections {
         target: MovieViewManager
@@ -210,7 +212,6 @@ TabView {
             currentIndex = responseId
             var currentTab = getTab(currentIndex)
             selectTab(currentTab)
-            titleRequestId.forceActiveFocus()
         }
     }
     Connections {
@@ -241,6 +242,8 @@ TabView {
             currentTab.active = false
             currentTab.active = true
         }
+        titleRequestId.forceActiveFocus()
+        Qt.inputMethod.hide()
     }
 
     function refreshTab() {
