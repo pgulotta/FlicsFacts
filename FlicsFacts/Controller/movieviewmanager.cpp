@@ -6,21 +6,31 @@
 #include <QtNetwork>
 #include <QDebug>
 
+const QString gSearchRequest { "http://api.themoviedb.org/3/search/movie?api_key=2839bfb130659459d7d9972ad9aa3cd4&language=en-US&query=%1&page=1&include_adult=false"};
+const QString gDetailsRequest {"http://api.themoviedb.org/3/movie/%1?api_key=2839bfb130659459d7d9972ad9aa3cd4&language=en-US"};
 
-const QString gRequest { "http://www.omdbapi.com/?s=%1&y=&plot=full&tomatoes=true&r=json"};
 
 MovieViewManager::MovieViewManager(QObject *parent) :
     QObject{parent},
     m_requestFailed{tr("This request was unsuccessful.")},
     m_appName{QApplication::applicationName()},
-    m_appVersion{"1.06"},
+    m_appVersion{"1.07"},
     mShareResponsesFormatterformatter{parent},
     mShareResponsesWatcher{parent},
     mOmdbResponseParser{parent, *this}
 {
     connect(&mNetworkAccessManager, &QNetworkAccessManager::finished, this, &MovieViewManager::onNetworkReply);
     connect(&mShareResponsesWatcher, &QFutureWatcher<QString>::finished, this, &MovieViewManager::onShareResponsesFormatted);
-    connect(&mOmdbResponseParser, &OmdbResponseParser::parsingComplete, this,  &MovieViewManager::onParsingComplete);
+    connect(&mOmdbResponseParser, &OmdbResponseParser::searchParsingComplete, this,  &MovieViewManager::onSearchParsingComplete);
+    connect(&mOmdbResponseParser, &OmdbResponseParser::detailsParsingComplete, this,  &MovieViewManager::onDetailsParsingComplete);
+}
+
+void MovieViewManager::setMovieId(int responseId, int movieId)
+{
+    if ( mMovieResponses.at(static_cast<std::size_t>(responseId))->MovieId == movieId)
+        return;
+
+    mMovieResponses.at(static_cast<std::size_t>(responseId))->MovieId = movieId;
 }
 
 void MovieViewManager::findFlicSelected(const QString& movieTitle)
@@ -33,12 +43,17 @@ void MovieViewManager::findFlicSelected(const QString& movieTitle)
     mMovieResponses.emplace_back( std::make_unique<MovieResponse>() );
     emit requestCreated(movieTitle, responseIndex);
 
-    queryMovieDetails(responseIndex, movieTitle);
+    queryMovieSearch(responseIndex, movieTitle);
 }
 
-QString MovieViewManager::formatUrl(const QString& movieTitle)
+QString MovieViewManager::formatMovieSearchUrl(const QString& movieTitle)
 {
-    return (QString ( gRequest.arg(movieTitle.trimmed().replace(' ','+') )  ) );;
+    return (QString ( gSearchRequest.arg(movieTitle.trimmed().replace(' ','+') )  ) );;
+}
+
+QString MovieViewManager::formatMovieDetailsUrl(int movieId)
+{
+    return (QString ( gDetailsRequest.arg(movieId) ) );;
 }
 
 int MovieViewManager::removeSelectedMovie(int responseId)
@@ -67,17 +82,27 @@ void MovieViewManager::onShareResponsesFormatted()
     }
 }
 
-void MovieViewManager::queryMovieDetails(int responseId,const QString& movieTitle)
+void MovieViewManager::queryMovieDetails(int responseId, int movieId)
 {
-    auto request = QNetworkRequest( formatUrl(movieTitle));
-    request.setAttribute(QNetworkRequest::Attribute::User, QVariant(responseId ));
+    auto request = QNetworkRequest( formatMovieDetailsUrl(movieId));
+    QStringList attributes {QString::number(responseId), QString::number(movieId)};
+    request.setAttribute(QNetworkRequest::Attribute::User, QVariant(attributes ));
     mNetworkAccessManager.get(request);
     qDebug() << "MovieViewManager::queryMovieDetails: id="<< responseId << "  url=" << request.url();
 }
 
+void MovieViewManager::queryMovieSearch(int responseId,const QString& movieTitle)
+{
+    auto request = QNetworkRequest( formatMovieSearchUrl(movieTitle));
+    QStringList attributes {QString::number( responseId)};
+    request.setAttribute(QNetworkRequest::Attribute::User, QVariant(attributes ));
+    mNetworkAccessManager.get(request);
+    qDebug() << "MovieViewManager::queryMovieSearch: id="<< responseId << "  url=" << request.url();
+}
 void MovieViewManager::onNetworkReply(QNetworkReply *networkReply)
 {
-    int responseId = networkReply->request().attribute(QNetworkRequest::Attribute::User).toInt();
+    QStringList attributes = networkReply->request().attribute(QNetworkRequest::Attribute::User).toStringList();
+    int responseId = attributes.at(0).toInt();
     if ( networkReply->error())
     {
         auto errorMessage = networkReply->errorString().length() > 50    ? "" : networkReply->errorString();
@@ -88,25 +113,41 @@ void MovieViewManager::onNetworkReply(QNetworkReply *networkReply)
     else
     {
         const QByteArray source = networkReply->readAll();
-        if ( source != nullptr && source.size() >0)
+        if ( attributes.count()>1)
         {
-            mOmdbResponseParser.parse(source,  responseId);
+            mOmdbResponseParser.parseMovieDetails(source, responseId);
+        }
+        else
+        {
+            mOmdbResponseParser.parseSearchResult(source, responseId);
         }
     }
     networkReply->deleteLater();
 }
 
-void MovieViewManager::onParsingComplete(int responseId, bool successful)
+void MovieViewManager::onSearchParsingComplete(int responseId, bool successful)
 {
+    qDebug() << "MovieViewManager::onSearchParsingComplete for responseId=" << responseId << " successful=" << successful;
     if (successful)
     {
         setStatus ( responseId, "");
+        queryMovieDetails (responseId, mMovieResponses.at(static_cast<std::size_t>(responseId))->MovieId);
     }
     else
     {
         setStatus ( responseId, QString (tr("Unable to find the selected flic.")));
     }
     emit responseReceived(responseId);
+}
+
+void MovieViewManager::onDetailsParsingComplete(int responseId, bool successful)
+{
+    if (successful)
+    {
+
+        emit responseReceived(responseId);
+    }
+    qDebug() << "MovieViewManager::onDetailsParsingComplete for responseId=" << responseId << " successful=" << successful;
 }
 
 void MovieViewManager::setStatus(int responseId, const QString& status)
@@ -244,6 +285,11 @@ QString MovieViewManager::plot(int responseId) const
 QString MovieViewManager::imdbRating(int responseId) const
 {
     return mMovieResponses.at(static_cast<std::size_t>(responseId))->ImdbRating;
+}
+
+int MovieViewManager::movieId(int responseId) const
+{
+    return mMovieResponses.at(static_cast<std::size_t>(responseId))->MovieId;
 }
 
 QString MovieViewManager::tomatoRating(int responseId) const

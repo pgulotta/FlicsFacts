@@ -13,6 +13,7 @@ Initializer::Initializer(QObject *parent) :
     QObject{parent},
     mMovieViewManager{parent}
 {
+
     QApplication::setApplicationName(tr("FlicsFacts"));
     QApplication::setOrganizationName("26Apps");
     QQuickStyle::setStyle("Material");

@@ -1,6 +1,4 @@
 #include <QApplication>
-#include <QObject>
-#include <QQmlContext>
 #include "initializer.hpp"
 
 

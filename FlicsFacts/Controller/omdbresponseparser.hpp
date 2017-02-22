@@ -13,15 +13,18 @@ Q_OBJECT
 public slots:
 
 signals:
-    void parsingComplete(int responseId, bool isSuccessful);
+    void searchParsingComplete(int responseId, bool isSuccessful);
+    void detailsParsingComplete(int responseId, bool isSuccessful);
 
 public:
     OmdbResponseParser(QObject *parent, MovieViewManager& movieViewManager);
     explicit OmdbResponseParser(const OmdbResponseParser& rhs) = delete;
     OmdbResponseParser& operator= (const OmdbResponseParser& rhs) = delete;
-    void parse( const QByteArray& mResponseSource, int responseId);
+    void parseSearchResult( const QByteArray& mResponseSource, int responseId);
+    void parseMovieDetails( const QByteArray& mResponseSource, int responseId);
 
 private:
     MovieViewManager& mMovieViewManager;
+
 };
 

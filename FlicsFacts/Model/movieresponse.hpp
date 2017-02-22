@@ -7,6 +7,7 @@ struct  MovieResponse
     MovieResponse(){
         Status =  QObject::tr("Working ...");
     }
+    int MovieId;
     QString Title;
     QString Year;
     QString Rated;

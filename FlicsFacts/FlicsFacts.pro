@@ -59,8 +59,6 @@ gcc|clang {
 }
 
 
-include(deployment.pri)
-
 QML_IMPORT_PATH =
 
 android {

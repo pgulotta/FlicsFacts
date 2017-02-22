@@ -18,7 +18,7 @@ ApplicationWindow {
     readonly property int fontSizeLarge: 18
     readonly property int fontSizeMedium: 16
     readonly property int fontSizeSmall: 14
-    readonly property string omdbLink: "http://www.omdbapi.com/"
+    readonly property string tmdbLink: "http://www.themoviedb.org/"
     readonly property string qtLink: "http://www.qt.io/"
     readonly property string websiteLink: "http://sites.google.com/view/flicsfacts/home"
     property alias tabViewCurrentIndex: movieResultsId.currentIndex

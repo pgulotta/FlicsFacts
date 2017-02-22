@@ -24,7 +24,8 @@ Q_PROPERTY(QString titleRequest READ titleRequest NOTIFY titleRequestChanged)
 
 public slots:
     void onNetworkReply(QNetworkReply *networkReply);
-    void onParsingComplete(int responseId,bool successful);
+    void onSearchParsingComplete(int responseId,bool successful);
+    void onDetailsParsingComplete(int responseId,bool successful);
     void onShareResponsesFormatted();
 
 signals:
@@ -34,6 +35,7 @@ signals:
     void displayTextMessage(const QString&  title, QString message);
 
 public:
+    Q_INVOKABLE int movieId(int responseId) const;
     Q_INVOKABLE QString year(int responseId) const;
     Q_INVOKABLE QString rated(int responseId) const;
     Q_INVOKABLE QString released(int responseId) const;
@@ -49,13 +51,15 @@ public:
     Q_INVOKABLE QString status(int responseId) const;
     Q_INVOKABLE void shareMovieResponses();
     Q_INVOKABLE void findFlicSelected(const QString& movieTitle);
-    Q_INVOKABLE void queryMovieDetails(int responseId, const QString& movieTitle);
+    Q_INVOKABLE void queryMovieSearch(int responseId, const QString& movieTitle);
+    Q_INVOKABLE void queryMovieDetails(int responseId, int movieId);
     Q_INVOKABLE int removeSelectedMovie(int responseId);
 
 
     explicit MovieViewManager(QObject *parent = 0);
     explicit MovieViewManager(const MovieViewManager& rhs) = delete;
     MovieViewManager& operator= (const MovieViewManager& rhs) = delete;
+    void setMovieId(int responseId, int movieId);
     void setYear(int responseId, const QString&  year);
     void setTitle(int responseId,const QString&  title);
     void setPoster(int responseId,const QString&  poster);
@@ -83,7 +87,7 @@ public:
 
     QString appNameVersion() const
     {
-        return appName() + " " + appVersion();
+        return appName() + " v" + appVersion();
     }
 
     QString titleRequest() const
@@ -97,7 +101,8 @@ public:
     }
 
 private:
-    QString formatUrl(const QString& movieTitle);
+    QString formatMovieSearchUrl(const QString& movieTitle);
+    QString formatMovieDetailsUrl(int movieId);
 
 private:
     QString m_requestFailed;

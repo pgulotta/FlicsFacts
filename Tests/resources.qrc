@@ -1,6 +1,8 @@
 <RCC>
     <qresource prefix="/json">
-        <file>response1.json</file>
-        <file>response2.json</file>		
+        <file>tmdbResponse1.json</file>
+        <file>tmdbResponse2.json</file>
+        <file>tmdbResponse3.json</file>
+        <file>tmdbDetails.json</file>
     </qresource>
 </RCC>

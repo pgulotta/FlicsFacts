@@ -58,9 +58,9 @@ Popup {
         }
         TextLabel {
             width: gridControlsWidth
-            text: "<a href=\"" + omdbLink + "\">OMDb API</a>"
-                  + " is used to obtain movie information."
-            onLinkActivated: Qt.openUrlExternally(omdbLink)
+            text: "<a href=\"" + tmdbLink + "\">TMDB API</a>"
+                  + " This product uses the TMDb API but is not endorsed or certified by TMDb."
+            onLinkActivated: Qt.openUrlExternally(tmdbLink)
         }
         TextLabel {
             width: gridControlsWidth

@@ -22,7 +22,6 @@ private slots:
     void cleanupTestCase();
     void testFormatRequest();
     void testNoResponse();
-    void testResponseParser();
 };
 
 
@@ -34,43 +33,6 @@ void TestFlicsFacts::cleanupTestCase()
 {
 }
 
-void TestFlicsFacts::testResponseParser()
-{
-    QString path1(QStringLiteral(":/json/response1.json"));
-    QFile file1(path1);
-    QVERIFY(file1.exists());
-    QVERIFY(file1.open(QFile::Text | QFile::ReadOnly ));
-    QString json1 = file1.readAll();
-    file1.close();
-
-    MovieViewManager movieViewManager;
-    OmdbResponseParser parser(nullptr, movieViewManager);
-
-    QByteArray byteArray1;
-    byteArray1.append(json1);
-    movieViewManager.findFlicSelected("October Sky");
-    parser.parse( byteArray1, 0);
-    QVERIFY(movieViewManager.title(0) == "October Sky");
-    QVERIFY(movieViewManager.year(0) == "1999");
-    QVERIFY(movieViewManager.rated(0) == "PG");
-    QVERIFY(movieViewManager.tomatoRating(0) == "");
-
-    QString path2(QStringLiteral(":/json/response2.json"));
-    QFile file2(path2);
-    QVERIFY(file2.exists());
-    QVERIFY(file2.open(QFile::Text | QFile::ReadOnly ));
-    QString json2 = file2.readAll();
-    file2.close();
-
-    QByteArray byteArray2;
-    byteArray2.append(json2);
-    movieViewManager.findFlicSelected("Fences");
-    parser.parse( byteArray2, 1);
-    QVERIFY(movieViewManager.title(1) == "Fences");
-    QVERIFY(movieViewManager.genre(1) == "Drama");
-    QVERIFY(movieViewManager.imdbRating(1) == "8.0");
-    QVERIFY(movieViewManager.runtime(1) == "138 min");
-}
 
 void TestFlicsFacts::testNoResponse()
 {
