@@ -35,7 +35,6 @@ void MovieViewManager::setMovieId(int responseId, int movieId)
 
 void MovieViewManager::findFlicSelected(const QString& movieTitle)
 {
-    qDebug() << "MovieViewManager::findFlicSelected: movieTitle="<< movieTitle;
     if (movieTitle.isEmpty())
         return;
 
@@ -88,7 +87,6 @@ void MovieViewManager::queryMovieDetails(int responseId, int movieId)
     QStringList attributes {QString::number(responseId), QString::number(movieId)};
     request.setAttribute(QNetworkRequest::Attribute::User, QVariant(attributes ));
     mNetworkAccessManager.get(request);
-    qDebug() << "MovieViewManager::queryMovieDetails: id="<< responseId << "  url=" << request.url();
 }
 
 void MovieViewManager::queryMovieSearch(int responseId,const QString& movieTitle)
@@ -97,7 +95,6 @@ void MovieViewManager::queryMovieSearch(int responseId,const QString& movieTitle
     QStringList attributes {QString::number( responseId)};
     request.setAttribute(QNetworkRequest::Attribute::User, QVariant(attributes ));
     mNetworkAccessManager.get(request);
-    qDebug() << "MovieViewManager::queryMovieSearch: id="<< responseId << "  url=" << request.url();
 }
 void MovieViewManager::onNetworkReply(QNetworkReply *networkReply)
 {
@@ -108,7 +105,6 @@ void MovieViewManager::onNetworkReply(QNetworkReply *networkReply)
         auto errorMessage = networkReply->errorString().length() > 50    ? "" : networkReply->errorString();
         setStatus ( responseId, QString ("%1\n%2").arg(m_requestFailed).arg( errorMessage));
         emit responseReceived(responseId);
-        qDebug() << "MovieViewManager::onNetworkReply: failed: " << networkReply->errorString();
     }
     else
     {
@@ -127,7 +123,6 @@ void MovieViewManager::onNetworkReply(QNetworkReply *networkReply)
 
 void MovieViewManager::onSearchParsingComplete(int responseId, bool successful)
 {
-    qDebug() << "MovieViewManager::onSearchParsingComplete for responseId=" << responseId << " successful=" << successful;
     if (successful)
     {
         setStatus ( responseId, "");
@@ -144,10 +139,8 @@ void MovieViewManager::onDetailsParsingComplete(int responseId, bool successful)
 {
     if (successful)
     {
-
         emit responseReceived(responseId);
     }
-    qDebug() << "MovieViewManager::onDetailsParsingComplete for responseId=" << responseId << " successful=" << successful;
 }
 
 void MovieViewManager::setStatus(int responseId, const QString& status)
@@ -187,18 +180,18 @@ void MovieViewManager::setGenre(int responseId, const QString&  genre)
     mMovieResponses.at(static_cast<std::size_t>(responseId))->Genre = genre;
 }
 
-void MovieViewManager::setImdbRating(int responseId,const QString&  imdbRating)
+void MovieViewManager::setPopularity(int responseId,const QString&  popularity)
 {
-    if ( mMovieResponses.at(static_cast<std::size_t>(responseId))->ImdbRating == imdbRating)
+    if ( mMovieResponses.at(static_cast<std::size_t>(responseId))->Popularity == popularity)
         return;
-    mMovieResponses.at(static_cast<std::size_t>(responseId))->ImdbRating = imdbRating;
+    mMovieResponses.at(static_cast<std::size_t>(responseId))->Popularity = popularity;
 }
 
-void MovieViewManager::setTomatoRating(int responseId,const QString&  tomatoRating)
+void MovieViewManager::setLanguages(int responseId,const QString&  languages)
 {
-    if ( mMovieResponses.at(static_cast<std::size_t>(responseId))->TomatoRating == tomatoRating)
+    if ( mMovieResponses.at(static_cast<std::size_t>(responseId))->Languages == languages)
         return;
-    mMovieResponses.at(static_cast<std::size_t>(responseId))->TomatoRating = tomatoRating;
+    mMovieResponses.at(static_cast<std::size_t>(responseId))->Languages = languages;
 }
 
 void MovieViewManager::setWebsite(int responseId,const QString&  website)
@@ -282,9 +275,9 @@ QString MovieViewManager::plot(int responseId) const
     return mMovieResponses.at(static_cast<std::size_t>(responseId))->Plot;
 }
 
-QString MovieViewManager::imdbRating(int responseId) const
+QString MovieViewManager::popularity(int responseId) const
 {
-    return mMovieResponses.at(static_cast<std::size_t>(responseId))->ImdbRating;
+    return mMovieResponses.at(static_cast<std::size_t>(responseId))->Popularity;
 }
 
 int MovieViewManager::movieId(int responseId) const
@@ -292,9 +285,9 @@ int MovieViewManager::movieId(int responseId) const
     return mMovieResponses.at(static_cast<std::size_t>(responseId))->MovieId;
 }
 
-QString MovieViewManager::tomatoRating(int responseId) const
+QString MovieViewManager::languages(int responseId) const
 {
-    return mMovieResponses.at(static_cast<std::size_t>(responseId))->TomatoRating;
+    return mMovieResponses.at(static_cast<std::size_t>(responseId))->Languages;
 }
 
 QString MovieViewManager::website(int responseId) const

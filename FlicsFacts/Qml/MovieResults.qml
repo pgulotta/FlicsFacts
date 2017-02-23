@@ -110,16 +110,16 @@ TabView {
                     text: MovieViewManager.rated(currentIndex)
                 }
                 GridTitleLabel {
-                    text: qsTr("Tomatoes")
+                    text: qsTr("Languages")
                 }
                 GridItemLabel {
-                    text: MovieViewManager.tomatoRating(currentIndex)
+                    text: MovieViewManager.languages(currentIndex)
                 }
                 GridTitleLabel {
-                    text: qsTr("IMDB")
+                    text: qsTr("Popularity")
                 }
                 GridItemLabel {
-                    text: MovieViewManager.imdbRating(currentIndex)
+                    text: MovieViewManager.popularity(currentIndex)
                 }
             }
             Grid {

@@ -10,7 +10,7 @@
 #include <cassert>
 
 
-static QString gDefaultGenre { QObject::tr("Not Defined")};
+static QString gNotDefined { QObject::tr("Not Defined")};
 static QString gDefaultField { "        "};
 
 static QHash<int, QString> mGenres
@@ -60,7 +60,40 @@ static QString getGenres(const QJsonObject& jsonObject)
             }
         }
     }
-    return result.isEmpty() ? gDefaultGenre : result;
+    return result.isEmpty() ? gNotDefined : result;
+}
+
+static QString getLanguages(const QJsonObject& jsonObject)
+{
+    QString result;
+    if (jsonObject.contains(QStringLiteral("spoken_languages")))
+    {
+        auto languages = jsonObject["spoken_languages"];
+        if ( languages.isArray() )
+        {
+            QJsonArray languagesArray = languages.toArray();
+            if ( languagesArray.count() > 0)
+            {
+                for(auto languageObject :languagesArray)
+                {
+                    bool addComma = !result.isEmpty();
+                    auto languageName = languageObject.toObject().value(QStringLiteral("name")).toString();
+                    result += (addComma)  ? ", " + languageName :  languageName;
+                }
+            }
+        }
+    }
+    return result.isEmpty() ? gNotDefined : result;
+}
+
+static QString convertJsonDoubleToString( const QString& key, const QJsonObject& source )
+{
+    return QString("%1").arg(source.value(key).toDouble());
+}
+
+static QString extractYear( const QString& source)
+{
+    return source.mid(0,4);
 }
 
 OmdbResponseParser::OmdbResponseParser(QObject *parent, MovieViewManager& movieViewManager) :
@@ -90,32 +123,41 @@ void OmdbResponseParser::parseSearchResult( const QByteArray& source,  int respo
                             QJsonObject jsonObject = resultsArray.at(0).toObject();
                             if (jsonObject.contains(QStringLiteral("title")))
                             {
-                                mMovieViewManager.setYear (responseId, gDefaultField);
-                                mMovieViewManager.setRated (responseId, gDefaultField);
+                                mMovieViewManager.setWebsite( responseId, gDefaultField);
                                 mMovieViewManager.setRuntime ( responseId, gDefaultField);
                                 mMovieViewManager.setActors ( responseId, gDefaultField);
+                                mMovieViewManager.setLanguages(  responseId, gDefaultField);
 
                                 mMovieViewManager.setTitle (responseId, jsonObject.value(QStringLiteral("title")).toString());
+
                                 if (jsonObject.contains(QStringLiteral("id")))
                                     mMovieViewManager.setMovieId(responseId,  jsonObject.value(QStringLiteral("id") ).toInt());
                                 else
                                     mMovieViewManager.setMovieId(responseId, 0);
+
                                 if (jsonObject.contains(QStringLiteral("release_date")))
-                                    mMovieViewManager.setReleased ( responseId,  jsonObject.value(QStringLiteral("release_date")).toString());
+                                {
+                                    QString releaseDate = jsonObject.value(QStringLiteral("release_date")).toString();
+                                    mMovieViewManager.setReleased ( responseId, releaseDate);
+                                    mMovieViewManager.setYear (responseId,  extractYear(releaseDate) );
+                                }
                                 else
                                     mMovieViewManager.setReleased ( responseId,  gDefaultField);
+
                                 if (jsonObject.contains(QStringLiteral("overview")))
                                     mMovieViewManager.setPlot (responseId,   jsonObject.value(QStringLiteral("overview")).toString());
                                 else
                                     mMovieViewManager.setPlot ( responseId, gDefaultField);
+
                                 if (jsonObject.contains(QStringLiteral("popularity")))
-                                    mMovieViewManager.setImdbRating (responseId,  jsonObject.value(QStringLiteral("popularity")).toString());
+                                    mMovieViewManager.setPopularity (responseId, convertJsonDoubleToString (QStringLiteral("popularity"), jsonObject));
                                 else
-                                    mMovieViewManager.setImdbRating ( responseId, gDefaultField);
+                                    mMovieViewManager.setPopularity ( responseId, gDefaultField);
+
                                 if (jsonObject.contains (QStringLiteral("vote_average")))
-                                    mMovieViewManager.setTomatoRating ( responseId,  jsonObject.value(QStringLiteral("vote_average")).toString());
+                                    mMovieViewManager.setRated(responseId,convertJsonDoubleToString(QStringLiteral("vote_average"), jsonObject));
                                 else
-                                    mMovieViewManager.setTomatoRating ( responseId, gDefaultField);
+                                    mMovieViewManager.setRated(  responseId, gDefaultField);
                                 if (jsonObject.contains(QStringLiteral("poster_path")))
                                     mMovieViewManager.setPoster (responseId, jsonObject.value(QStringLiteral("poster_path")).toString());
                                 else
@@ -134,7 +176,6 @@ void OmdbResponseParser::parseSearchResult( const QByteArray& source,  int respo
             qDebug() << "OmdbResponseParser::parseSearchResult ecxception: " << e.what();
         }
     }
-    qDebug() << "OmdbResponseParser::parseSearchResult for responseId=" << responseId << " successful=" << success;
     emit searchParsingComplete(responseId, success);
 }
 
@@ -148,30 +189,18 @@ void OmdbResponseParser::parseMovieDetails( const QByteArray& source,  int respo
             if ( !document.isNull() && !document.isEmpty())
             {
                 QJsonObject jsonObject = document.object();
+
                 if (jsonObject.contains(QStringLiteral("homepage")))
                     mMovieViewManager.setWebsite ( responseId,  jsonObject.value(QStringLiteral("homepage")).toString());
                 else
                     mMovieViewManager.setWebsite ( responseId, gDefaultField);
 
                 if (jsonObject.contains(QStringLiteral("runtime")))
-                    mMovieViewManager.setRuntime ( responseId,  jsonObject.value(QStringLiteral("Runtime")).toString());
+                    mMovieViewManager.setRuntime ( responseId,  QString("%1 min").arg(jsonObject.value(QStringLiteral("runtime")).toInt()));
                 else
                     mMovieViewManager.setRuntime ( responseId, gDefaultField);
 
-
-
-//                        if (jsonObject.contains(QStringLiteral("Year")))
-//                            mMovieViewManager.setYear (responseId,  jsonObject.value(QStringLiteral("Year")).toString());
-//                        if (jsonObject.contains(QStringLiteral("Rated")))
-//                            mMovieViewManager.setRated (responseId,  jsonObject.value(QStringLiteral("Rated")).toString());
-//                        if (jsonObject.contains(QStringLiteral("Runtime")))
-//                            mMovieViewManager.setRuntime ( responseId,  jsonObject.value(QStringLiteral("Runtime")).toString());
-//                        if (jsonObject.contains(QStringLiteral("Actors")))
-//                            mMovieViewManager.setActors ( responseId,  jsonObject.value(QStringLiteral("Actors")).toString());
-//                        if (jsonObject.contains(QStringLiteral("Website")))
-//                            mMovieViewManager.setWebsite ( responseId,  jsonObject.value(QStringLiteral("Website")).toString());
-//                        if (jsonObject.contains(QStringLiteral("Genre")))
-//                            mMovieViewManager.setGenre ( responseId, jsonObject.value(QStringLiteral("Genre")).toString());
+                mMovieViewManager.setLanguages( responseId,  getLanguages(jsonObject));
                 success = true;
             }
         }
@@ -180,6 +209,5 @@ void OmdbResponseParser::parseMovieDetails( const QByteArray& source,  int respo
             qDebug() << "OmdbResponseParser::parseGetDetails ecxception: " << e.what();
         }
     }
-    qDebug() << "OmdbResponseParser::parseMovieDetails for responseId=" << responseId << " successful=" << success;
     emit detailsParsingComplete(responseId, success);
 }

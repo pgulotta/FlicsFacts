@@ -42,12 +42,12 @@ public:
     Q_INVOKABLE QString runtime(int responseId) const;
     Q_INVOKABLE QString actors(int responseId) const;
     Q_INVOKABLE QString plot(int responseId) const;
-    Q_INVOKABLE QString imdbRating(int responseId) const;
+    Q_INVOKABLE QString popularity(int responseId) const;
     Q_INVOKABLE QString website(int responseId) const;
     Q_INVOKABLE QString title(int responseId) const;
     Q_INVOKABLE QString poster(int responseId) const;
     Q_INVOKABLE QString genre(int responseId) const;
-    Q_INVOKABLE QString tomatoRating(int responseId) const;
+    Q_INVOKABLE QString languages(int responseId) const;
     Q_INVOKABLE QString status(int responseId) const;
     Q_INVOKABLE void shareMovieResponses();
     Q_INVOKABLE void findFlicSelected(const QString& movieTitle);
@@ -64,8 +64,8 @@ public:
     void setTitle(int responseId,const QString&  title);
     void setPoster(int responseId,const QString&  poster);
     void setGenre(int responseId, const QString&  genre);
-    void setImdbRating(int responseId,const QString&  imdbRating);
-    void setTomatoRating(int responseId,const QString&  tomatoRating);
+    void setPopularity(int responseId,const QString&  popularity);
+    void setLanguages(int responseId,const QString&  languages);
     void setWebsite(int responseId,const QString&  website);
     void setRated(int responseId,const QString&  rated);
     void setReleased(int responseId,const QString&  released);

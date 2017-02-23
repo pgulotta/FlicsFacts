@@ -15,8 +15,8 @@ struct  MovieResponse
     QString Runtime;
     QString Actors;
     QString Plot;
-    QString ImdbRating;
-    QString TomatoRating;
+    QString Popularity;
+    QString Languages;
     QString Website;
     QString Poster;
     QString Genre;
