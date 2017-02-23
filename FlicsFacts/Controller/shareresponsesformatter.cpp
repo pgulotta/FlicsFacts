@@ -27,11 +27,13 @@ QString ShareResponsesFormatter::formatAsText(std::vector<std::unique_ptr<MovieR
             formatField(tr("Year"), movieResponse->Year, mFormattedResponses);
             formatField(tr("Released"), movieResponse->Released, mFormattedResponses);
             formatField(tr("Runtime"), movieResponse->Runtime, mFormattedResponses);
+            formatField(tr("Rated"), movieResponse->Rated, mFormattedResponses);
             formatField(tr("Popularity"), movieResponse->Popularity, mFormattedResponses);
             formatField(tr("Languages"), movieResponse->Languages, mFormattedResponses);
             mFormattedResponses += QString("\r\n");
             formatField(tr("Actors"), movieResponse->Actors, mFormattedResponses);
-            formatField(tr("Website"), movieResponse->Website, mFormattedResponses);
+            if ( !movieResponse->WebsiteUrl.trimmed().isEmpty())
+                formatField(tr("Website"), movieResponse->WebsiteUrl, mFormattedResponses);
             mFormattedResponses += QString("\r\n");
             formatField(tr("Plot"), movieResponse->Plot, mFormattedResponses);
             mFormattedResponses += QString("\r\n");

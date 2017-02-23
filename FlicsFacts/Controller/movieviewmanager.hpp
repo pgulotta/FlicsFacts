@@ -26,6 +26,7 @@ public slots:
     void onNetworkReply(QNetworkReply *networkReply);
     void onSearchParsingComplete(int responseId,bool successful);
     void onDetailsParsingComplete(int responseId,bool successful);
+    void onCreditsParsingComplete(int responseId,bool successful);
     void onShareResponsesFormatted();
 
 signals:
@@ -44,6 +45,7 @@ public:
     Q_INVOKABLE QString plot(int responseId) const;
     Q_INVOKABLE QString popularity(int responseId) const;
     Q_INVOKABLE QString website(int responseId) const;
+    Q_INVOKABLE QString websiteUrl(int responseId) const;
     Q_INVOKABLE QString title(int responseId) const;
     Q_INVOKABLE QString poster(int responseId) const;
     Q_INVOKABLE QString genre(int responseId) const;
@@ -52,7 +54,6 @@ public:
     Q_INVOKABLE void shareMovieResponses();
     Q_INVOKABLE void findFlicSelected(const QString& movieTitle);
     Q_INVOKABLE void queryMovieSearch(int responseId, const QString& movieTitle);
-    Q_INVOKABLE void queryMovieDetails(int responseId, int movieId);
     Q_INVOKABLE int removeSelectedMovie(int responseId);
 
 
@@ -67,6 +68,7 @@ public:
     void setPopularity(int responseId,const QString&  popularity);
     void setLanguages(int responseId,const QString&  languages);
     void setWebsite(int responseId,const QString&  website);
+    void setWebsiteUrl(int responseId,const QString&  websiteUrl);
     void setRated(int responseId,const QString&  rated);
     void setReleased(int responseId,const QString&  released);
     void setRuntime(int responseId,const QString&  runtime);
@@ -103,6 +105,9 @@ public:
 private:
     QString formatMovieSearchUrl(const QString& movieTitle);
     QString formatMovieDetailsUrl(int movieId);
+    QString formatMovieCreditsUrl(int movieId);
+    void queryMovieDetails(int responseId, int movieId);
+    void queryMovieCredits(int responseId, int movieId);
 
 private:
     QString m_requestFailed;
@@ -114,6 +119,8 @@ private:
     ShareResponsesFormatter mShareResponsesFormatterformatter;
     QFutureWatcher<QString> mShareResponsesWatcher;
     OmdbResponseParser mOmdbResponseParser;
+
+
 
 };
 

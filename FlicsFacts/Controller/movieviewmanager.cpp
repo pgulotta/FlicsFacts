@@ -8,7 +8,7 @@
 
 const QString gSearchRequest { "http://api.themoviedb.org/3/search/movie?api_key=2839bfb130659459d7d9972ad9aa3cd4&language=en-US&query=%1&page=1&include_adult=false"};
 const QString gDetailsRequest {"http://api.themoviedb.org/3/movie/%1?api_key=2839bfb130659459d7d9972ad9aa3cd4&language=en-US"};
-
+const QString gCreditsRequest {"http://api.themoviedb.org/3/movie/%1/credits?api_key=2839bfb130659459d7d9972ad9aa3cd4"};
 
 MovieViewManager::MovieViewManager(QObject *parent) :
     QObject{parent},
@@ -23,6 +23,7 @@ MovieViewManager::MovieViewManager(QObject *parent) :
     connect(&mShareResponsesWatcher, &QFutureWatcher<QString>::finished, this, &MovieViewManager::onShareResponsesFormatted);
     connect(&mOmdbResponseParser, &OmdbResponseParser::searchParsingComplete, this,  &MovieViewManager::onSearchParsingComplete);
     connect(&mOmdbResponseParser, &OmdbResponseParser::detailsParsingComplete, this,  &MovieViewManager::onDetailsParsingComplete);
+    connect(&mOmdbResponseParser, &OmdbResponseParser::creditsParsingComplete, this,  &MovieViewManager::onCreditsParsingComplete);
 }
 
 void MovieViewManager::setMovieId(int responseId, int movieId)
@@ -52,7 +53,12 @@ QString MovieViewManager::formatMovieSearchUrl(const QString& movieTitle)
 
 QString MovieViewManager::formatMovieDetailsUrl(int movieId)
 {
-    return (QString ( gDetailsRequest.arg(movieId) ) );;
+    return (QString ( gDetailsRequest.arg(movieId) ) );
+}
+
+QString MovieViewManager::formatMovieCreditsUrl(int movieId)
+{
+    return (QString ( gCreditsRequest.arg(movieId) ) );
 }
 
 int MovieViewManager::removeSelectedMovie(int responseId)
@@ -79,6 +85,14 @@ void MovieViewManager::onShareResponsesFormatted()
         ShareClient shareClient(parent());
         shareClient.setShare(mShareResponsesWatcher.result());
     }
+}
+
+void MovieViewManager::queryMovieCredits(int responseId, int movieId)
+{
+    auto request = QNetworkRequest( formatMovieCreditsUrl(movieId));
+    QStringList attributes {QString::number(responseId), QString::number(movieId), QStringLiteral("Credits")};
+    request.setAttribute(QNetworkRequest::Attribute::User, QVariant(attributes ));
+    mNetworkAccessManager.get(request);
 }
 
 void MovieViewManager::queryMovieDetails(int responseId, int movieId)
@@ -109,7 +123,12 @@ void MovieViewManager::onNetworkReply(QNetworkReply *networkReply)
     else
     {
         const QByteArray source = networkReply->readAll();
-        if ( attributes.count()>1)
+        if ( attributes.count()==3)
+        {
+            mOmdbResponseParser.parseMovieCredits(source, responseId);
+        }
+        else
+        if ( attributes.count()==2)
         {
             mOmdbResponseParser.parseMovieDetails(source, responseId);
         }
@@ -127,6 +146,7 @@ void MovieViewManager::onSearchParsingComplete(int responseId, bool successful)
     {
         setStatus ( responseId, "");
         queryMovieDetails (responseId, mMovieResponses.at(static_cast<std::size_t>(responseId))->MovieId);
+        queryMovieCredits(responseId, mMovieResponses.at(static_cast<std::size_t>(responseId))->MovieId);
     }
     else
     {
@@ -136,6 +156,14 @@ void MovieViewManager::onSearchParsingComplete(int responseId, bool successful)
 }
 
 void MovieViewManager::onDetailsParsingComplete(int responseId, bool successful)
+{
+    if (successful)
+    {
+        emit responseReceived(responseId);
+    }
+}
+
+void MovieViewManager::onCreditsParsingComplete(int responseId, bool successful)
 {
     if (successful)
     {
@@ -199,6 +227,13 @@ void MovieViewManager::setWebsite(int responseId,const QString&  website)
     if ( mMovieResponses.at(static_cast<std::size_t>(responseId))->Website == website)
         return;
     mMovieResponses.at(static_cast<std::size_t>(responseId))->Website = website;
+}
+
+void MovieViewManager::setWebsiteUrl(int responseId,const QString&  websiteUrl)
+{
+    if ( mMovieResponses.at(static_cast<std::size_t>(responseId))->WebsiteUrl == websiteUrl)
+        return;
+    mMovieResponses.at(static_cast<std::size_t>(responseId))->WebsiteUrl = websiteUrl;
 }
 
 void MovieViewManager::setRated(int responseId,const QString&  rated)
@@ -293,6 +328,11 @@ QString MovieViewManager::languages(int responseId) const
 QString MovieViewManager::website(int responseId) const
 {
     return mMovieResponses.at(static_cast<std::size_t>(responseId))->Website;
+}
+
+QString MovieViewManager::websiteUrl(int responseId) const
+{
+    return mMovieResponses.at(static_cast<std::size_t>(responseId))->WebsiteUrl;
 }
 
 QString MovieViewManager::title(int responseId) const

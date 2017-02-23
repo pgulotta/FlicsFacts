@@ -15,7 +15,8 @@ TabView {
     property int animationFromX: 0
     property string currentTitle: ""
     property int tabItemWidth: isPortraitMode ? windowWidth * .7 : windowWidth * .8
-    property int tabItemHeight: isPortraitMode ? windowHeight * .35 : windowHeight * .20
+    property int plotItemHeight: isPortraitMode ? windowHeight * .35 : windowHeight * .2
+    property int actorsItemHeight: isPortraitMode ? plotItemHeight *.4 : plotItemHeight *.5
     readonly property int firstColumnWidth: isPortraitMode ? windowWidth / (gridColumnCount + 3) : windowWidth / (gridColumnCount + 2)
 
     style: TabViewStyle {
@@ -74,11 +75,9 @@ TabView {
                 }
                 Text {
                     text: MovieViewManager.website(currentIndex)
-                          === "N/A" ? " " : "<a href=\"" + MovieViewManager.website(
-                                          currentIndex) + "\">Go to ...</a>"
                     font.pointSize: fontSizeMedium
                     onLinkActivated: Qt.openUrlExternally(
-                                         MovieViewManager.website(currentIndex))
+                                         MovieViewManager.websiteUrl(currentIndex))
                     color: Material.primary
                 }
                 GridTitleLabel {
@@ -145,20 +144,26 @@ TabView {
                 GridTitleLabel {
                     text: qsTr("Actors")
                 }
-                GridItemLabel {
-                    wrapMode: Label.Wrap
-                    width: tabItemWidth
-                    text: MovieViewManager.actors(currentIndex)
+                Flickable {
+                    contentHeight: actorsId.height
+                    width: actorsId.width
+                    height: actorsItemHeight
+                    clip: true
+                    GridItemLabel {
+                        id: actorsId
+                        text: MovieViewManager.actors(currentIndex)
+                        width: tabItemWidth
+                        wrapMode: Label.Wrap
+                    }
                 }
 
                 GridTitleLabel {
                     text: qsTr("Plot")
                 }
-
                 Flickable {
                     contentHeight: plotId.height
                     width: plotId.width
-                    height: tabItemHeight
+                    height: plotItemHeight
                     clip: true
                     GridItemLabel {
                         id: plotId

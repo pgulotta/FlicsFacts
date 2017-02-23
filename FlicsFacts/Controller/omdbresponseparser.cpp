@@ -124,6 +124,7 @@ void OmdbResponseParser::parseSearchResult( const QByteArray& source,  int respo
                             if (jsonObject.contains(QStringLiteral("title")))
                             {
                                 mMovieViewManager.setWebsite( responseId, gDefaultField);
+                                mMovieViewManager.setWebsiteUrl( responseId, gDefaultField);
                                 mMovieViewManager.setRuntime ( responseId, gDefaultField);
                                 mMovieViewManager.setActors ( responseId, gDefaultField);
                                 mMovieViewManager.setLanguages(  responseId, gDefaultField);
@@ -191,14 +192,17 @@ void OmdbResponseParser::parseMovieDetails( const QByteArray& source,  int respo
                 QJsonObject jsonObject = document.object();
 
                 if (jsonObject.contains(QStringLiteral("homepage")))
-                    mMovieViewManager.setWebsite ( responseId,  jsonObject.value(QStringLiteral("homepage")).toString());
-                else
-                    mMovieViewManager.setWebsite ( responseId, gDefaultField);
-
+                {
+                    auto homepage = jsonObject.value(QStringLiteral("homepage")).toString();
+                    if ( !homepage.isEmpty() )
+                    {
+                        auto website = "<a href=\"" + jsonObject.value(QStringLiteral("homepage")).toString() + "\">Go to ...</a>";
+                        mMovieViewManager.setWebsite ( responseId,  website);
+                        mMovieViewManager.setWebsiteUrl ( responseId,  homepage);
+                    }
+                }
                 if (jsonObject.contains(QStringLiteral("runtime")))
                     mMovieViewManager.setRuntime ( responseId,  QString("%1 min").arg(jsonObject.value(QStringLiteral("runtime")).toInt()));
-                else
-                    mMovieViewManager.setRuntime ( responseId, gDefaultField);
 
                 mMovieViewManager.setLanguages( responseId,  getLanguages(jsonObject));
                 success = true;
@@ -210,4 +214,46 @@ void OmdbResponseParser::parseMovieDetails( const QByteArray& source,  int respo
         }
     }
     emit detailsParsingComplete(responseId, success);
+}
+
+void OmdbResponseParser::parseMovieCredits( const QByteArray& source,  int responseId)
+{
+    QString result;
+    bool success = false;
+    if ( source != nullptr && source.size() >0)
+    {
+        try {
+            QJsonDocument document = QJsonDocument::fromJson(source);
+            if ( !document.isNull() && !document.isEmpty())
+            {
+                QJsonObject jsonObject = document.object();
+                if (jsonObject.contains(QStringLiteral("cast")))
+                {
+                    auto cast = jsonObject["cast"];
+                    if ( cast.isArray() )
+                    {
+                        QJsonArray array = cast.toArray();
+                        if ( array.count() > 0)
+                        {
+                            int actorsCount =1;
+                            for(auto item :array)
+                            {
+                                auto languageName = item.toObject().value(QStringLiteral("name")).toString();
+                                result += (actorsCount > 1)  ? ", " + languageName :  languageName;
+                                if ( ++actorsCount >8 )
+                                    break;
+                            }
+                        }
+                    }
+                }
+                mMovieViewManager.setActors( responseId, result);
+                success = true;
+            }
+        }
+        catch(std::exception const & e)
+        {
+            qDebug() << "OmdbResponseParser::parseMovieCredits ecxception: " << e.what();
+        }
+    }
+    emit creditsParsingComplete(responseId, success);
 }

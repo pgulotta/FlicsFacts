@@ -18,6 +18,7 @@ struct  MovieResponse
     QString Popularity;
     QString Languages;
     QString Website;
+    QString WebsiteUrl;
     QString Poster;
     QString Genre;
     QString Status;

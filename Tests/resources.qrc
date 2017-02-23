@@ -4,5 +4,6 @@
         <file>tmdbResponse2.json</file>
         <file>tmdbResponse3.json</file>
         <file>tmdbDetails.json</file>
+        <file>tmdbCredits.json</file>		
     </qresource>
 </RCC>
