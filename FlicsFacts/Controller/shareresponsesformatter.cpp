@@ -2,15 +2,16 @@
 #include <QString>
 #include <QDebug>
 
+
+void formatField(const QString &key, const QString &value, QString &formattedText)
+{
+    formattedText += QString("%1=%2    ").arg(key).arg(value);
+}
+
 ShareResponsesFormatter::ShareResponsesFormatter(QObject *parent) :
     QObject{parent},
     mFormattedResponses{1024}
 {
-}
-
-void ShareResponsesFormatter::formatField(const QString &key, const QString &value, QString &formattedText)
-{
-    formattedText += QString("%1=%2    ").arg(key).arg(value);
 }
 
 QString ShareResponsesFormatter::formatAsText(std::vector<std::unique_ptr<MovieResponse> >::const_iterator cbegin,

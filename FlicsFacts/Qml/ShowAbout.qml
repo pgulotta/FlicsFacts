@@ -44,7 +44,7 @@ Popup {
 
         TextLabel {
             width: aboutPopupId.availableWidth * .85
-            text: qsTr("FlicsFacts " + MovieViewManager.appVersion
+            text: qsTr("FlicsFacts v" + MovieViewManager.appVersion
                        + " from 26Apps provides movie information for the selected Flic. Visit "+
                        "<a href=\"" + websiteLink + "\">website.</a>")
             onLinkActivated: Qt.openUrlExternally(websiteLink)

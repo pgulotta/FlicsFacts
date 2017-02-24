@@ -174,8 +174,8 @@ TabView {
                 }
             }
             Row {
-                anchors.top: gridBottomId.bottom
-                anchors.topMargin: textMargin
+                anchors.top: gridBottomId.top
+               // anchors.topMargin: textMargin
                 Label {
                     width: tabViewId.width
                     horizontalAlignment: "AlignHCenter"
@@ -200,10 +200,9 @@ TabView {
     onCurrentIndexChanged: {
         var status = MovieViewManager.status(currentIndex)
         if (status.startsWith(MovieViewManager.requestFailed)) {
-
             var currentTab = getTab(currentIndex)
             if (currentTab !== undefined) {
-                MovieViewManager.queryMovieDetails(currentIndex,
+                MovieViewManager.queryMovieSearch(currentIndex,
                                                    currentTab.title)
             }
         } else {

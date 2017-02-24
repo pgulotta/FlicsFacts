@@ -36,46 +36,168 @@ signals:
     void displayTextMessage(const QString&  title, QString message);
 
 public:
-    Q_INVOKABLE int movieId(int responseId) const;
-    Q_INVOKABLE QString year(int responseId) const;
-    Q_INVOKABLE QString rated(int responseId) const;
-    Q_INVOKABLE QString released(int responseId) const;
-    Q_INVOKABLE QString runtime(int responseId) const;
-    Q_INVOKABLE QString actors(int responseId) const;
-    Q_INVOKABLE QString plot(int responseId) const;
-    Q_INVOKABLE QString popularity(int responseId) const;
-    Q_INVOKABLE QString website(int responseId) const;
-    Q_INVOKABLE QString websiteUrl(int responseId) const;
-    Q_INVOKABLE QString title(int responseId) const;
-    Q_INVOKABLE QString poster(int responseId) const;
-    Q_INVOKABLE QString genre(int responseId) const;
-    Q_INVOKABLE QString languages(int responseId) const;
-    Q_INVOKABLE QString status(int responseId) const;
+    explicit MovieViewManager(QObject *parent = 0);
+    explicit MovieViewManager(const MovieViewManager& rhs) = delete;
+    MovieViewManager& operator= (const MovieViewManager& rhs) = delete;
+
     Q_INVOKABLE void shareMovieResponses();
     Q_INVOKABLE void findFlicSelected(const QString& movieTitle);
     Q_INVOKABLE void queryMovieSearch(int responseId, const QString& movieTitle);
     Q_INVOKABLE int removeSelectedMovie(int responseId);
 
+    Q_INVOKABLE QString year(int responseId) const
+    {
+        return mMovieResponses.at(static_cast<std::size_t>(responseId))->Year;
+    }
 
-    explicit MovieViewManager(QObject *parent = 0);
-    explicit MovieViewManager(const MovieViewManager& rhs) = delete;
-    MovieViewManager& operator= (const MovieViewManager& rhs) = delete;
-    void setMovieId(int responseId, int movieId);
-    void setYear(int responseId, const QString&  year);
-    void setTitle(int responseId,const QString&  title);
-    void setPoster(int responseId,const QString&  poster);
-    void setGenre(int responseId, const QString&  genre);
-    void setPopularity(int responseId,const QString&  popularity);
-    void setLanguages(int responseId,const QString&  languages);
-    void setWebsite(int responseId,const QString&  website);
-    void setWebsiteUrl(int responseId,const QString&  websiteUrl);
-    void setRated(int responseId,const QString&  rated);
-    void setReleased(int responseId,const QString&  released);
-    void setRuntime(int responseId,const QString&  runtime);
-    void setActors(int responseId,const QString&  actors);
-    void setPlot(int responseId,const QString&  plot);
-    void setStatus(int responseId,const QString& status);
-    void setTitleRequest(const QString&  titleRequest);
+    Q_INVOKABLE QString rated(int responseId) const
+    {
+        return mMovieResponses.at(static_cast<std::size_t>(responseId))->Rated;
+    }
+
+    Q_INVOKABLE QString released(int responseId) const
+    {
+        return mMovieResponses.at(static_cast<std::size_t>(responseId))->Released;
+    }
+
+    Q_INVOKABLE QString runtime(int responseId) const
+    {
+        return mMovieResponses.at(static_cast<std::size_t>(responseId))->Runtime;
+    }
+
+    Q_INVOKABLE QString actors(int responseId) const
+    {
+        return mMovieResponses.at(static_cast<std::size_t>(responseId))->Actors;
+    }
+
+    Q_INVOKABLE QString plot(int responseId) const
+    {
+        return mMovieResponses.at(static_cast<std::size_t>(responseId))->Plot;
+    }
+
+    Q_INVOKABLE QString popularity(int responseId) const
+    {
+        return mMovieResponses.at(static_cast<std::size_t>(responseId))->Popularity;
+    }
+
+    Q_INVOKABLE int movieId(int responseId) const
+    {
+        return mMovieResponses.at(static_cast<std::size_t>(responseId))->MovieId;
+    }
+
+    Q_INVOKABLE QString languages(int responseId) const
+    {
+        return mMovieResponses.at(static_cast<std::size_t>(responseId))->Languages;
+    }
+
+    Q_INVOKABLE QString websiteUrl(int responseId) const
+    {
+        return mMovieResponses.at(static_cast<std::size_t>(responseId))->WebsiteUrl;
+    }
+    Q_INVOKABLE QString website(int responseId) const
+    {
+        return mMovieResponses.at(static_cast<std::size_t>(responseId))->Website;
+    }
+    Q_INVOKABLE QString title(int responseId) const
+    {
+        return mMovieResponses.at(static_cast<std::size_t>(responseId))->Title;
+    }
+
+    Q_INVOKABLE QString poster(int responseId) const
+    {
+        return mMovieResponses.at(static_cast<std::size_t>(responseId))->Poster;
+    }
+
+    Q_INVOKABLE QString genre(int responseId) const
+    {
+        return mMovieResponses.at(static_cast<std::size_t>(responseId))->Genre;
+    }
+
+    Q_INVOKABLE QString status(int responseId) const
+    {
+        return mMovieResponses.at(static_cast<std::size_t>(responseId))->Status;
+    }
+
+    void setMovieId(int responseId, int movieId)
+    {
+        mMovieResponses.at(static_cast<std::size_t>(responseId))->MovieId = movieId;
+    }
+
+    void setStatus(int responseId, const QString& status)
+    {
+        mMovieResponses.at(static_cast<std::size_t>(responseId))->Status = status;
+    }
+
+    void setYear(int responseId, const QString&  year)
+    {
+        mMovieResponses.at(static_cast<std::size_t>(responseId))->Year = year;
+    }
+
+    void setTitle(int responseId,const QString&  title)
+    {
+        mMovieResponses.at(static_cast<std::size_t>(responseId))->Title = title;
+    }
+
+    void setPoster(int responseId,const QString&  poster)
+    {
+        mMovieResponses.at(static_cast<std::size_t>(responseId) )->Poster = poster;
+    }
+
+    void setGenre(int responseId, const QString&  genre)
+    {
+        mMovieResponses.at(static_cast<std::size_t>(responseId))->Genre = genre;
+    }
+
+    void setPopularity(int responseId,const QString&  popularity)
+    {
+        mMovieResponses.at(static_cast<std::size_t>(responseId))->Popularity = popularity;
+    }
+
+    void setLanguages(int responseId,const QString&  languages)
+    {
+        mMovieResponses.at(static_cast<std::size_t>(responseId))->Languages = languages;
+    }
+
+    void setWebsite(int responseId,const QString&  website)
+    {
+        mMovieResponses.at(static_cast<std::size_t>(responseId))->Website = website;
+    }
+
+    void setWebsiteUrl(int responseId,const QString&  websiteUrl)
+    {
+        mMovieResponses.at(static_cast<std::size_t>(responseId))->WebsiteUrl = websiteUrl;
+    }
+
+    void setRated(int responseId,const QString&  rated)
+    {
+        if ( mMovieResponses.at(static_cast<std::size_t>(responseId))->Rated == rated)
+            return;
+        mMovieResponses.at(static_cast<std::size_t>(responseId))->Rated = rated;
+    }
+
+    void setReleased(int responseId,const QString&  released)
+    {
+        mMovieResponses.at(static_cast<std::size_t>(responseId))->Released = released;
+    }
+
+    void setRuntime(int responseId,const QString&  runtime)
+    {
+        mMovieResponses.at(static_cast<std::size_t>(responseId))->Runtime = runtime;
+    }
+
+    void setActors(int responseId,const QString&  actors)
+    {
+        mMovieResponses.at(static_cast<std::size_t>(responseId))->Actors = actors;
+    }
+    void setPlot(int responseId,const QString&  plot)
+    {
+        mMovieResponses.at(static_cast<std::size_t>(responseId))->Plot = plot;
+    }
+    void setTitleRequest(const QString&  titleRequest)
+    {
+        m_titleRequest = titleRequest;
+        emit titleRequestChanged(titleRequest);
+    }
 
     QString appName() const
     {
@@ -103,9 +225,6 @@ public:
     }
 
 private:
-    QString formatMovieSearchUrl(const QString& movieTitle);
-    QString formatMovieDetailsUrl(int movieId);
-    QString formatMovieCreditsUrl(int movieId);
     void queryMovieDetails(int responseId, int movieId);
     void queryMovieCredits(int responseId, int movieId);
 

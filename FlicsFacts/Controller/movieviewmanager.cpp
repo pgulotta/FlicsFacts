@@ -10,11 +10,26 @@ const QString gSearchRequest { "http://api.themoviedb.org/3/search/movie?api_key
 const QString gDetailsRequest {"http://api.themoviedb.org/3/movie/%1?api_key=2839bfb130659459d7d9972ad9aa3cd4&language=en-US"};
 const QString gCreditsRequest {"http://api.themoviedb.org/3/movie/%1/credits?api_key=2839bfb130659459d7d9972ad9aa3cd4"};
 
+QString formatMovieSearchUrl(const QString& movieTitle)
+{
+    return (QString ( gSearchRequest.arg(movieTitle.trimmed().replace(' ','+') )  ) );;
+}
+
+QString formatMovieDetailsUrl(int movieId)
+{
+    return (QString ( gDetailsRequest.arg(movieId) ) );
+}
+
+QString formatMovieCreditsUrl(int movieId)
+{
+    return (QString ( gCreditsRequest.arg(movieId) ) );
+}
+
 MovieViewManager::MovieViewManager(QObject *parent) :
     QObject{parent},
     m_requestFailed{tr("This request was unsuccessful.")},
     m_appName{QApplication::applicationName()},
-    m_appVersion{"1.07"},
+    m_appVersion{"1.08"},
     mShareResponsesFormatterformatter{parent},
     mShareResponsesWatcher{parent},
     mOmdbResponseParser{parent, *this}
@@ -24,14 +39,6 @@ MovieViewManager::MovieViewManager(QObject *parent) :
     connect(&mOmdbResponseParser, &OmdbResponseParser::searchParsingComplete, this,  &MovieViewManager::onSearchParsingComplete);
     connect(&mOmdbResponseParser, &OmdbResponseParser::detailsParsingComplete, this,  &MovieViewManager::onDetailsParsingComplete);
     connect(&mOmdbResponseParser, &OmdbResponseParser::creditsParsingComplete, this,  &MovieViewManager::onCreditsParsingComplete);
-}
-
-void MovieViewManager::setMovieId(int responseId, int movieId)
-{
-    if ( mMovieResponses.at(static_cast<std::size_t>(responseId))->MovieId == movieId)
-        return;
-
-    mMovieResponses.at(static_cast<std::size_t>(responseId))->MovieId = movieId;
 }
 
 void MovieViewManager::findFlicSelected(const QString& movieTitle)
@@ -46,21 +53,6 @@ void MovieViewManager::findFlicSelected(const QString& movieTitle)
     queryMovieSearch(responseIndex, movieTitle);
 }
 
-QString MovieViewManager::formatMovieSearchUrl(const QString& movieTitle)
-{
-    return (QString ( gSearchRequest.arg(movieTitle.trimmed().replace(' ','+') )  ) );;
-}
-
-QString MovieViewManager::formatMovieDetailsUrl(int movieId)
-{
-    return (QString ( gDetailsRequest.arg(movieId) ) );
-}
-
-QString MovieViewManager::formatMovieCreditsUrl(int movieId)
-{
-    return (QString ( gCreditsRequest.arg(movieId) ) );
-}
-
 int MovieViewManager::removeSelectedMovie(int responseId)
 {
     mMovieResponses.erase(mMovieResponses.begin() + responseId);
@@ -72,19 +64,6 @@ void MovieViewManager::shareMovieResponses()
     QFuture<QString> future = QtConcurrent::run<QString>(&mShareResponsesFormatterformatter, &ShareResponsesFormatter::formatAsText,
                                                          mMovieResponses.cbegin(), mMovieResponses.cend());
     mShareResponsesWatcher.setFuture(future);
-}
-
-void MovieViewManager::onShareResponsesFormatted()
-{
-    if ( mShareResponsesWatcher.result().size() == 0)
-    {
-        emit displayTextMessage( tr( "Share FlicsFacts"), tr("There is nothing to share."));
-    }
-    else
-    {
-        ShareClient shareClient(parent());
-        shareClient.setShare(mShareResponsesWatcher.result());
-    }
 }
 
 void MovieViewManager::queryMovieCredits(int responseId, int movieId)
@@ -171,191 +150,18 @@ void MovieViewManager::onCreditsParsingComplete(int responseId, bool successful)
     }
 }
 
-void MovieViewManager::setStatus(int responseId, const QString& status)
+void MovieViewManager::onShareResponsesFormatted()
 {
-    if ( mMovieResponses.at(static_cast<std::size_t>(responseId))->Status == status)
-        return;
-    mMovieResponses.at(static_cast<std::size_t>(responseId))->Status = status;
+    if ( mShareResponsesWatcher.result().size() == 0)
+    {
+        emit displayTextMessage( tr( "Share FlicsFacts"), tr("There is nothing to share."));
+    }
+    else
+    {
+        ShareClient shareClient(parent());
+        shareClient.setShare(mShareResponsesWatcher.result());
+    }
 }
-
-void MovieViewManager::setYear(int responseId, const QString&  year)
-{
-    if ( mMovieResponses.at(static_cast<std::size_t>(responseId))->Year == year)
-        return;
-
-    mMovieResponses.at(static_cast<std::size_t>(responseId))->Year = year;
-}
-
-void MovieViewManager::setTitle(int responseId,const QString&  title)
-{
-    if ( mMovieResponses.at(static_cast<std::size_t>(responseId))->Title == title)
-        return;
-    mMovieResponses.at(static_cast<std::size_t>(responseId))->Title = title;
-}
-
-void MovieViewManager::setPoster(int responseId,const QString&  poster)
-{
-    if ( mMovieResponses.at(static_cast<std::size_t>(responseId))->Poster == poster)
-        return;
-
-    mMovieResponses.at(static_cast<std::size_t>(responseId) )->Poster = poster;
-}
-
-void MovieViewManager::setGenre(int responseId, const QString&  genre)
-{
-    if ( mMovieResponses.at(static_cast<std::size_t>(responseId))->Genre == genre)
-        return;
-    mMovieResponses.at(static_cast<std::size_t>(responseId))->Genre = genre;
-}
-
-void MovieViewManager::setPopularity(int responseId,const QString&  popularity)
-{
-    if ( mMovieResponses.at(static_cast<std::size_t>(responseId))->Popularity == popularity)
-        return;
-    mMovieResponses.at(static_cast<std::size_t>(responseId))->Popularity = popularity;
-}
-
-void MovieViewManager::setLanguages(int responseId,const QString&  languages)
-{
-    if ( mMovieResponses.at(static_cast<std::size_t>(responseId))->Languages == languages)
-        return;
-    mMovieResponses.at(static_cast<std::size_t>(responseId))->Languages = languages;
-}
-
-void MovieViewManager::setWebsite(int responseId,const QString&  website)
-{
-    if ( mMovieResponses.at(static_cast<std::size_t>(responseId))->Website == website)
-        return;
-    mMovieResponses.at(static_cast<std::size_t>(responseId))->Website = website;
-}
-
-void MovieViewManager::setWebsiteUrl(int responseId,const QString&  websiteUrl)
-{
-    if ( mMovieResponses.at(static_cast<std::size_t>(responseId))->WebsiteUrl == websiteUrl)
-        return;
-    mMovieResponses.at(static_cast<std::size_t>(responseId))->WebsiteUrl = websiteUrl;
-}
-
-void MovieViewManager::setRated(int responseId,const QString&  rated)
-{
-    if ( mMovieResponses.at(static_cast<std::size_t>(responseId))->Rated == rated)
-        return;
-    mMovieResponses.at(static_cast<std::size_t>(responseId))->Rated = rated;
-}
-
-void MovieViewManager::setReleased(int responseId,const QString&  released)
-{
-    if ( mMovieResponses.at(static_cast<std::size_t>(responseId))->Released == released)
-        return;
-    mMovieResponses.at(static_cast<std::size_t>(responseId))->Released = released;
-}
-
-void MovieViewManager::setRuntime(int responseId,const QString&  runtime)
-{
-    if ( mMovieResponses.at(static_cast<std::size_t>(responseId))->Runtime == runtime)
-        return;
-    mMovieResponses.at(static_cast<std::size_t>(responseId))->Runtime = runtime;
-}
-
-void MovieViewManager::setActors(int responseId,const QString&  actors)
-{
-    if ( mMovieResponses.at(static_cast<std::size_t>(responseId))->Actors == actors)
-        return;
-    mMovieResponses.at(static_cast<std::size_t>(responseId))->Actors = actors;
-}
-
-void MovieViewManager::setPlot(int responseId,const QString&  plot)
-{
-    if ( mMovieResponses.at(static_cast<std::size_t>(responseId))->Plot == plot)
-        return;
-    mMovieResponses.at(static_cast<std::size_t>(responseId))->Plot = plot;
-}
-
-void MovieViewManager::setTitleRequest(const QString&  titleRequest)
-{
-    if (m_titleRequest == titleRequest)
-        return;
-
-    m_titleRequest = titleRequest;
-    emit titleRequestChanged(titleRequest);
-}
-
-QString MovieViewManager::year(int responseId) const
-{
-    return mMovieResponses.at(static_cast<std::size_t>(responseId))->Year;
-}
-
-QString MovieViewManager::rated(int responseId) const
-{
-    return mMovieResponses.at(static_cast<std::size_t>(responseId))->Rated;
-}
-
-QString MovieViewManager::released(int responseId) const
-{
-    return mMovieResponses.at(static_cast<std::size_t>(responseId))->Released;
-}
-
-QString MovieViewManager::runtime(int responseId) const
-{
-    return mMovieResponses.at(static_cast<std::size_t>(responseId))->Runtime;
-}
-
-QString MovieViewManager::actors(int responseId) const
-{
-    return mMovieResponses.at(static_cast<std::size_t>(responseId))->Actors;
-}
-
-QString MovieViewManager::plot(int responseId) const
-{
-    return mMovieResponses.at(static_cast<std::size_t>(responseId))->Plot;
-}
-
-QString MovieViewManager::popularity(int responseId) const
-{
-    return mMovieResponses.at(static_cast<std::size_t>(responseId))->Popularity;
-}
-
-int MovieViewManager::movieId(int responseId) const
-{
-    return mMovieResponses.at(static_cast<std::size_t>(responseId))->MovieId;
-}
-
-QString MovieViewManager::languages(int responseId) const
-{
-    return mMovieResponses.at(static_cast<std::size_t>(responseId))->Languages;
-}
-
-QString MovieViewManager::website(int responseId) const
-{
-    return mMovieResponses.at(static_cast<std::size_t>(responseId))->Website;
-}
-
-QString MovieViewManager::websiteUrl(int responseId) const
-{
-    return mMovieResponses.at(static_cast<std::size_t>(responseId))->WebsiteUrl;
-}
-
-QString MovieViewManager::title(int responseId) const
-{
-    return mMovieResponses.at(static_cast<std::size_t>(responseId))->Title;
-}
-
-QString MovieViewManager::poster(int responseId) const
-{
-    return mMovieResponses.at(static_cast<std::size_t>(responseId))->Poster;
-}
-
-QString MovieViewManager::genre(int responseId) const
-{
-    return mMovieResponses.at(static_cast<std::size_t>(responseId))->Genre;
-}
-
-QString MovieViewManager::status(int responseId) const
-{
-    return mMovieResponses.at(static_cast<std::size_t>(responseId))->Status;
-}
-
-
 
 
 
