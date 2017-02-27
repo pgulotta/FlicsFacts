@@ -8,6 +8,7 @@
 #include <QtAndroid>
 #endif
 
+#include "fam/floatingactions.hpp"
 
 Initializer::Initializer(QObject *parent) :
     QObject{parent},
@@ -17,10 +18,18 @@ Initializer::Initializer(QObject *parent) :
     QApplication::setApplicationName(tr("FlicsFacts"));
     QApplication::setOrganizationName("26Apps");
     QQuickStyle::setStyle("Material");
+    QQmlApplicationEngine engine;
+
+    FloatingActions::initialize(engine.rootContext(), &mQmlApplicationEngine);
 
     mQmlApplicationEngine.rootContext()->setContextProperty("MovieViewManager",&mMovieViewManager);
     mQmlApplicationEngine.load(QUrl(QStringLiteral("qrc:/Qml/main.qml")));
-
+//    auto rootObjects = mQmlApplicationEngine.rootObjects();
+//    if (rootObjects.count() < 1)
+//    {
+//        qDebug() << "Failed to load Qml.  Application is exiting";
+//        app.exit();
+//    }
 #ifdef Q_OS_ANDROID
     QtAndroid::hideSplashScreen();
 #endif

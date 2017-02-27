@@ -6,6 +6,13 @@ QT += qml \
     widgets \
     network \
 
+CONFIG += c++14
+#CONFIG += c++14 \
+#	qtquickcompiler
+
+
+include(./fam/fam.pri)
+
 SOURCES += main.cpp \
     initializer.cpp \
     Controller/omdbresponseparser.cpp \
@@ -48,18 +55,16 @@ RESOURCES += qml.qrc
 
 ICON = Resources/icon.png
 
+QML_IMPORT_PATH += $$PWD
+
+DEFINES += QT_USE_QSTRINGBUILDER \
+    QT_DEPRECATED_WARNINGS
+
+
 win32: RC_FILE = Resources/FlicsFacts.rc
-
-DEFINES += QT_USE_QSTRINGBUILDER
-
-CONFIG += c++14
-
 gcc|clang {
     QMAKE_CXXFLAGS += -std=c++1y
 }
-
-
-QML_IMPORT_PATH =
 
 android {
     QT += androidextras

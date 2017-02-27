@@ -3,6 +3,7 @@ import QtQuick.Layouts 1.3
 import QtQuick.Window 2.2
 import QtQuick.Controls 2.1
 import QtQuick.Controls.Material 2.1
+import "../fam"
 
 ApplicationWindow {
     readonly property bool isPortraitMode: Screen.height > Screen.width
@@ -131,6 +132,8 @@ ApplicationWindow {
 
     MovieResults {
         id: movieResultsId
+        FloatingActionMenu {
+        }
     }
 
     ShowAbout {
