@@ -6,9 +6,8 @@ QT += qml \
     widgets \
     network \
 
-CONFIG += c++14
-#CONFIG += c++14 \
-#	qtquickcompiler
+CONFIG += c++14 \
+    qtquickcompiler
 
 
 include(./fam/fam.pri)

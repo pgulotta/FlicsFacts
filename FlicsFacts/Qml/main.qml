@@ -37,13 +37,25 @@ ApplicationWindow {
         Material.elevation: 4
         RowLayout {
             anchors.fill: parent
+            ToolButton {
+                id: menuToolbarId
+                anchors.left: parent.left
+                anchors.leftMargin: textBorderWidth
+                contentItem: Image {
+                    fillMode: Image.Pad
+                    horizontalAlignment: Image.AlignHCenter
+                    verticalAlignment: Image.AlignVCenter
+                    source: "qrc:/Images/menu.png"
+                }
+                onClicked: drawerId.open()
+            }
             Rectangle {
                 id: searchTextRectId
                 width: isPortraitMode ? .4 * rootId.width : .5 * rootId.width
                 height: tabHeight
                 radius: 4
-                anchors.left: parent.left
-                anchors.leftMargin: spacingIndent
+                anchors.left: menuToolbarId.right
+                anchors.leftMargin: textBorderWidth
                 border.width: textBorderWidth
                 border.color: Material.accent
                 TextField {
@@ -117,22 +129,29 @@ ApplicationWindow {
                 }
             }
             ToolButton {
-                id: menuButtonId
+                id: moreButtonId
                 anchors.right: parent.right
                 contentItem: Image {
                     fillMode: Image.Pad
                     horizontalAlignment: Image.AlignHCenter
                     verticalAlignment: Image.AlignVCenter
-                    source: "qrc:/Images/menu.png"
+                    source: "qrc:/Images/more.png"
                 }
                 onClicked: showAboutId.open()
             }
         }
     }
 
+    Drawer {
+        id: drawerId
+        width: isPortraitMode ? rootId.width / 2 : rootId.width / 3
+        height: rootId.height
+    }
+
     MovieResults {
         id: movieResultsId
         FloatingActionMenu {
+            famIconColor: Material.accent
         }
     }
 
