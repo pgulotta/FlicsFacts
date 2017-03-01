@@ -1,12 +1,11 @@
 <RCC>
     <qresource prefix="/">
-        <file>qtquickcontrols2.conf</file>	
+        <file>qtquickcontrols2.conf</file>
         <file>Qml/main.qml</file>
         <file>Qml/ShowAbout.qml</file>
         <file>Qml/ShowMessage.qml</file>
-        <file>Qml/MovieResults.qml</file>
         <file>Qml/MovieSearchResults.qml</file>
-		<file>Qml/TitleLabel.qml</file>
+        <file>Qml/TitleLabel.qml</file>
         <file>Qml/HeadingLabel.qml</file>
         <file>Qml/TextLabel.qml</file>
         <file>Qml/GridTitleLabel.qml</file>

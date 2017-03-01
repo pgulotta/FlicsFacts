@@ -1,7 +1,8 @@
-#include "../FlicsFacts/Model/movieresponse.hpp "
+#include "../FlicsFacts/Model/moviesearchresponse.hpp "
 #include "../FlicsFacts/Controller/movieviewmanager.hpp"
 #include "../FlicsFacts/Controller/shareresponsesformatter.hpp"
 #include "../FlicsFacts/Controller/omdbresponseparser.hpp"
+#include "../FlicsFacts/fam/qqmlobjectlistmodel.hpp"
 #include <QTest>
 #include <QDebug>
 #include <QFile>
@@ -35,11 +36,10 @@ void TestFlicsFacts::cleanupTestCase()
 
 void TestFlicsFacts::testNoResponse()
 {
-    std::vector <std::unique_ptr<MovieResponse> > movieResponses;
-    MovieResponse movieResponse;
-    movieResponses.emplace_back( std::make_unique<MovieResponse>(movieResponse) );
+    QQmlObjectListModel<MovieSearchResponse> movieResponses;
+    movieResponses.append( new MovieSearchResponse(this));
     ShareResponsesFormatter formatter;
-    auto formattedResponses= formatter.formatAsText(movieResponses.cbegin(), movieResponses.cend());
+    auto formattedResponses= formatter.formatAsText(movieResponses.constBegin(), movieResponses.constEnd());
     QVERIFY(formattedResponses.size() == 0);
 }
 

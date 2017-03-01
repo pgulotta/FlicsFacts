@@ -22,7 +22,6 @@ RESOURCES += \
     resources.qrc
 
 HEADERS += \
-    ../FlicsFacts/Model/movieresponse.hpp \
     ../FlicsFacts/Model/moviesearchresponse.hpp \
     ../FlicsFacts/Controller/omdbresponseparser.hpp \
     ../FlicsFacts/Controller/shareresponsesformatter.hpp \

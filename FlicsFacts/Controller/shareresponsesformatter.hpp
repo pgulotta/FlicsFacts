@@ -1,6 +1,7 @@
 #pragma once
 
-#include <../FlicsFacts/Model/movieresponse.hpp>
+#include "../FlicsFacts/fam/qqmlobjectlistmodel.hpp"
+#include <../FlicsFacts/Model/moviesearchresponse.hpp>
 #include <QObject>
 #include <vector>
 #include <iterator>
@@ -20,7 +21,7 @@ public:
     explicit ShareResponsesFormatter(QObject *parent = 0);
     explicit ShareResponsesFormatter(const ShareResponsesFormatter& rhs) = delete;
     ShareResponsesFormatter& operator= (const ShareResponsesFormatter& rhs) = delete;
-    QString formatAsText(std::vector<std::unique_ptr<MovieResponse> >::const_iterator begin, std::vector<std::unique_ptr<MovieResponse> >::const_iterator end);
+    QString formatAsText(QQmlObjectListModel<MovieSearchResponse>::const_iterator begin, QQmlObjectListModel<MovieSearchResponse>::const_iterator end);
 
 private:
     QString mFormattedResponses;

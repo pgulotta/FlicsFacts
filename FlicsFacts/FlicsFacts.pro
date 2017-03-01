@@ -22,7 +22,6 @@ SOURCES += main.cpp \
 
 HEADERS += \
     initializer.hpp \
-    Model/movieresponse.hpp \
     Controller/omdbresponseparser.hpp \
     Controller/movieviewmanager.hpp \
     Controller/shareclient.hpp \

@@ -120,50 +120,50 @@ void OmdbResponseParser::parseSearchResult( const QByteArray& source,  int respo
                         QJsonArray resultsArray = results.toArray();
                         if ( resultsArray.count() > 0)
                         {
+                            auto movieResponse = mMovieViewManager.searchResponseModel()->at(responseId);
                             QJsonObject jsonObject = resultsArray.at(0).toObject();
                             if (jsonObject.contains(QStringLiteral("title")))
                             {
-                                mMovieViewManager.setWebsite( responseId, gDefaultField);
-                                mMovieViewManager.setWebsiteUrl( responseId, gDefaultField);
-                                mMovieViewManager.setRuntime ( responseId, gDefaultField);
-                                mMovieViewManager.setActors ( responseId, gDefaultField);
-                                mMovieViewManager.setLanguages(  responseId, gDefaultField);
-
-                                mMovieViewManager.setTitle (responseId, jsonObject.value(QStringLiteral("title")).toString());
+                                movieResponse->setWebsite(  gDefaultField);
+                                movieResponse->setWebsiteUrl(  gDefaultField);
+                                movieResponse->setRuntime (  gDefaultField);
+                                movieResponse->setActors (  gDefaultField);
+                                movieResponse->setLanguages(   gDefaultField);
+                                movieResponse->setTitle ( jsonObject.value(QStringLiteral("title")).toString());
 
                                 if (jsonObject.contains(QStringLiteral("id")))
-                                    mMovieViewManager.setMovieId(responseId,  jsonObject.value(QStringLiteral("id") ).toInt());
+                                    movieResponse->setMovieId(  jsonObject.value(QStringLiteral("id") ).toInt());
                                 else
-                                    mMovieViewManager.setMovieId(responseId, 0);
+                                    movieResponse->setMovieId( 0);
 
                                 if (jsonObject.contains(QStringLiteral("release_date")))
                                 {
                                     QString releaseDate = jsonObject.value(QStringLiteral("release_date")).toString();
-                                    mMovieViewManager.setReleased ( responseId, releaseDate);
-                                    mMovieViewManager.setYear (responseId,  extractYear(releaseDate) );
+                                    movieResponse->setReleased (  releaseDate);
+                                    movieResponse->setYear (  extractYear(releaseDate) );
                                 }
                                 else
-                                    mMovieViewManager.setReleased ( responseId,  gDefaultField);
+                                    movieResponse->setReleased (   gDefaultField);
 
                                 if (jsonObject.contains(QStringLiteral("overview")))
-                                    mMovieViewManager.setPlot (responseId,   jsonObject.value(QStringLiteral("overview")).toString());
+                                    movieResponse->setPlot (   jsonObject.value(QStringLiteral("overview")).toString());
                                 else
-                                    mMovieViewManager.setPlot ( responseId, gDefaultField);
+                                    movieResponse->setPlot (  gDefaultField);
 
                                 if (jsonObject.contains(QStringLiteral("popularity")))
-                                    mMovieViewManager.setPopularity (responseId, convertJsonDoubleToString (QStringLiteral("popularity"), jsonObject));
+                                    movieResponse->setPopularity ( convertJsonDoubleToString (QStringLiteral("popularity"), jsonObject));
                                 else
-                                    mMovieViewManager.setPopularity ( responseId, gDefaultField);
+                                    movieResponse->setPopularity (  gDefaultField);
 
                                 if (jsonObject.contains (QStringLiteral("vote_average")))
-                                    mMovieViewManager.setRated(responseId,convertJsonDoubleToString(QStringLiteral("vote_average"), jsonObject));
+                                    movieResponse->setRating(convertJsonDoubleToString(QStringLiteral("vote_average"), jsonObject));
                                 else
-                                    mMovieViewManager.setRated(  responseId, gDefaultField);
+                                    movieResponse->setRating( gDefaultField);
                                 if (jsonObject.contains(QStringLiteral("poster_path")))
-                                    mMovieViewManager.setPoster (responseId, jsonObject.value(QStringLiteral("poster_path")).toString());
+                                    movieResponse->setPoster ( jsonObject.value(QStringLiteral("poster_path")).toString());
                                 else
-                                    mMovieViewManager.setPoster ( responseId, gDefaultField);
-                                mMovieViewManager.setGenre ( responseId,  getGenres(jsonObject));
+                                    movieResponse->setPoster (  gDefaultField);
+                                movieResponse->setGenre (   getGenres(jsonObject));
 
                                 success = true;
                             }
@@ -189,22 +189,22 @@ void OmdbResponseParser::parseMovieDetails( const QByteArray& source,  int respo
             QJsonDocument document = QJsonDocument::fromJson(source);
             if ( !document.isNull() && !document.isEmpty())
             {
+                auto movieResponse = mMovieViewManager.searchResponseModel()->at(responseId);
                 QJsonObject jsonObject = document.object();
-
                 if (jsonObject.contains(QStringLiteral("homepage")))
                 {
                     auto homepage = jsonObject.value(QStringLiteral("homepage")).toString();
                     if ( !homepage.isEmpty() )
                     {
                         auto website = "<a href=\"" + jsonObject.value(QStringLiteral("homepage")).toString() + "\">Go to ...</a>";
-                        mMovieViewManager.setWebsite ( responseId,  website);
-                        mMovieViewManager.setWebsiteUrl ( responseId,  homepage);
+                        movieResponse->setWebsite (   website);
+                        movieResponse->setWebsiteUrl (   homepage);
                     }
                 }
                 if (jsonObject.contains(QStringLiteral("runtime")))
-                    mMovieViewManager.setRuntime ( responseId,  QString("%1 min").arg(jsonObject.value(QStringLiteral("runtime")).toInt()));
+                    movieResponse->setRuntime (   QString("%1 min").arg(jsonObject.value(QStringLiteral("runtime")).toInt()));
 
-                mMovieViewManager.setLanguages( responseId,  getLanguages(jsonObject));
+                movieResponse->setLanguages(   getLanguages(jsonObject));
                 success = true;
             }
         }
@@ -226,6 +226,7 @@ void OmdbResponseParser::parseMovieCredits( const QByteArray& source,  int respo
             QJsonDocument document = QJsonDocument::fromJson(source);
             if ( !document.isNull() && !document.isEmpty())
             {
+                auto movieResponse = mMovieViewManager.searchResponseModel()->at(responseId);
                 QJsonObject jsonObject = document.object();
                 if (jsonObject.contains(QStringLiteral("cast")))
                 {
@@ -246,7 +247,7 @@ void OmdbResponseParser::parseMovieCredits( const QByteArray& source,  int respo
                         }
                     }
                 }
-                mMovieViewManager.setActors( responseId, result);
+                movieResponse->setActors(  result);
                 success = true;
             }
         }

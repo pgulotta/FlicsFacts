@@ -47,8 +47,7 @@ void MovieViewManager::findFlicSelected(const QString& movieTitle)
     if (movieTitle.isEmpty())
         return;
 
-    int responseIndex = static_cast<int>(mMovieResponses.size());
-    mMovieResponses.emplace_back( std::make_unique<MovieResponse>() );
+    int responseIndex = m_searchResponseModel.count();
     m_searchResponseModel.append( new MovieSearchResponse(this));
     queryMovieSearch(responseIndex, movieTitle);
 }
@@ -56,14 +55,13 @@ void MovieViewManager::findFlicSelected(const QString& movieTitle)
 int MovieViewManager::removeSelectedMovie(int responseId)
 {
     m_searchResponseModel.remove(responseId);
-    mMovieResponses.erase(mMovieResponses.begin() + responseId);
-    return static_cast<int>( mMovieResponses.size());
+    return m_searchResponseModel.count();
 }
 
 void MovieViewManager::shareMovieResponses()
 {
     QFuture<QString> future = QtConcurrent::run<QString>(&mShareResponsesFormatterformatter, &ShareResponsesFormatter::formatAsText,
-                                                         mMovieResponses.cbegin(), mMovieResponses.cend());
+                                                         m_searchResponseModel.constBegin(), m_searchResponseModel.constEnd());
     mShareResponsesWatcher.setFuture(future);
 }
 
@@ -97,7 +95,7 @@ void MovieViewManager::onNetworkReply(QNetworkReply *networkReply)
     if ( networkReply->error())
     {
         auto errorMessage = networkReply->errorString().length() > 50    ? "" : networkReply->errorString();
-        setStatus ( responseId, QString ("%1\n%2").arg(m_requestFailed).arg( errorMessage));
+        m_searchResponseModel.at(responseId)->setStatus ( QString ("%1\n%2").arg(m_requestFailed).arg( errorMessage));
         emit responseReceived(responseId);
     }
     else
@@ -122,15 +120,16 @@ void MovieViewManager::onNetworkReply(QNetworkReply *networkReply)
 
 void MovieViewManager::onSearchParsingComplete(int responseId, bool successful)
 {
+    auto movieResponse = m_searchResponseModel.at(responseId);
     if (successful)
     {
-        setStatus ( responseId, "");
-        queryMovieDetails (responseId, mMovieResponses.at(static_cast<std::size_t>(responseId))->MovieId);
-        queryMovieCredits(responseId, mMovieResponses.at(static_cast<std::size_t>(responseId))->MovieId);
+        m_searchResponseModel.at(responseId)->setStatus ("");
+        queryMovieDetails (responseId, movieResponse->movieId());
+        queryMovieCredits(responseId, movieResponse->movieId());
     }
     else
     {
-        setStatus ( responseId, QString (tr("Unable to find the selected flic.")));
+        movieResponse->setStatus(tr("Unable to find the selected flic."));
     }
     emit responseReceived(responseId);
 }

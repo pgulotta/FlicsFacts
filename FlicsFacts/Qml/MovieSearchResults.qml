@@ -166,7 +166,6 @@ Pane {
             }
             Row {
                 anchors.top: gridBottomId.top
-                // anchors.topMargin: textMargin
                 Label {
                     width: paneId.width
                     horizontalAlignment: "AlignHCenter"

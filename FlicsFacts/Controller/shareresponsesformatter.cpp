@@ -14,29 +14,29 @@ ShareResponsesFormatter::ShareResponsesFormatter(QObject *parent) :
 {
 }
 
-QString ShareResponsesFormatter::formatAsText(std::vector<std::unique_ptr<MovieResponse> >::const_iterator cbegin,
-                                              std::vector<std::unique_ptr<MovieResponse> >::const_iterator cend)
+QString ShareResponsesFormatter::formatAsText(QQmlObjectListModel<MovieSearchResponse>::const_iterator cbegin,
+                                              QQmlObjectListModel<MovieSearchResponse>::const_iterator cend)
 {
     mFormattedResponses.clear();
 
     std::for_each(cbegin, cend, [&]  ( auto&& movieResponse)
     {
-        if ( movieResponse->Title.size() >0)
+        if ( movieResponse->title().size() >0)
         {
-            mFormattedResponses += QString("\r\n*****  %1    *****\r\n").arg(movieResponse->Title);
-            formatField(tr("Genre"), movieResponse->Genre, mFormattedResponses);
-            formatField(tr("Year"), movieResponse->Year, mFormattedResponses);
-            formatField(tr("Released"), movieResponse->Released, mFormattedResponses);
-            formatField(tr("Runtime"), movieResponse->Runtime, mFormattedResponses);
-            formatField(tr("Rated"), movieResponse->Rated, mFormattedResponses);
-            formatField(tr("Popularity"), movieResponse->Popularity, mFormattedResponses);
-            formatField(tr("Languages"), movieResponse->Languages, mFormattedResponses);
+            mFormattedResponses += QString("\r\n*****  %1    *****\r\n").arg(movieResponse->title());
+            formatField(tr("Genre"), movieResponse->genre(), mFormattedResponses);
+            formatField(tr("Year"), movieResponse->year(), mFormattedResponses);
+            formatField(tr("Released"), movieResponse->released(), mFormattedResponses);
+            formatField(tr("Runtime"), movieResponse->runtime(), mFormattedResponses);
+            formatField(tr("Rated"), movieResponse->rating(), mFormattedResponses);
+            formatField(tr("Popularity"), movieResponse->popularity(), mFormattedResponses);
+            formatField(tr("Languages"), movieResponse->languages(), mFormattedResponses);
             mFormattedResponses += QString("\r\n");
-            formatField(tr("Actors"), movieResponse->Actors, mFormattedResponses);
-            if ( !movieResponse->WebsiteUrl.trimmed().isEmpty())
-                formatField(tr("Website"), movieResponse->WebsiteUrl, mFormattedResponses);
+            formatField(tr("Actors"), movieResponse->actors(), mFormattedResponses);
+            if ( !movieResponse->websiteUrl().trimmed().isEmpty())
+                formatField(tr("Website"), movieResponse->websiteUrl(), mFormattedResponses);
             mFormattedResponses += QString("\r\n");
-            formatField(tr("Plot"), movieResponse->Plot, mFormattedResponses);
+            formatField(tr("Plot"), movieResponse->plot(), mFormattedResponses);
             mFormattedResponses += QString("\r\n");
         }
     });
