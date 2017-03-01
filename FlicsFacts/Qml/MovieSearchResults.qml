@@ -30,7 +30,8 @@ Pane {
             model: searchResponseModel
             delegate: searchResponseDelegateId
         }
-        onCurrentIndexChanged: MovieViewManager.tryQueryMovieSearch(currentIndex)
+        onCurrentIndexChanged: MovieViewManager.tryQueryMovieSearch(
+                                   currentIndex)
     }
     PageIndicator {
         count: swipeViewId.count
@@ -197,6 +198,4 @@ Pane {
     ShowMessage {
         id: showMessageId
     }
-
-
 }

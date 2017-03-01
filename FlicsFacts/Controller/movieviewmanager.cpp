@@ -87,7 +87,6 @@ void MovieViewManager::queryMovieDetails(int responseId, int movieId)
 
 void MovieViewManager::tryQueryMovieSearch(int responseId)
 {
-    qDebug() << "MovieViewManager::tryQueryMovieSearch"  <<  responseId;
     if ( responseId <0 ||  responseId >=  m_searchResponseModel.count() )
         return;
     auto searchResponse = m_searchResponseModel.at(responseId);

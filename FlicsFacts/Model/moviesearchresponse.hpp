@@ -195,18 +195,18 @@ signals:
 public:
     explicit MovieSearchResponse(QObject *parent = nullptr) :
         QObject(parent){
-        qDebug() << " MovieSearchResponse() called";
+        //  qDebug() << " MovieSearchResponse() called";
     }
 
     MovieSearchResponse(const QString& title,  QObject *parent = nullptr) :
         QObject(parent){
-        qDebug() << " MovieSearchResponse() called";
+        // qDebug() << " MovieSearchResponse() called";
         m_title= title;
     }
 
     ~MovieSearchResponse()
     {
-        qDebug() << " ~MovieSearchResponse() called";
+        // qDebug() << " ~MovieSearchResponse() called";
     }
 
     int movieId() const
