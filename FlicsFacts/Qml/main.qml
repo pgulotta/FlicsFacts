@@ -68,7 +68,6 @@ ApplicationWindow {
                     anchors.leftMargin: textMargin
                     anchors.right: searchTextRectId.right
                     anchors.rightMargin: textMargin
-                    text: MovieViewManager.titleRequest
                     Keys.onReturnPressed: {
                         Qt.inputMethod.hide()
                         processSearchRequest()
@@ -102,8 +101,7 @@ ApplicationWindow {
                     source: "qrc:/Images/remove.png"
                 }
                 onClicked: {
-                    var movieCount = MovieViewManager.removeSelectedMovie(
-                                movieSearchResultsId.movieIndex)
+                    MovieViewManager.removeSelectedMovie(movieSearchResultsId.movieIndex)
                     onFocusChanged: Qt.inputMethod.hide()
                 }
             }

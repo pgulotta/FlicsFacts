@@ -21,7 +21,7 @@ Q_PROPERTY(QString requestFailed READ requestFailed CONSTANT )
 Q_PROPERTY(QString appName READ appName CONSTANT )
 Q_PROPERTY(QString appVersion READ appVersion CONSTANT )
 Q_PROPERTY(QString appNameVersion READ appNameVersion CONSTANT )
-Q_PROPERTY(QString titleRequest READ titleRequest NOTIFY titleRequestChanged)
+Q_PROPERTY(QString titleRequest READ titleRequest )
 
 public slots:
     void onNetworkReply(QNetworkReply *networkReply);
@@ -32,7 +32,6 @@ public slots:
 
 signals:
     void responseReceived(int responseId);
-    void titleRequestChanged(const QString&  titleRequest);
     void displayTextMessage(const QString&  title, QString message);
 
 public:
@@ -42,8 +41,8 @@ public:
 
     Q_INVOKABLE void shareMovieResponses();
     Q_INVOKABLE void findFlicSelected(const QString& movieTitle);
-    Q_INVOKABLE void queryMovieSearch(int responseId, const QString& movieTitle);
-    Q_INVOKABLE int removeSelectedMovie(int responseId);
+    Q_INVOKABLE void tryQueryMovieSearch(int responseId);
+    Q_INVOKABLE void removeSelectedMovie(int responseId);
 
     QString appName() const
     {
@@ -67,7 +66,7 @@ public:
 
     QString requestFailed() const
     {
-        return m_requestFailed;
+        return m_networkFailureMessage;
     }
 
     QQmlObjectListModel<MovieSearchResponse>*  searchResponseModel()
@@ -76,11 +75,12 @@ public:
     }
 
 private:
+    void queryMovieSearch(int responseId, const QString& movieTitle);
     void queryMovieDetails(int responseId, int movieId);
     void queryMovieCredits(int responseId, int movieId);
 
 private:
-    QString m_requestFailed;
+    QString m_networkFailureMessage;
     QString m_appName;
     QString m_appVersion;
     QString m_titleRequest;

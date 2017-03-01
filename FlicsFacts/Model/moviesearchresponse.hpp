@@ -162,7 +162,6 @@ public slots:
     }
 
 signals:
-
     void movieIdChanged(int movieId);
 
     void titleChanged(QString title);
@@ -197,6 +196,12 @@ public:
     explicit MovieSearchResponse(QObject *parent = nullptr) :
         QObject(parent){
         qDebug() << " MovieSearchResponse() called";
+    }
+
+    MovieSearchResponse(const QString& title,  QObject *parent = nullptr) :
+        QObject(parent){
+        qDebug() << " MovieSearchResponse() called";
+        m_title= title;
     }
 
     ~MovieSearchResponse()

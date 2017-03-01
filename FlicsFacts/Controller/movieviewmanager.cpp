@@ -27,7 +27,7 @@ QString formatMovieCreditsUrl(int movieId)
 
 MovieViewManager::MovieViewManager(QObject *parent) :
     QObject{parent},
-    m_requestFailed{tr("This request was unsuccessful.")},
+    m_networkFailureMessage{tr("A network issue occurred when querying \nmovie")},
     m_appName{QApplication::applicationName()},
     m_appVersion{"1.09"},
     mShareResponsesFormatterformatter{parent},
@@ -48,14 +48,18 @@ void MovieViewManager::findFlicSelected(const QString& movieTitle)
         return;
 
     int responseIndex = m_searchResponseModel.count();
-    m_searchResponseModel.append( new MovieSearchResponse(this));
+    m_searchResponseModel.append( new MovieSearchResponse(movieTitle, this));
     queryMovieSearch(responseIndex, movieTitle);
 }
 
-int MovieViewManager::removeSelectedMovie(int responseId)
+void MovieViewManager::removeSelectedMovie(int responseId)
 {
+    if ( responseId <0 ||  responseId >=  m_searchResponseModel.count() )
+        return;
+    auto movieResponse = m_searchResponseModel.at(responseId);
     m_searchResponseModel.remove(responseId);
-    return m_searchResponseModel.count();
+    movieResponse->setParent(nullptr);
+    delete  movieResponse;
 }
 
 void MovieViewManager::shareMovieResponses()
@@ -81,8 +85,22 @@ void MovieViewManager::queryMovieDetails(int responseId, int movieId)
     mNetworkAccessManager.get(request);
 }
 
+void MovieViewManager::tryQueryMovieSearch(int responseId)
+{
+    qDebug() << "MovieViewManager::tryQueryMovieSearch"  <<  responseId;
+    if ( responseId <0 ||  responseId >=  m_searchResponseModel.count() )
+        return;
+    auto searchResponse = m_searchResponseModel.at(responseId);
+    if (searchResponse->status().startsWith(m_networkFailureMessage))
+    {
+        queryMovieSearch(responseId, searchResponse->title());
+    }
+}
+
 void MovieViewManager::queryMovieSearch(int responseId,const QString& movieTitle)
 {
+    if ( movieTitle.isEmpty())
+        return;
     auto request = QNetworkRequest( formatMovieSearchUrl(movieTitle));
     QStringList attributes {QString::number( responseId)};
     request.setAttribute(QNetworkRequest::Attribute::User, QVariant(attributes ));
@@ -95,7 +113,8 @@ void MovieViewManager::onNetworkReply(QNetworkReply *networkReply)
     if ( networkReply->error())
     {
         auto errorMessage = networkReply->errorString().length() > 50    ? "" : networkReply->errorString();
-        m_searchResponseModel.at(responseId)->setStatus ( QString ("%1\n%2").arg(m_requestFailed).arg( errorMessage));
+        auto searchResponse = m_searchResponseModel.at(responseId);
+        searchResponse->setStatus ( QString ("%1 %2.\n%3").arg(m_networkFailureMessage).arg(searchResponse->title()).arg( errorMessage));
         emit responseReceived(responseId);
     }
     else

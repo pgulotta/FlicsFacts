@@ -30,6 +30,7 @@ Pane {
             model: searchResponseModel
             delegate: searchResponseDelegateId
         }
+        onCurrentIndexChanged: MovieViewManager.tryQueryMovieSearch(currentIndex)
     }
     PageIndicator {
         count: swipeViewId.count
@@ -48,7 +49,7 @@ Pane {
                 rowSpacing: textMargin
                 columnSpacing: textMargin
                 verticalItemAlignment: Grid.AlignBottom
-                visible: model.title !== ""
+                visible: model.runtime !== ""
                 NumberAnimation on y {
                     easing.type: Easing.Linear
                     from: -windowHeight
