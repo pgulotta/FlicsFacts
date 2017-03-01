@@ -5,6 +5,7 @@
         <file>Qml/ShowAbout.qml</file>
         <file>Qml/ShowMessage.qml</file>
         <file>Qml/MovieResults.qml</file>
+        <file>Qml/MovieSearchResults.qml</file>
 		<file>Qml/TitleLabel.qml</file>
         <file>Qml/HeadingLabel.qml</file>
         <file>Qml/TextLabel.qml</file>

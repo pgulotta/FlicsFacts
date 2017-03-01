@@ -188,14 +188,6 @@ TabView {
         }
     }
 
-    ShowMessage {
-        id: showMessageId
-    }
-
-    Component.onCompleted: {
-        titleRequestId.forceActiveFocus()
-        Qt.inputMethod.hide()
-    }
 
     onCurrentIndexChanged: {
         var status = MovieViewManager.status(currentIndex)

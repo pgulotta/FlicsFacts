@@ -21,7 +21,6 @@ FloatingActions::FloatingActions( const QString& menuProperyName, const QString&
 
 void FloatingActions::initializeContext( QQmlContext *context)
 {
-    qDebug() << "FloatingActions::initializeContext called";
     context->setContextProperty(mMenuProperyName, mFloatingActionMenu);
     context->setContextProperty(mButtonsProperyName, &mFloatingActionButtons);
     context->setContextProperty("floatingActionMenu", mFloatingActionMenu);

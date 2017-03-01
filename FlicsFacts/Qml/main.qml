@@ -22,8 +22,6 @@ ApplicationWindow {
     readonly property string tmdbLink: "http://www.themoviedb.org/"
     readonly property string qtLink: "http://www.qt.io/"
     readonly property string websiteLink: "http://sites.google.com/view/flicsfacts/home"
-    property alias tabViewCurrentIndex: movieResultsId.currentIndex
-    property alias tabViewCurrentTitle: movieResultsId.currentTitle
 
     id: rootId
     visible: true
@@ -96,7 +94,7 @@ ApplicationWindow {
             ToolButton {
                 id: removeButtonId
                 anchors.left: searchButtonId.right
-                visible: tabViewCurrentTitle !== ""
+                visible: searchResponseModel.count !== 0
                 contentItem: Image {
                     fillMode: Image.Pad
                     horizontalAlignment: Image.AlignHCenter
@@ -105,18 +103,14 @@ ApplicationWindow {
                 }
                 onClicked: {
                     var movieCount = MovieViewManager.removeSelectedMovie(
-                                tabViewCurrentIndex)
-                    if (movieCount === 0)
-                        tabViewCurrentTitle = ""
-                    movieResultsId.deleteTab(tabViewCurrentIndex)
-                    movieResultsId.refreshTab()
+                                movieSearchResultsId.movieIndex)
                     onFocusChanged: Qt.inputMethod.hide()
                 }
             }
             ToolButton {
                 id: shareButtonId
                 anchors.left: removeButtonId.right
-                visible: tabViewCurrentTitle !== "" && isAndroidPlatform
+                visible: isAndroidPlatform && searchResponseModel.count !== 0
                 contentItem: Image {
                     fillMode: Image.Pad
                     horizontalAlignment: Image.AlignHCenter
@@ -148,15 +142,23 @@ ApplicationWindow {
         height: rootId.height
     }
 
-    MovieResults {
-        id: movieResultsId
+    MovieSearchResults {
+        id: movieSearchResultsId
+        visible: true
         FloatingActionMenu {
             famIconColor: Material.accent
         }
+
     }
 
     ShowAbout {
         id: showAboutId
+    }
+
+    function getCurrentSearchMovieTitle() {
+        console.log("getCurrentSearchMovieTitle")
+        return ( searchResponseModel.count === 0 || movieSearchResultsId === undefined || movieSearchResultsId.movieIndex === undefined)  ?
+                    "" :  searchResponseModel.get(movieSearchResultsId.movieIndex)
     }
 
     function processSearchRequest() {

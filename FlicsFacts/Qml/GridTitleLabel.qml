@@ -5,4 +5,5 @@ Label {
     color: Material.foreground
     font.pointSize: fontSizeMedium
     width: firstColumnWidth
+    elide: Qt.ElideRight
 }

@@ -1,6 +1,9 @@
 QT   += testlib \
-        widgets \
-        network \
+    qml \
+    quick \
+    quickcontrols2 \
+    widgets \
+    network \
 
 android {
     QT += androidextras
@@ -20,10 +23,13 @@ RESOURCES += \
 
 HEADERS += \
     ../FlicsFacts/Model/movieresponse.hpp \
+    ../FlicsFacts/Model/moviesearchresponse.hpp \
     ../FlicsFacts/Controller/omdbresponseparser.hpp \
     ../FlicsFacts/Controller/shareresponsesformatter.hpp \
     ../FlicsFacts/Controller/movieviewmanager.hpp \
-    ../FlicsFacts/Controller/shareclient.hpp
+    ../FlicsFacts/Controller/shareclient.hpp \
+    ../FlicsFacts/fam/qqmlobjectlistmodel.hpp
+
 
 SOURCES += \
     testflicsfacts.cpp \

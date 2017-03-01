@@ -29,10 +29,11 @@ MovieViewManager::MovieViewManager(QObject *parent) :
     QObject{parent},
     m_requestFailed{tr("This request was unsuccessful.")},
     m_appName{QApplication::applicationName()},
-    m_appVersion{"1.08"},
+    m_appVersion{"1.09"},
     mShareResponsesFormatterformatter{parent},
     mShareResponsesWatcher{parent},
-    mOmdbResponseParser{parent, *this}
+    mOmdbResponseParser{parent, *this},
+    m_searchResponseModel { parent}
 {
     connect(&mNetworkAccessManager, &QNetworkAccessManager::finished, this, &MovieViewManager::onNetworkReply);
     connect(&mShareResponsesWatcher, &QFutureWatcher<QString>::finished, this, &MovieViewManager::onShareResponsesFormatted);
@@ -48,13 +49,13 @@ void MovieViewManager::findFlicSelected(const QString& movieTitle)
 
     int responseIndex = static_cast<int>(mMovieResponses.size());
     mMovieResponses.emplace_back( std::make_unique<MovieResponse>() );
-    emit requestCreated(movieTitle, responseIndex);
-
+    m_searchResponseModel.append( new MovieSearchResponse(this));
     queryMovieSearch(responseIndex, movieTitle);
 }
 
 int MovieViewManager::removeSelectedMovie(int responseId)
 {
+    m_searchResponseModel.remove(responseId);
     mMovieResponses.erase(mMovieResponses.begin() + responseId);
     return static_cast<int>( mMovieResponses.size());
 }

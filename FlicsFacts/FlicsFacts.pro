@@ -6,6 +6,7 @@ QT += qml \
     widgets \
     network \
 
+
 CONFIG += c++14 \
     qtquickcompiler
 
@@ -25,7 +26,8 @@ HEADERS += \
     Controller/omdbresponseparser.hpp \
     Controller/movieviewmanager.hpp \
     Controller/shareclient.hpp \
-    Controller/shareresponsesformatter.hpp
+    Controller/shareresponsesformatter.hpp \
+    Model/moviesearchresponse.hpp
 
 
 DISTFILES += \
@@ -48,7 +50,8 @@ DISTFILES += \
     Qml/GridItemLabel.qml \
     Qml/GridTitleLabel.qml \
     Qml/HeadingLabel.qml \
-	android/AndroidManifest.xml 
+	android/AndroidManifest.xml \ 
+    Qml/MovieSearchResults.qml
 	
 RESOURCES += qml.qrc
 
