@@ -1,7 +1,7 @@
 #include "../FlicsFacts/Model/moviesearchresponse.hpp "
 #include "../FlicsFacts/Controller/movieviewmanager.hpp"
 #include "../FlicsFacts/Controller/shareresponsesformatter.hpp"
-#include "../FlicsFacts/Controller/omdbresponseparser.hpp"
+#include "../FlicsFacts/Controller/tmdbresponseparser.hpp"
 #include "../FlicsFacts/fam/qqmlobjectlistmodel.hpp"
 #include <QTest>
 #include <QDebug>

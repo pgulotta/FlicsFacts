@@ -23,7 +23,7 @@ RESOURCES += \
 
 HEADERS += \
     ../FlicsFacts/Model/moviesearchresponse.hpp \
-    ../FlicsFacts/Controller/omdbresponseparser.hpp \
+    ../FlicsFacts/Controller/tmdbresponseparser.hpp \
     ../FlicsFacts/Controller/shareresponsesformatter.hpp \
     ../FlicsFacts/Controller/movieviewmanager.hpp \
     ../FlicsFacts/Controller/shareclient.hpp \
@@ -32,7 +32,7 @@ HEADERS += \
 
 SOURCES += \
     testflicsfacts.cpp \
-    ../FlicsFacts/Controller/omdbresponseparser.cpp \
+    ../FlicsFacts/Controller/tmdbresponseparser.cpp \
     ../FlicsFacts/Controller/shareresponsesformatter.cpp \
     ../FlicsFacts/Controller/movieviewmanager.cpp \
     ../FlicsFacts/Controller/shareclient.cpp

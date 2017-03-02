@@ -15,18 +15,20 @@ include(./fam/fam.pri)
 
 SOURCES += main.cpp \
     initializer.cpp \
-    Controller/omdbresponseparser.cpp \
     Controller/movieviewmanager.cpp \
     Controller/shareclient.cpp \
-    Controller/shareresponsesformatter.cpp
+    Controller/shareresponsesformatter.cpp \
+    Controller/tmdbresponseparser.cpp \
+    Controller/floatingactionsmoviesearch.cpp
 
 HEADERS += \
     initializer.hpp \
-    Controller/omdbresponseparser.hpp \
     Controller/movieviewmanager.hpp \
     Controller/shareclient.hpp \
     Controller/shareresponsesformatter.hpp \
-    Model/moviesearchresponse.hpp
+    Model/moviesearchresponse.hpp \
+    Controller/tmdbresponseparser.hpp \
+    Controller/floatingactionsmoviesearch.hpp
 
 
 DISTFILES += \

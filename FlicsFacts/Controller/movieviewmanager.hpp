@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../FlicsFacts/Controller/shareresponsesformatter.hpp"
-#include "../FlicsFacts/Controller/omdbresponseparser.hpp"
+#include "../FlicsFacts/Controller/tmdbresponseparser.hpp"
 #include "../FlicsFacts/fam/qqmlobjectlistmodel.hpp"
 #include "../FlicsFacts/Model/moviesearchresponse.hpp"
 #include <QObject>
@@ -43,6 +43,7 @@ public:
     Q_INVOKABLE void findFlicSelected(const QString& movieTitle);
     Q_INVOKABLE void tryQueryMovieSearch(int responseId);
     Q_INVOKABLE void removeSelectedMovie(int responseId);
+    Q_INVOKABLE void removeAllMovieSearchResponses();
 
     QString appName() const
     {
@@ -78,6 +79,9 @@ private:
     void queryMovieSearch(int responseId, const QString& movieTitle);
     void queryMovieDetails(int responseId, int movieId);
     void queryMovieCredits(int responseId, int movieId);
+    void displayNothingToShare();
+    void displayShareNotSupported();
+    bool removeMovieSearchResponses();
 
 private:
     QString m_networkFailureMessage;
@@ -87,7 +91,10 @@ private:
     QNetworkAccessManager mNetworkAccessManager;
     ShareResponsesFormatter mShareResponsesFormatterformatter;
     QFutureWatcher<QString> mShareResponsesWatcher;
-    OmdbResponseParser mOmdbResponseParser;
+    TmdbResponseParser mTmdbResponseParser;
     QQmlObjectListModel<MovieSearchResponse> m_searchResponseModel;
+
+
+
 };
 

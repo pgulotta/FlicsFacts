@@ -1,6 +1,7 @@
 #include "movieviewmanager.hpp"
 #include "../FlicsFacts/Controller/shareclient.hpp"
 #include <QtConcurrent/QtConcurrentRun>
+#include <QtGui/QTouchDevice>
 #include <QApplication>
 #include <QString>
 #include <QtNetwork>
@@ -32,14 +33,14 @@ MovieViewManager::MovieViewManager(QObject *parent) :
     m_appVersion{"1.09"},
     mShareResponsesFormatterformatter{parent},
     mShareResponsesWatcher{parent},
-    mOmdbResponseParser{parent, *this},
+    mTmdbResponseParser{parent, *this},
     m_searchResponseModel { parent}
 {
     connect(&mNetworkAccessManager, &QNetworkAccessManager::finished, this, &MovieViewManager::onNetworkReply);
     connect(&mShareResponsesWatcher, &QFutureWatcher<QString>::finished, this, &MovieViewManager::onShareResponsesFormatted);
-    connect(&mOmdbResponseParser, &OmdbResponseParser::searchParsingComplete, this,  &MovieViewManager::onSearchParsingComplete);
-    connect(&mOmdbResponseParser, &OmdbResponseParser::detailsParsingComplete, this,  &MovieViewManager::onDetailsParsingComplete);
-    connect(&mOmdbResponseParser, &OmdbResponseParser::creditsParsingComplete, this,  &MovieViewManager::onCreditsParsingComplete);
+    connect(&mTmdbResponseParser, &TmdbResponseParser::searchParsingComplete, this,  &MovieViewManager::onSearchParsingComplete);
+    connect(&mTmdbResponseParser, &TmdbResponseParser::detailsParsingComplete, this,  &MovieViewManager::onDetailsParsingComplete);
+    connect(&mTmdbResponseParser, &TmdbResponseParser::creditsParsingComplete, this,  &MovieViewManager::onCreditsParsingComplete);
 }
 
 void MovieViewManager::findFlicSelected(const QString& movieTitle)
@@ -54,19 +55,65 @@ void MovieViewManager::findFlicSelected(const QString& movieTitle)
 
 void MovieViewManager::removeSelectedMovie(int responseId)
 {
+    qDebug() << "MovieViewManager::removeSelectedMovie: ";
     if ( responseId <0 ||  responseId >=  m_searchResponseModel.count() )
         return;
     auto movieResponse = m_searchResponseModel.at(responseId);
+    qDebug() << "MovieViewManager::removeSelectedMovie: " << movieResponse->title();
     m_searchResponseModel.remove(responseId);
     movieResponse->setParent(nullptr);
     delete  movieResponse;
 }
 
+void MovieViewManager::removeAllMovieSearchResponses()
+{
+    try
+    {
+        while (m_searchResponseModel.count() > 0)
+        {
+            removeSelectedMovie(m_searchResponseModel.count() - 1);
+        }
+    }
+    catch(std::exception const & e)
+    {
+        qDebug() << "MovieViewManager::removeAllMovieSearchResponses ecxception: " << e.what();
+    }
+}
+
+bool MovieViewManager::removeMovieSearchResponses()
+{
+    bool result = false;
+    try
+    {
+        while (m_searchResponseModel.count() > 0)
+        {
+            removeSelectedMovie(m_searchResponseModel.count() - 1);
+        }
+        result = true;
+    }
+    catch(std::exception const & e)
+    {
+        qDebug() << "MovieViewManager::removeAllMovieSearchResponses ecxception: " << e.what();
+    }
+    return result;
+}
+
 void MovieViewManager::shareMovieResponses()
 {
-    QFuture<QString> future = QtConcurrent::run<QString>(&mShareResponsesFormatterformatter, &ShareResponsesFormatter::formatAsText,
-                                                         m_searchResponseModel.constBegin(), m_searchResponseModel.constEnd());
-    mShareResponsesWatcher.setFuture(future);
+#ifdef Q_OS_ANDROID
+    if (m_searchResponseModel.count() == 0)
+    {
+        displayNothingToShare();
+    }
+    else
+    {
+        QFuture<QString> future = QtConcurrent::run<QString>(&mShareResponsesFormatterformatter, &ShareResponsesFormatter::formatAsText,
+                                                             m_searchResponseModel.constBegin(), m_searchResponseModel.constEnd());
+        mShareResponsesWatcher.setFuture(future);
+    }
+#else
+    displayShareNotSupported();
+#endif
 }
 
 void MovieViewManager::queryMovieCredits(int responseId, int movieId)
@@ -121,16 +168,16 @@ void MovieViewManager::onNetworkReply(QNetworkReply *networkReply)
         const QByteArray source = networkReply->readAll();
         if ( attributes.count()==3)
         {
-            mOmdbResponseParser.parseMovieCredits(source, responseId);
+            mTmdbResponseParser.parseMovieCredits(source, responseId);
         }
         else
         if ( attributes.count()==2)
         {
-            mOmdbResponseParser.parseMovieDetails(source, responseId);
+            mTmdbResponseParser.parseMovieDetails(source, responseId);
         }
         else
         {
-            mOmdbResponseParser.parseSearchResult(source, responseId);
+            mTmdbResponseParser.parseSearchResult(source, responseId);
         }
     }
     networkReply->deleteLater();
@@ -168,11 +215,23 @@ void MovieViewManager::onCreditsParsingComplete(int responseId, bool successful)
     }
 }
 
+void MovieViewManager::displayNothingToShare()
+{
+
+    emit displayTextMessage( tr( "Share FlicsFacts"), tr("There is nothing to share."));
+}
+
+void MovieViewManager::displayShareNotSupported()
+{
+
+    emit displayTextMessage( tr( "Share FlicsFacts"), tr("Sharing is not supported here."));
+}
+
 void MovieViewManager::onShareResponsesFormatted()
 {
     if ( mShareResponsesWatcher.result().size() == 0)
     {
-        emit displayTextMessage( tr( "Share FlicsFacts"), tr("There is nothing to share."));
+        displayNothingToShare();
     }
     else
     {
@@ -180,8 +239,6 @@ void MovieViewManager::onShareResponsesFormatted()
         shareClient.setShare(mShareResponsesWatcher.result());
     }
 }
-
-
 
 
 

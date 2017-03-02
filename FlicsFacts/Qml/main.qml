@@ -30,30 +30,36 @@ ApplicationWindow {
     color: Material.background
     title: MovieViewManager.appNameVersion
 
+    signal menuSelected(string contextId, bool isClosed)
+    signal buttonSelected(string contextId, int modelIndex)
+
     header: ToolBar {
         id: topToolbarId
         Material.elevation: 4
         RowLayout {
             anchors.fill: parent
-            ToolButton {
-                id: menuToolbarId
-                anchors.left: parent.left
-                anchors.leftMargin: textBorderWidth
-                contentItem: Image {
-                    fillMode: Image.Pad
-                    horizontalAlignment: Image.AlignHCenter
-                    verticalAlignment: Image.AlignVCenter
-                    source: "qrc:/Images/menu.png"
-                }
-                onClicked: drawerId.open()
-            }
+            //            ToolButton {
+            //                id: menuToolbarId
+            //                visible: true
+            //                anchors.left: parent.left
+            //                anchors.leftMargin: textBorderWidth
+            //                contentItem: Image {
+            //                    fillMode: Image.Pad
+            //                    horizontalAlignment: Image.AlignHCenter
+            //                    verticalAlignment: Image.AlignVCenter
+            //                    source: "qrc:/Images/menu.png"
+            //                }
+            //                onClicked: drawerId.open()
+            //            }
             Rectangle {
                 id: searchTextRectId
-                width: isPortraitMode ? .4 * rootId.width : .5 * rootId.width
+                width: .5 * rootId.width
                 height: tabHeight
                 radius: 4
-                anchors.left: menuToolbarId.right
-                anchors.leftMargin: textBorderWidth
+                //anchors.left: menuToolbarId.right
+                //anchors.leftMargin: textBorderWidth
+                anchors.left: parent.left
+                anchors.leftMargin: textMargin
                 border.width: textBorderWidth
                 border.color: Material.accent
                 TextField {
@@ -101,62 +107,67 @@ ApplicationWindow {
                     source: "qrc:/Images/remove.png"
                 }
                 onClicked: {
-                    MovieViewManager.removeSelectedMovie(movieSearchResultsId.movieIndex)
+                    MovieViewManager.removeSelectedMovie(
+                                movieSearchResultsId.movieIndex)
                     onFocusChanged: Qt.inputMethod.hide()
                 }
-            }
-            ToolButton {
-                id: shareButtonId
-                anchors.left: removeButtonId.right
-                visible: isAndroidPlatform && searchResponseModel.count !== 0
-                contentItem: Image {
-                    fillMode: Image.Pad
-                    horizontalAlignment: Image.AlignHCenter
-                    verticalAlignment: Image.AlignVCenter
-                    source: "qrc:/Images/share.png"
-                }
-                onClicked: {
-                    MovieViewManager.shareMovieResponses()
-                    onFocusChanged: Qt.inputMethod.hide()
-                }
-            }
-            ToolButton {
-                id: moreButtonId
-                anchors.right: parent.right
-                contentItem: Image {
-                    fillMode: Image.Pad
-                    horizontalAlignment: Image.AlignHCenter
-                    verticalAlignment: Image.AlignVCenter
-                    source: "qrc:/Images/more.png"
-                }
-                onClicked: showAboutId.open()
             }
         }
     }
 
-    Drawer {
-        id: drawerId
-        width: isPortraitMode ? rootId.width / 2 : rootId.width / 3
-        height: rootId.height
-    }
-
+    //    Drawer {
+    //        id: drawerId
+    //        width: isPortraitMode ? rootId.width / 2 : rootId.width / 3
+    //        height: rootId.height
+    //    }
     MovieSearchResults {
         id: movieSearchResultsId
         visible: true
         FloatingActionMenu {
-            famIconColor: Material.accent
+            id: famShareId
+            visible: searchResponseModel.count !== 0
+            famIconColor: "MediumPurple"
+            famImage: "qrc:/Images/more.png"
+            labelWidth: 160
+            famLabelBackColor: Material.background
+            onButtonItemSelected: {
+                switch (modelIndex) {
+                case 0:
+                    MovieViewManager.shareMovieResponses()
+                    break
+                case 1:
+                    MovieViewManager.removeAllMovieSearchResponses()
+                    break
+                case 2:
+                    showAboutId.open()
+                    break
+                default:
+                    console.log("onButtonItemSelected error" )
+                    break
+                }
+            }
+
+            floatingActionButtons: ListModel {
+                ListElement {
+                    description: "Share All Movies"
+                    iconUrl: "qrc:/Images/share.png"
+                    iconColor: "MediumPurple"
+                }
+                ListElement {
+                    description: "Remove Movie Searches"
+                    iconUrl: "qrc:/Images/deleteall.png"
+                    iconColor: "MediumPurple"
+                }
+                ListElement {
+                    description: "About"
+                    iconUrl: "qrc:/Images/credits.png"
+                    iconColor: "MediumPurple"
+                }
+            }
         }
-
     }
-
     ShowAbout {
         id: showAboutId
-    }
-
-    function getCurrentSearchMovieTitle() {
-        console.log("getCurrentSearchMovieTitle")
-        return ( searchResponseModel.count === 0 || movieSearchResultsId === undefined || movieSearchResultsId.movieIndex === undefined)  ?
-                    "" :  searchResponseModel.get(movieSearchResultsId.movieIndex)
     }
 
     function processSearchRequest() {
