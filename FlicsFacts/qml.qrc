@@ -27,10 +27,11 @@
         <file>Images/remove@3x.png</file>
         <file>Images/deleteall.png</file>
         <file>Images/deleteall@2x.png</file>
-        <file>Images/deleteall@3x.png</file>		
+        <file>Images/deleteall@3x.png</file>
         <file>Images/credits.png</file>
         <file>Images/credits@2x.png</file>
-        <file>Images/credits@3x.png</file>		
+        <file>Images/credits@3x.png</file>
         <file>Images/splash.png</file>
+        <file>Qml/MainDrawer.qml</file>
     </qresource>
 </RCC>

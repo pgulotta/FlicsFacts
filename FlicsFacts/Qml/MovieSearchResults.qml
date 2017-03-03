@@ -180,6 +180,49 @@ Pane {
         }
     }
 
+    FloatingActionMenu {
+        id: famShareId
+        visible: searchResponseModel.count !== 0
+        famIconColor: "DarkSlateBlue"
+        famImage: "qrc:/Images/more.png"
+        labelWidth: 180
+        famLabelBackColor: "white"
+        onButtonItemSelected: {
+            switch (modelIndex) {
+            case 0:
+                MovieViewManager.shareMovieResponses()
+                break
+            case 1:
+                MovieViewManager.removeAllMovieSearchResponses()
+                break
+            case 2:
+                showAboutId.open()
+                break
+            default:
+                console.log("onButtonItemSelected error")
+                break
+            }
+        }
+
+        floatingActionButtons: ListModel {
+            ListElement {
+                description: qsTr("Share All Movies")
+                iconUrl: "qrc:/Images/share.png"
+                iconColor: "DarkSlateBlue"
+            }
+            ListElement {
+                description: "Remove Movie Searches"
+                iconUrl: "qrc:/Images/deleteall.png"
+                iconColor: "DarkSlateBlue"
+            }
+            ListElement {
+                description: "About"
+                iconUrl: "qrc:/Images/credits.png"
+                iconColor: "DarkSlateBlue"
+            }
+        }
+    }
+
     Connections {
         target: MovieViewManager
         onResponseReceived: {

@@ -55,11 +55,9 @@ void MovieViewManager::findFlicSelected(const QString& movieTitle)
 
 void MovieViewManager::removeSelectedMovie(int responseId)
 {
-    qDebug() << "MovieViewManager::removeSelectedMovie: ";
     if ( responseId <0 ||  responseId >=  m_searchResponseModel.count() )
         return;
     auto movieResponse = m_searchResponseModel.at(responseId);
-    qDebug() << "MovieViewManager::removeSelectedMovie: " << movieResponse->title();
     m_searchResponseModel.remove(responseId);
     movieResponse->setParent(nullptr);
     delete  movieResponse;
