@@ -21,7 +21,6 @@ Page {
     property string currentTitle: ""
     property alias movieIndex: swipeViewId.currentIndex
 
-
     //  anchors.fill: parent
     header: ToolBar {
         id: movieSearchToolBarId
@@ -127,7 +126,12 @@ Page {
     Component {
         id: searchResponseDelegateId
         Item {
+            id: searchResponseItemId
             Grid {
+                anchors.top: searchResponseItemId.top
+                anchors.topMargin: textMargin
+                anchors.left: searchResponseItemId.left
+                anchors.leftMargin: textMargin
                 id: gridTopId
                 columns: gridColumnCount
                 rowSpacing: textMargin
@@ -201,6 +205,8 @@ Page {
                 id: gridBottomId
                 anchors.top: gridTopId.bottom
                 anchors.topMargin: textMargin
+                anchors.left: searchResponseItemId.left
+                anchors.leftMargin: textMargin
                 columns: 2
                 columnSpacing: textMargin
                 rowSpacing: gridTopId.rowSpacing

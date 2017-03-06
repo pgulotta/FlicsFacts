@@ -7,6 +7,7 @@
 #include <QtNetwork>
 #include <QDebug>
 
+const QString gAppName {"FlicsFacts"};
 const QString gSearchRequest { "http://api.themoviedb.org/3/search/movie?api_key=2839bfb130659459d7d9972ad9aa3cd4&language=en-US&query=%1&page=1&include_adult=false"};
 const QString gDetailsRequest {"http://api.themoviedb.org/3/movie/%1?api_key=2839bfb130659459d7d9972ad9aa3cd4&language=en-US"};
 const QString gCreditsRequest {"http://api.themoviedb.org/3/movie/%1/credits?api_key=2839bfb130659459d7d9972ad9aa3cd4"};
@@ -29,7 +30,7 @@ QString formatMovieCreditsUrl(int movieId)
 MovieViewManager::MovieViewManager(QObject *parent) :
     QObject{parent},
     m_networkFailureMessage{tr("A network issue occurred when querying \nmovie")},
-    m_appName{QApplication::applicationName()},
+    m_appName{gAppName},
     m_appVersion{"1.09"},
     mShareResponsesFormatterformatter{parent},
     mShareResponsesWatcher{parent},

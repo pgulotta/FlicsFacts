@@ -37,31 +37,36 @@ Page {
     TitleLabel {
         id: aboutTitleId
         text: qsTr("About")
+        width: parent.width * 0.80
         anchors.left: parent.left
         anchors.leftMargin: spacingIndent
         anchors.top: parent.top
         anchors.topMargin: spacingIndent
     }
-    Grid {
-        id: aboutGridId
-        width: aboutPageId.width * .6
-        height: aboutPageId.height * .6
+    TextLabel {
+        id: aboutDescriptionId
+        text: qsTr("FlicsFacts v" + MovieViewManager.appVersion
+                   + " from 26Apps provides movie information for the selected Flic. Visit "
+                   + "<a href=\"" + websiteLink + "\">website.</a>")
+        onLinkActivated: Qt.openUrlExternally(websiteLink)
         anchors.top: aboutTitleId.bottom
         anchors.topMargin: textMargin
-        anchors.left: aboutTitleId.left
+        anchors.left: parent.left
         anchors.leftMargin: spacingIndent
-        anchors.right: aboutTitleId.right
+        anchors.right: parent.right
+        anchors.rightMargin: spacingIndent
+    }
+
+    Grid {
+        id: aboutGridId
+        width: parent.width * 0.80
+        anchors.top: aboutDescriptionId.bottom
+        anchors.topMargin: textMargin
+        anchors.left: parent.left
+        anchors.leftMargin: spacingIndent
+        anchors.right: parent.right
         anchors.rightMargin: spacingIndent
         columns: 1
-
-        TextLabel {
-            width: aboutPageId.availableWidth * .85
-            text: qsTr("FlicsFacts v" + MovieViewManager.appVersion
-                       + " from 26Apps provides movie information for the selected Flic. Visit "
-                       + "<a href=\"" + websiteLink + "\">website.</a>")
-            onLinkActivated: Qt.openUrlExternally(websiteLink)
-        }
-
         Label {
             text: " "
         }
