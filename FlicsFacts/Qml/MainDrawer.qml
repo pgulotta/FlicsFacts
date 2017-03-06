@@ -8,8 +8,8 @@ import "../fam"
 
 Drawer {
     id: drawerId
-    width: isPortraitMode ? rootId.width / 2 : rootId.width / 3
-    height: rootId.height
+    width: isPortraitMode ? root.width / 2 : root.width / 3
+    height: root.height
 
     Component {
         id: headerId
@@ -23,39 +23,29 @@ Drawer {
             }
             gradient: Gradient {
                 GradientStop {
-                    position: 0.0
-                    color: "DarkSlateBlue"
+                    position: 0.00;
+                    color: "#483d8b";
                 }
                 GradientStop {
-                    position: 0.25
-                    color: "MediumSlateBlue"
+                    position: 0.50;
+                    color: "#7b68ee";
                 }
                 GradientStop {
-                    position: 0.50
-                    color: "Lavender"
-                }
-                GradientStop {
-                    position: 0.75
-                    color: "MediumSlateBlue"
-                }
-
-                GradientStop {
-                    position: 1.0
-                    color: "DarkSlateBlue"
+                    position: 1.00;
+                    color: "#483d8b";
                 }
             }
             TitleLabel {
-                text: "FlicsFacts"
+                text: MovieViewManager.appName
                 anchors.centerIn: parent
             }
         }
     }
     ListView {
-        id: listView
+        id: drawerListViewId
         currentIndex: -1
         anchors.fill: parent
         header: headerId
-
         focus: true
 
         delegate: ItemDelegate {
@@ -63,28 +53,28 @@ Drawer {
             text: model.title
             highlighted: ListView.isCurrentItem
             onClicked: {
-
-                //                if (listView.currentIndex != index) {
-                //                    listView.currentIndex = index
-                //                    stackView.push(model.source)
-                //                }
-                showAboutId.open()
-                drawerId.close()
+                if (drawerListViewId.currentIndex != index) {
+                    drawerListViewId.currentIndex = index
+                    stackView.push(model.source)
+                    drawerListViewId.currentIndex =-1
+                }
+                mainDrawerId.close()
             }
         }
-
         model: ListModel {
             ListElement {
                 title: "Movie Search"
-                source: "qrc:/Qml/MovieSearchResults.qml"
+                source: "qrc:/Qml/MovieSearchPage.qml"
             }
             ListElement {
                 title: "About"
-                source: "qrc:/Qml/ShowAbout.qml"
+                source: "qrc:/Qml/AboutPage.qml"
             }
         }
 
         ScrollIndicator.vertical: ScrollIndicator {
         }
+
+
     }
 }

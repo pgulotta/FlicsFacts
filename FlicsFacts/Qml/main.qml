@@ -3,7 +3,6 @@ import QtQuick.Layouts 1.3
 import QtQuick.Window 2.2
 import QtQuick.Controls 2.1
 import QtQuick.Controls.Material 2.1
-import "../fam"
 
 ApplicationWindow {
     readonly property bool isPortraitMode: Screen.height > Screen.width
@@ -23,109 +22,21 @@ ApplicationWindow {
     readonly property string qtLink: "http://www.qt.io/"
     readonly property string websiteLink: "http://sites.google.com/view/flicsfacts/home"
 
-    id: rootId
+    id: root
     visible: true
     width: windowWidth
     height: windowHeight
     color: Material.background
     title: MovieViewManager.appNameVersion
 
-    signal menuSelected(string contextId, bool isClosed)
-    signal buttonSelected(string contextId, int modelIndex)
-
     MainDrawer {
         id: mainDrawerId
     }
 
-    header: ToolBar {
-        id: topToolbarId
-        Material.elevation: 4
-        RowLayout {
-            anchors.fill: parent
-            ToolButton {
-                id: menuToolbarId
-                visible: true
-                anchors.left: parent.left
-                anchors.leftMargin: textBorderWidth
-                contentItem: Image {
-                    fillMode: Image.Pad
-                    horizontalAlignment: Image.AlignHCenter
-                    verticalAlignment: Image.AlignVCenter
-                    source: "qrc:/Images/menu.png"
-                }
-                onClicked: mainDrawerId.open()
-            }
-            Rectangle {
-                id: searchTextRectId
-                width: .5 * rootId.width
-                height: tabHeight
-                radius: 4
-                anchors.left: menuToolbarId.right
-                anchors.leftMargin: textBorderWidth
-                border.width: textBorderWidth
-                border.color: Material.accent
-                TextField {
-                    id: titleRequestId
-                    height: tabHeight + 12
-                    focus: true
-                    placeholderText: qsTr("Movie Title")
-                    color: Material.primary
-                    font.pointSize: fontSizeSmall
-                    anchors.top: searchTextRectId.top
-                    anchors.left: searchTextRectId.left
-                    anchors.leftMargin: textMargin
-                    anchors.right: searchTextRectId.right
-                    anchors.rightMargin: textMargin
-                    Keys.onReturnPressed: {
-                        Qt.inputMethod.hide()
-                        processSearchRequest()
-                    }
-                    onFocusChanged: Qt.inputMethod.hide()
-                }
-            }
-            ToolButton {
-                id: searchButtonId
-                anchors.left: searchTextRectId.right
-                anchors.leftMargin: textBorderWidth
-                contentItem: Image {
-                    fillMode: Image.Pad
-                    horizontalAlignment: Image.AlignHCenter
-                    verticalAlignment: Image.AlignVCenter
-                    source: "qrc:/Images/search.png"
-                }
-                onClicked: {
-                    processSearchRequest()
-                    onFocusChanged: Qt.inputMethod.hide()
-                }
-            }
-            ToolButton {
-                id: removeButtonId
-                anchors.left: searchButtonId.right
-                visible: searchResponseModel.count !== 0
-                contentItem: Image {
-                    fillMode: Image.Pad
-                    horizontalAlignment: Image.AlignHCenter
-                    verticalAlignment: Image.AlignVCenter
-                    source: "qrc:/Images/remove.png"
-                }
-                onClicked: {
-                    MovieViewManager.removeSelectedMovie(
-                                movieSearchResultsId.movieIndex)
-                    onFocusChanged: Qt.inputMethod.hide()
-                }
-            }
+    StackView {
+        id: stackView
+        anchors.fill: parent
+        initialItem: MainPage {
         }
-    }
-
-    MovieSearchResults {
-        id: movieSearchResultsId
-    }
-    ShowAbout {
-        id: showAboutId
-    }
-
-    function processSearchRequest() {
-        MovieViewManager.findFlicSelected(titleRequestId.text)
-        titleRequestId.text = ""
     }
 }

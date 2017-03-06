@@ -42,17 +42,8 @@ DISTFILES += \
     android/res/drawable/splash.png \
     android/res/drawable/splashscreen.xml \
     android/src/com/twentysixapps/flicsfacts/MovieShareIntent.java \
-    Qml/main.qml \
-    Qml/ShowAbout.qml \
-    Qml/ShowMessage.qml \
-    Qml/MovieResults.qml \
-    Qml/TitleLabel.qml	\
-    Qml/TextLabel.qml \	
-    Qml/GridItemLabel.qml \
-    Qml/GridTitleLabel.qml \
-    Qml/HeadingLabel.qml \
 	android/AndroidManifest.xml \ 
-    Qml/MovieSearchResults.qml
+
 	
 RESOURCES += qml.qrc
 

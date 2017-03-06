@@ -1,15 +1,9 @@
 <RCC>
     <qresource prefix="/">
         <file>qtquickcontrols2.conf</file>
-        <file>Qml/main.qml</file>
-        <file>Qml/ShowAbout.qml</file>
-        <file>Qml/ShowMessage.qml</file>
-        <file>Qml/MovieSearchResults.qml</file>
-        <file>Qml/TitleLabel.qml</file>
-        <file>Qml/HeadingLabel.qml</file>
-        <file>Qml/TextLabel.qml</file>
-        <file>Qml/GridTitleLabel.qml</file>
-        <file>Qml/GridItemLabel.qml</file>
+        <file>Images/logo.png</file>
+        <file>Images/logo@2x.png</file>
+        <file>Images/logo@3x.png</file>		
         <file>Images/menu.png</file>
         <file>Images/menu@2x.png</file>
         <file>Images/menu@3x.png</file>
@@ -31,7 +25,20 @@
         <file>Images/credits.png</file>
         <file>Images/credits@2x.png</file>
         <file>Images/credits@3x.png</file>
+		<file>Images/back.png</file>
+        <file>Images/back@2x.png</file>
+        <file>Images/back@3x.png</file>
         <file>Images/splash.png</file>
+        <file>Qml/main.qml</file>
+        <file>Qml/MainPage.qml</file>		
+        <file>Qml/AboutPage.qml</file>
+        <file>Qml/ShowMessage.qml</file>
+        <file>Qml/TitleLabel.qml</file>
+        <file>Qml/TextLabel.qml</file>
+        <file>Qml/GridItemLabel.qml</file>
+        <file>Qml/GridTitleLabel.qml</file>
+        <file>Qml/HeadingLabel.qml</file>
+        <file>Qml/MovieSearchPage.qml</file>
         <file>Qml/MainDrawer.qml</file>
     </qresource>
 </RCC>

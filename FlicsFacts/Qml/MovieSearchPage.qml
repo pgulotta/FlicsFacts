@@ -6,9 +6,11 @@ import QtQuick.Controls.Material 2.1
 
 import "../fam"
 
-Pane {
-    id: paneId
-    anchors.fill: parent
+Page {
+    id: movieSearchPageId
+
+    signal backButtonSelected
+
     readonly property int tabAnimationDuration: 400
     readonly property int animationFromX: 0
     readonly property int flickableItemWidth: isPortraitMode ? windowWidth * .65 : windowWidth * .75
@@ -17,8 +19,90 @@ Pane {
                                                              * .4 : plotItemHeight * .5
     readonly property int firstColumnWidth: isPortraitMode ? windowWidth / (gridColumnCount + 2) : windowWidth / (gridColumnCount + 2)
     property string currentTitle: ""
-
     property alias movieIndex: swipeViewId.currentIndex
+
+
+    //  anchors.fill: parent
+    header: ToolBar {
+        id: movieSearchToolBarId
+        Material.elevation: 4
+
+        ToolButton {
+            id: backToolButtonId
+            visible: true
+            anchors.left: parent.left
+            anchors.leftMargin: textBorderWidth
+            contentItem: Image {
+                fillMode: Image.Pad
+                horizontalAlignment: Image.AlignHCenter
+                verticalAlignment: Image.AlignVCenter
+                source: "qrc:/Images/back.png"
+            }
+            onClicked: backButtonSelected()
+        }
+        Rectangle {
+            id: searchTextRectId
+            width: .5 * windowWidth
+            height: parent.height * .8
+            radius: 4
+            anchors.left: backToolButtonId.right
+            anchors.leftMargin: textBorderWidth
+            anchors.top: parent.top
+            border.width: textBorderWidth
+            border.color: Material.accent
+            TextField {
+                id: titleRequestId
+                height: tabHeight + 12
+                focus: true
+                placeholderText: qsTr("Movie Title")
+                color: Material.primary
+                font.pointSize: fontSizeSmall
+                verticalAlignment: Text.AlignVCenter
+                anchors.left: searchTextRectId.left
+                anchors.leftMargin: textMargin
+                anchors.right: searchTextRectId.right
+                anchors.rightMargin: textMargin
+                anchors.top: searchTextRectId.top
+                anchors.topMargin: 8
+                Keys.onReturnPressed: {
+                    Qt.inputMethod.hide()
+                    processSearchRequest()
+                }
+                onFocusChanged: Qt.inputMethod.hide()
+            }
+        }
+        ToolButton {
+            id: searchButtonId
+            anchors.left: searchTextRectId.right
+            anchors.leftMargin: textBorderWidth
+            contentItem: Image {
+                fillMode: Image.Pad
+                horizontalAlignment: Image.AlignHCenter
+                verticalAlignment: Image.AlignVCenter
+                source: "qrc:/Images/search.png"
+            }
+            onClicked: {
+                processSearchRequest()
+                onFocusChanged: Qt.inputMethod.hide()
+            }
+        }
+        ToolButton {
+            id: removeButtonId
+            anchors.left: searchButtonId.right
+            visible: searchResponseModel.count !== 0
+            contentItem: Image {
+                fillMode: Image.Pad
+                horizontalAlignment: Image.AlignHCenter
+                verticalAlignment: Image.AlignVCenter
+                source: "qrc:/Images/remove.png"
+            }
+            onClicked: {
+                MovieViewManager.removeSelectedMovie(
+                            movieSearchPageId.movieIndex)
+                onFocusChanged: Qt.inputMethod.hide()
+            }
+        }
+    }
 
     SwipeView {
         id: swipeViewId
@@ -42,7 +126,6 @@ Pane {
 
     Component {
         id: searchResponseDelegateId
-
         Item {
             Grid {
                 id: gridTopId
@@ -169,7 +252,7 @@ Pane {
             Row {
                 anchors.top: gridBottomId.top
                 Label {
-                    width: paneId.width
+                    width: movieSearchPageId.width
                     horizontalAlignment: "AlignHCenter"
                     wrapMode: Label.Wrap
                     color: Material.primary
@@ -195,9 +278,6 @@ Pane {
             case 1:
                 MovieViewManager.removeAllMovieSearchResponses()
                 break
-            case 2:
-                showAboutId.open()
-                break
             default:
                 console.log("onButtonItemSelected error")
                 break
@@ -213,11 +293,6 @@ Pane {
             ListElement {
                 description: "Remove Movie Searches"
                 iconUrl: "qrc:/Images/deleteall.png"
-                iconColor: "DarkSlateBlue"
-            }
-            ListElement {
-                description: "About"
-                iconUrl: "qrc:/Images/credits.png"
                 iconColor: "DarkSlateBlue"
             }
         }
@@ -241,4 +316,11 @@ Pane {
     ShowMessage {
         id: showMessageId
     }
+
+    function processSearchRequest() {
+        MovieViewManager.findFlicSelected(titleRequestId.text)
+        titleRequestId.text = ""
+    }
+
+    onBackButtonSelected: StackView.view.pop()
 }
