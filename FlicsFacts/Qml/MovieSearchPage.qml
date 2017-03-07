@@ -13,15 +13,16 @@ Page {
 
     readonly property int tabAnimationDuration: 400
     readonly property int animationFromX: 0
-    readonly property int flickableItemWidth: isPortraitMode ? windowWidth * .65 : windowWidth * .75
-    readonly property int plotItemHeight: isPortraitMode ? windowHeight * .35 : windowHeight * .2
-    readonly property int actorsItemHeight: isPortraitMode ? plotItemHeight
-                                                             * .4 : plotItemHeight * .5
-    readonly property int firstColumnWidth: isPortraitMode ? windowWidth / (gridColumnCount + 2) : windowWidth / (gridColumnCount + 2)
+    property int gridColumnCount: isPortraitMode ? 2 : 4
+    property int flickableItemWidth: isPortraitMode ? windowWidth * .65 : windowWidth * .75
+    property int plotItemHeight: isPortraitMode ? windowHeight * .35 : windowHeight * .2
+    property int actorsItemHeight: isPortraitMode ? plotItemHeight * .3 : plotItemHeight * .5
+    property int firstColumnWidth: isPortraitMode ? windowWidth / (gridColumnCount
+                                                                   + 2) : windowWidth
+                                                    / (gridColumnCount + 2)
     property string currentTitle: ""
     property alias movieIndex: swipeViewId.currentIndex
 
-    //  anchors.fill: parent
     header: ToolBar {
         id: movieSearchToolBarId
         Material.elevation: 4
@@ -42,11 +43,13 @@ Page {
         Rectangle {
             id: searchTextRectId
             width: .5 * windowWidth
-            height: parent.height * .8
             radius: 4
             anchors.left: backToolButtonId.right
             anchors.leftMargin: textBorderWidth
             anchors.top: parent.top
+            anchors.topMargin: textMargin
+            anchors.bottom: parent.bottom
+            anchors.bottomMargin: textMargin
             border.width: textBorderWidth
             border.color: Material.accent
             TextField {
@@ -60,9 +63,8 @@ Page {
                 anchors.left: searchTextRectId.left
                 anchors.leftMargin: textMargin
                 anchors.right: searchTextRectId.right
-                anchors.rightMargin: textMargin
                 anchors.top: searchTextRectId.top
-                anchors.topMargin: 8
+                anchors.topMargin: textBorderWidth
                 Keys.onReturnPressed: {
                     Qt.inputMethod.hide()
                     processSearchRequest()
@@ -142,7 +144,7 @@ Page {
                     easing.type: Easing.Linear
                     from: -windowHeight
                     to: 0
-                    duration: tabAnimationDuration
+                    duration: 10
                 }
                 GridTitleLabel {
                     text: qsTr("Title")
@@ -285,7 +287,7 @@ Page {
                 MovieViewManager.removeAllMovieSearchResponses()
                 break
             default:
-                console.log("onButtonItemSelected error")
+                console.log("In onButtonItemSelected, model error is unknown")
                 break
             }
         }
@@ -317,6 +319,7 @@ Page {
     Component.onCompleted: {
         titleRequestId.forceActiveFocus()
         Qt.inputMethod.hide()
+        console.log("gridColumnCount:" + gridColumnCount)
     }
 
     ShowMessage {

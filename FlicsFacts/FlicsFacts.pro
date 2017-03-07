@@ -18,8 +18,7 @@ SOURCES += main.cpp \
     Controller/movieviewmanager.cpp \
     Controller/shareclient.cpp \
     Controller/shareresponsesformatter.cpp \
-    Controller/tmdbresponseparser.cpp \
-    Controller/floatingactionsmoviesearch.cpp
+    Controller/tmdbresponseparser.cpp
 
 HEADERS += \
     initializer.hpp \
@@ -27,8 +26,7 @@ HEADERS += \
     Controller/shareclient.hpp \
     Controller/shareresponsesformatter.hpp \
     Model/moviesearchresponse.hpp \
-    Controller/tmdbresponseparser.hpp \
-    Controller/floatingactionsmoviesearch.hpp
+    Controller/tmdbresponseparser.hpp
 
 
 DISTFILES += \

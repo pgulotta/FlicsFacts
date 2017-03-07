@@ -31,7 +31,7 @@ Page {
         Label {
             text: MovieViewManager.appName
             color: "white"
-            font.pixelSize: 20
+            font.pixelSize: fontSizeXLarge
             anchors.centerIn: parent
         }
     }
@@ -39,7 +39,7 @@ Page {
 
     Image {
         id: mainPaneImageId
-        width: isPortraitMode ? windowWidth * .65 : windowHeight *.65
+        width: isPortraitMode ? windowWidth * .65 : windowHeight *.60
         height: width
         anchors.centerIn: parent
         fillMode: Image.PreserveAspectFit
@@ -47,8 +47,8 @@ Page {
     }
     TextLabel {
         text: MovieViewManager.appNameVersion
-        anchors.topMargin: textMargin
-        anchors.top: mainPaneImageId.bottom
+        anchors.bottomMargin: spacingIndent
+       anchors.bottom: parent.bottom
         anchors.left: parent.left
         anchors.right: parent.right
         horizontalAlignment: "AlignHCenter"

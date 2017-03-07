@@ -31,7 +31,7 @@ MovieViewManager::MovieViewManager(QObject *parent) :
     QObject{parent},
     m_networkFailureMessage{tr("A network issue occurred when querying \nmovie")},
     m_appName{gAppName},
-    m_appVersion{"1.09"},
+    m_appVersion{"1.10"},
     mShareResponsesFormatterformatter{parent},
     mShareResponsesWatcher{parent},
     mTmdbResponseParser{parent, *this},

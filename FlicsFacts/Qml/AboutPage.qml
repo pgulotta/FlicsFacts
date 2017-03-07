@@ -7,7 +7,7 @@ Page {
     id: aboutPageId
 
     signal backButtonSelected
-    readonly property int gridControlsWidth: aboutPageId.availableWidth * .9
+    property int gridControlsWidth: aboutPageId.availableWidth * .9
 
     header: ToolBar {
         id: aboutToolBarId
@@ -29,7 +29,7 @@ Page {
         Label {
             text: MovieViewManager.appName
             color: "white"
-            font.pixelSize: 20
+            font.pixelSize: fontSizeXLarge
             anchors.centerIn: parent
         }
     }

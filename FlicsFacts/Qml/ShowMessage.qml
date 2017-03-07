@@ -12,7 +12,6 @@ Popup {
     width: isPortraitMode ? windowWidth * .8 : windowWidth * .4
     height: isPortraitMode ? windowHeight * .15 : windowHeight * .25
     readonly property int closeTimerDuration: 1000
-    readonly property int gridControlsWidth: messagePopupId.availableWidth * .9
     property string titleText: MovieViewManager.appName
     property string messageText: ""
 
