@@ -3,7 +3,6 @@ import QtQuick.Layouts 1.3
 import QtQuick.Window 2.2
 import QtQuick.Controls 2.1
 import QtQuick.Controls.Material 2.1
-import "../fam"
 
 Page {
     id: mainPageId
@@ -36,10 +35,9 @@ Page {
         }
     }
 
-
     Image {
         id: mainPaneImageId
-        width: isPortraitMode ? windowWidth * .65 : windowHeight *.60
+        width: isPortraitMode ? windowWidth * .65 : windowHeight * .60
         height: width
         anchors.centerIn: parent
         fillMode: Image.PreserveAspectFit
@@ -48,11 +46,9 @@ Page {
     TextLabel {
         text: MovieViewManager.appNameVersion
         anchors.bottomMargin: spacingIndent
-       anchors.bottom: parent.bottom
+        anchors.bottom: parent.bottom
         anchors.left: parent.left
         anchors.right: parent.right
         horizontalAlignment: "AlignHCenter"
     }
-
-
 }

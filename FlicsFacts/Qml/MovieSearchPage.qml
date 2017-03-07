@@ -274,7 +274,7 @@ Page {
     FloatingActionMenu {
         id: famShareId
         visible: searchResponseModel.count !== 0
-        famIconColor: "DarkSlateBlue"
+        famIconColor: "MediumPurple"
         famImage: "qrc:/Images/more.png"
         labelWidth: 180
         famLabelBackColor: "white"
@@ -296,12 +296,12 @@ Page {
             ListElement {
                 description: qsTr("Share All Movies")
                 iconUrl: "qrc:/Images/share.png"
-                iconColor: "DarkSlateBlue"
+                iconColor: "MediumPurple"
             }
             ListElement {
                 description: "Remove Movie Searches"
                 iconUrl: "qrc:/Images/deleteall.png"
-                iconColor: "DarkSlateBlue"
+                iconColor: "MediumPurple"
             }
         }
     }

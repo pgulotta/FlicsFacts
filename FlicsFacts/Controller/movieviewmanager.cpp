@@ -223,7 +223,7 @@ void MovieViewManager::displayNothingToShare()
 void MovieViewManager::displayShareNotSupported()
 {
 
-    emit displayTextMessage( tr( "Share FlicsFacts"), tr("Sharing is not supported here."));
+    emit displayTextMessage( tr( "Share FlicsFacts"), tr("Sorry, sharing is not available."));
 }
 
 void MovieViewManager::onShareResponsesFormatted()
