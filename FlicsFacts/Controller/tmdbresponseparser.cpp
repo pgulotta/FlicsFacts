@@ -57,7 +57,7 @@ static QString getGenres(const QJsonObject& jsonObject)
                     {
                         result += (addComma)  ? ", " + cit.value()  :  cit.value();
                     }
-                    if ( ++counter > 3)
+                    if ( ++counter > 2)
                         break;
                 }
             }
@@ -83,7 +83,7 @@ static QString getLanguages(const QJsonObject& jsonObject)
                     bool addComma = !result.isEmpty();
                     auto languageName = languageObject.toObject().value(QStringLiteral("name")).toString();
                     result += (addComma)  ? ", " + languageName :  languageName;
-                    if ( ++counter > 3)
+                    if ( ++counter > 2)
                         break;
                 }
             }

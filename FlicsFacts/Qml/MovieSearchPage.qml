@@ -319,7 +319,6 @@ Page {
     Component.onCompleted: {
         titleRequestId.forceActiveFocus()
         Qt.inputMethod.hide()
-        console.log("gridColumnCount:" + gridColumnCount)
     }
 
     ShowMessage {

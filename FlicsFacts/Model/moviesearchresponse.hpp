@@ -1,6 +1,8 @@
 #pragma once
 
 #include <QtQml>
+#include <QGuiApplication>
+#include <QScreen>
 #include <QObject>
 #include <QString>
 #include <QDebug>
@@ -39,8 +41,7 @@ public slots:
     {
         if (m_title == title)
             return;
-
-        m_title = title;
+        m_title= (title.length() >mMaxValueLength ) ? title.left(mTruncateLength) + elideText : title;
         emit titleChanged(title);
     }
 
@@ -300,4 +301,9 @@ private:
     QString m_poster;
     QString m_status;
     QString m_genre;
+
+    const QString elideText {"..."};
+    const int mMaxValueLength {25};
+    const int mTruncateLength {24};
+
 };
