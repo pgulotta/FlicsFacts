@@ -5,8 +5,6 @@ import QtQuick.Controls.Material 2.1
 
 Page {
     id: aboutPageId
-
-    signal backButtonSelected
     property int gridControlsWidth: aboutPageId.availableWidth * .9
 
     header: ToolBar {
@@ -23,9 +21,8 @@ Page {
                 verticalAlignment: Image.AlignVCenter
                 source: "qrc:/Images/back.png"
             }
-            onClicked: backButtonSelected()
+            onClicked: onBackButtonSelected()
         }
-
         Label {
             text: MovieViewManager.appName
             color: "white"
@@ -96,5 +93,9 @@ Page {
             text: qsTr("FlicFacts does not request or share any personal information with third parties.It does not request or know the user's physical location.")
         }
     }
-    onBackButtonSelected: StackView.view.pop()
+
+    function onBackButtonSelected()
+    {
+        StackView.view.pop()
+    }
 }

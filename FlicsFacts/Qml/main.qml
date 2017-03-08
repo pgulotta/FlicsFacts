@@ -24,7 +24,7 @@ ApplicationWindow {
     property int windowWidth: isAndroidPlatform ? Screen.width : Screen.width / 3
     property int windowHeight: isAndroidPlatform ? Screen.height : Screen.height / 3
 
-    id: root
+    id: rootId
     visible: true
     width: windowWidth
     height: windowHeight
@@ -36,7 +36,7 @@ ApplicationWindow {
     }
 
     StackView {
-        id: stackView
+        id: stackViewId
         anchors.fill: parent
         initialItem: MainPage {
         }

@@ -9,9 +9,7 @@ import "../fam"
 Page {
     id: movieSearchPageId
 
-    signal backButtonSelected
-
-    readonly property int tabAnimationDuration: 400
+    readonly property int tabAnimationDuration: 1000
     readonly property int animationFromX: 0
     property int gridColumnCount: isPortraitMode ? 2 : 4
     property int flickableItemWidth: isPortraitMode ? windowWidth * .65 : windowWidth * .75
@@ -38,7 +36,9 @@ Page {
                 verticalAlignment: Image.AlignVCenter
                 source: "qrc:/Images/back.png"
             }
-            onClicked: backButtonSelected()
+            onClicked: {
+                onBackButtonSelected()
+            }
         }
         Rectangle {
             id: searchTextRectId
@@ -109,6 +109,7 @@ Page {
         id: swipeViewId
         anchors.fill: parent
         clip: true
+
         currentIndex: 0
         Repeater {
             id: searchResponseModelId
@@ -130,11 +131,11 @@ Page {
         Item {
             id: searchResponseItemId
             Grid {
+                id: gridTopId
                 anchors.top: searchResponseItemId.top
                 anchors.topMargin: textMargin
                 anchors.left: searchResponseItemId.left
                 anchors.leftMargin: textMargin
-                id: gridTopId
                 columns: gridColumnCount
                 rowSpacing: textMargin
                 columnSpacing: textMargin
@@ -274,7 +275,7 @@ Page {
     FloatingActionMenu {
         id: famShareId
         visible: searchResponseModel.count !== 0
-        famIconColor: "MediumPurple"
+        famIconColor: "indigo"
         famImage: "qrc:/Images/more.png"
         labelWidth: 180
         famLabelBackColor: "white"
@@ -296,12 +297,12 @@ Page {
             ListElement {
                 description: qsTr("Share All Movies")
                 iconUrl: "qrc:/Images/share.png"
-                iconColor: "MediumPurple"
+                iconColor: "indigo"
             }
             ListElement {
                 description: "Remove Movie Searches"
                 iconUrl: "qrc:/Images/deleteall.png"
-                iconColor: "MediumPurple"
+                iconColor: "indigo"
             }
         }
     }
@@ -314,7 +315,7 @@ Page {
     }
     Connections {
         target: MovieViewManager
-        onDisplayTextMessage: showMessageId.show(title, message)
+        onDisplayTextMessage:showMessageId.show(title, message)
     }
     Component.onCompleted: {
         titleRequestId.forceActiveFocus()
@@ -330,5 +331,7 @@ Page {
         titleRequestId.text = ""
     }
 
-    onBackButtonSelected: StackView.view.pop()
+    function onBackButtonSelected() {
+        StackView.view.pop()
+    }
 }

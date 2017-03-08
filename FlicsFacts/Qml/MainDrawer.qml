@@ -6,9 +6,9 @@ import QtGraphicalEffects 1.0
 import QtQuick.Controls.Material 2.1
 
 Drawer {
-    id: drawerId
-    width: isPortraitMode ? root.width / 2 : root.width / 3
-    height: root.height
+    id: mainDrawerId
+    width: isPortraitMode ? rootId.width / 2 : rootId.width / 3
+    height: rootId.height
 
     Component {
         id: headerId
@@ -23,20 +23,21 @@ Drawer {
             gradient: Gradient {
                 GradientStop {
                     position: 0.00;
-                    color: "#483d8b";
+                    color: "DarkSlateBlue";
                 }
                 GradientStop {
                     position: 0.50;
-                    color: "#7b68ee";
+                    color: "#bfbff2";
                 }
                 GradientStop {
                     position: 1.00;
-                    color: "#483d8b";
+                    color: "DarkSlateBlue";
                 }
             }
             TitleLabel {
                 text: MovieViewManager.appName
                 anchors.centerIn: parent
+                color: "DarkSlateBlue"
             }
         }
     }
@@ -54,7 +55,7 @@ Drawer {
             onClicked: {
                 if (drawerListViewId.currentIndex != index) {
                     drawerListViewId.currentIndex = index
-                    stackView.push(model.source)
+                    stackViewId.push(model.source)
                     drawerListViewId.currentIndex =-1
                 }
                 mainDrawerId.close()
@@ -73,7 +74,6 @@ Drawer {
 
         ScrollIndicator.vertical: ScrollIndicator {
         }
-
 
     }
 }
