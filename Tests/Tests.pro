@@ -22,8 +22,9 @@ RESOURCES += \
     resources.qrc
 
 HEADERS += \
-    ../FlicsFacts/Model/moviesearchresponse.hpp \
-    ../FlicsFacts/Controller/tmdbresponseparser.hpp \
+    ../FlicsFacts/Model/movieresponse.hpp \
+    ../FlicsFacts/Model/sortedmovieresponsesmodel.hpp \
+    ../FlicsFacts/Controller/moviesearchparser.hpp \
     ../FlicsFacts/Controller/shareresponsesformatter.hpp \
     ../FlicsFacts/Controller/movieviewmanager.hpp \
     ../FlicsFacts/Controller/shareclient.hpp \
@@ -32,7 +33,7 @@ HEADERS += \
 
 SOURCES += \
     testflicsfacts.cpp \
-    ../FlicsFacts/Controller/tmdbresponseparser.cpp \
+    ../FlicsFacts/Controller/moviesearchparser.cpp \
     ../FlicsFacts/Controller/shareresponsesformatter.cpp \
     ../FlicsFacts/Controller/movieviewmanager.cpp \
     ../FlicsFacts/Controller/shareclient.cpp

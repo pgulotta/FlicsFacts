@@ -1,44 +1,47 @@
 <RCC>
     <qresource prefix="/">
         <file>qtquickcontrols2.conf</file>
+        <file>Images/add_movies.png</file>
+        <file>Images/add_movies@2x.png</file>
+        <file>Images/play_movies.png</file>
+        <file>Images/play_movies@2x.png</file>
         <file>Images/logo.png</file>
         <file>Images/logo@2x.png</file>
-        <file>Images/logo@3x.png</file>
         <file>Images/menu.png</file>
         <file>Images/menu@2x.png</file>
-        <file>Images/menu@3x.png</file>
         <file>Images/more.png</file>
         <file>Images/more@2x.png</file>
-        <file>Images/more@3x.png</file>
         <file>Images/search.png</file>
         <file>Images/search@2x.png</file>
-        <file>Images/search@3x.png</file>
+        <file>Images/movie_search.png</file>
+        <file>Images/movie_search@2x.png</file>
         <file>Images/share.png</file>
         <file>Images/share@2x.png</file>
-        <file>Images/share@3x.png</file>
         <file>Images/remove.png</file>
         <file>Images/remove@2x.png</file>
-        <file>Images/remove@3x.png</file>
         <file>Images/deleteall.png</file>
         <file>Images/deleteall@2x.png</file>
-        <file>Images/deleteall@3x.png</file>
         <file>Images/credits.png</file>
         <file>Images/credits@2x.png</file>
-        <file>Images/credits@3x.png</file>
         <file>Images/back.png</file>
         <file>Images/back@2x.png</file>
-        <file>Images/back@3x.png</file>
         <file>Images/splash.png</file>
         <file>Qml/main.qml</file>
         <file>Qml/MainPage.qml</file>
         <file>Qml/AboutPage.qml</file>
-        <file>Qml/ShowMessage.qml</file>
+        <file>Qml/MessagePopup.qml</file>
         <file>Qml/TitleLabel.qml</file>
         <file>Qml/TextLabel.qml</file>
         <file>Qml/GridItemLabel.qml</file>
         <file>Qml/GridTitleLabel.qml</file>
         <file>Qml/HeadingLabel.qml</file>
-        <file>Qml/MovieSearchPage.qml</file>
+        <file>Qml/MovieResponsePage.qml</file>
+        <file>Qml/NowPlayingMoviesPage.qml</file>
+        <file>Qml/UpcomingMoviesPage.qml</file>
         <file>Qml/MainDrawer.qml</file>
+        <file>Qml/NowPlayingMoviesToolBar.qml</file>
+        <file>Qml/UpcomingMoviesToolBar.qml</file>
+        <file>Qml/MovieSearchToolBar.qml</file>
+        <file>Qml/MovieResponseDelegate.qml</file>
     </qresource>
 </RCC>

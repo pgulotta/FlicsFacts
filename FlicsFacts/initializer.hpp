@@ -11,7 +11,7 @@ public:
 
 public:
     explicit Initializer(const Initializer& ) = delete;
-    Initializer& operator= (const Initializer&) =delete;
+    Initializer& operator= (const Initializer&) = delete;
 
     explicit Initializer(QObject *parent=0);
 

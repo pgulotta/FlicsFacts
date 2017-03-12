@@ -40,5 +40,6 @@ ApplicationWindow {
         anchors.fill: parent
         initialItem: MainPage {
         }
+
     }
 }

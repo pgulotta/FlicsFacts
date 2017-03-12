@@ -4,6 +4,6 @@ import QtQuick.Controls.Material 2.1
 Label {
     color: Material.primary
     font.bold: true
-    font.pointSize: fontSizeLarge
+    font.pointSize: fontSizeMedium
     elide: Qt.ElideRight
 }

@@ -6,11 +6,13 @@
 #include <QObject>
 #include <QString>
 #include <QDebug>
+#include <QDate>
+#include <QSortFilterProxyModel>
 
-class MovieSearchResponse : public QObject
+
+class MovieResponse : public QObject
 {
 Q_OBJECT
-Q_PROPERTY(int movieId READ movieId WRITE setMovieId NOTIFY movieIdChanged)
 Q_PROPERTY(QString title READ title WRITE setTitle NOTIFY titleChanged )
 Q_PROPERTY(QString year READ year WRITE setYear NOTIFY yearChanged)
 Q_PROPERTY(QString rating READ rating WRITE setRating NOTIFY ratingChanged)
@@ -25,6 +27,7 @@ Q_PROPERTY(QString websiteUrl READ websiteUrl WRITE setWebsiteUrl NOTIFY website
 Q_PROPERTY(QString poster READ poster WRITE setPoster NOTIFY posterChanged)
 Q_PROPERTY(QString genre READ genre WRITE setGenre NOTIFY genreChanged)
 Q_PROPERTY(QString status READ status WRITE setStatus NOTIFY statusChanged)
+Q_PROPERTY(int movieId READ movieId WRITE setMovieId NOTIFY movieIdChanged)
 
 public slots:
 
@@ -194,21 +197,21 @@ signals:
     void genreChanged(QString genre);
 
 public:
-    explicit MovieSearchResponse(QObject *parent = nullptr) :
+    explicit MovieResponse(QObject *parent = nullptr) :
         QObject(parent){
-        //  qDebug() << " MovieSearchResponse() called";
+        //  qDebug() << " MovieResponse() called";
     }
 
-    MovieSearchResponse(const QString& title,  QObject *parent = nullptr) :
+    MovieResponse(const QString& title,  QObject *parent = nullptr) :
         QObject(parent){
-        // qDebug() << " MovieSearchResponse() called";
+        // qDebug() << " MovieResponse() called";
         m_title= title;
     }
 
-    ~MovieSearchResponse()
-    {
-        // qDebug() << " ~MovieSearchResponse() called";
-    }
+//    virtual ~MovieResponse()
+//    {
+//        qDebug() << " ~MovieResponse() called";
+//    }
 
     int movieId() const
     {
@@ -286,7 +289,6 @@ public:
     }
 
 private:
-    int m_movieId;
     QString m_title;
     QString m_year;
     QString m_rating;
@@ -299,11 +301,14 @@ private:
     QString m_website;
     QString m_websiteUrl;
     QString m_poster;
-    QString m_status;
     QString m_genre;
+    QString m_status ={tr("Working ...")};
+    int m_movieId;
 
     const QString elideText {"..."};
     const int mMaxValueLength {25};
     const int mTruncateLength {24};
 
 };
+
+

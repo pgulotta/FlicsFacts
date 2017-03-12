@@ -14,8 +14,8 @@ ShareResponsesFormatter::ShareResponsesFormatter(QObject *parent) :
 {
 }
 
-QString ShareResponsesFormatter::formatAsText(QQmlObjectListModel<MovieSearchResponse>::const_iterator cbegin,
-                                              QQmlObjectListModel<MovieSearchResponse>::const_iterator cend)
+QString ShareResponsesFormatter::formatAsText(QQmlObjectListModel<MovieResponse>::const_iterator cbegin,
+                                              QQmlObjectListModel<MovieResponse>::const_iterator cend)
 {
     mFormattedResponses.clear();
 

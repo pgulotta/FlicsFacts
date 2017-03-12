@@ -7,10 +7,8 @@ class ShareClient : public QObject
 {
 Q_OBJECT
 
-public:
-    Q_INVOKABLE void setShare(const QString &shareContent) const;
-
 public slots:
+    void setShare(const QString &shareContent) const;
 
 signals:
 

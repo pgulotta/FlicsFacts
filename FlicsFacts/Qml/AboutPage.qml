@@ -8,7 +8,6 @@ Page {
     property int gridControlsWidth: aboutPageId.availableWidth * .9
 
     header: ToolBar {
-        id: aboutToolBarId
         Material.elevation: 4
         ToolButton {
             id: backToolButtonId

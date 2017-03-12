@@ -7,7 +7,7 @@ import QtQuick.Controls.Material 2.1
 
 Drawer {
     id: mainDrawerId
-    width: isPortraitMode ? rootId.width / 2 : rootId.width / 3
+    width: isPortraitMode ? rootId.width * .7 : rootId.width * .4
     height: rootId.height
 
     Component {
@@ -15,23 +15,19 @@ Drawer {
         Rectangle {
             width: parent.width
             height: width / 2
-            Behavior on x {
-                ColorAnimation {
-                    duration: 1000
-                }
-            }
+
             gradient: Gradient {
                 GradientStop {
-                    position: 0.00;
-                    color: "DarkSlateBlue";
+                    position: 0.00
+                    color: "DarkSlateBlue"
                 }
                 GradientStop {
-                    position: 0.50;
-                    color: "#bfbff2";
+                    position: 0.50
+                    color: "#bfbff2"
                 }
                 GradientStop {
-                    position: 1.00;
-                    color: "DarkSlateBlue";
+                    position: 1.00
+                    color: "DarkSlateBlue"
                 }
             }
             TitleLabel {
@@ -41,6 +37,7 @@ Drawer {
             }
         }
     }
+
     ListView {
         id: drawerListViewId
         currentIndex: -1
@@ -51,29 +48,48 @@ Drawer {
         delegate: ItemDelegate {
             width: parent.width
             text: model.title
-            highlighted: ListView.isCurrentItem
+            highlighted: false
             onClicked: {
                 if (drawerListViewId.currentIndex != index) {
                     drawerListViewId.currentIndex = index
                     stackViewId.push(model.source)
-                    drawerListViewId.currentIndex =-1
                 }
+                drawerListViewId.currentIndex = -1
                 mainDrawerId.close()
+            }
+            leftPadding: avatar.implicitWidth + spacingIndent
+            Image {
+                id: avatar
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.left: parent.left
+                anchors.leftMargin: textMargin
+                source: model.image
             }
         }
         model: ListModel {
             ListElement {
-                title: "Movie Search"
-                source: "qrc:/Qml/MovieSearchPage.qml"
+                title: qsTr("Movie Search")
+                source: "qrc:/Qml/MovieResponsePage.qml"
+                image: "qrc:/Images/movie_search.png"
             }
             ListElement {
-                title: "About"
+                title: qsTr("Movies Now Playing")
+                source: "qrc:/Qml/NowPlayingMoviesPage.qml"
+                image: "qrc:/Images/play_movies.png"
+            }
+            ListElement {
+                title: qsTr("Upcoming Movies")
+                source: "qrc:/Qml/UpcomingMoviesPage.qml"
+                image: "qrc:/Images/add_movies.png"
+            }
+            ListElement {
+                title: qsTr("About")
                 source: "qrc:/Qml/AboutPage.qml"
+                image: "qrc:/Images/credits.png"
             }
         }
 
         ScrollIndicator.vertical: ScrollIndicator {
         }
-
     }
 }

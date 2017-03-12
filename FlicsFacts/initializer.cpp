@@ -21,7 +21,10 @@ Initializer::Initializer(QObject *parent) :
     QQmlApplicationEngine engine;
 
     FloatingActions::initialize(engine.rootContext(), &mQmlApplicationEngine);
-    mQmlApplicationEngine.rootContext()->setContextProperty("searchResponseModel", mMovieViewManager.searchResponseModel() );
+    mQmlApplicationEngine.rootContext()->setContextProperty("movieSearchResponses", mMovieViewManager.movieSearchResponses() );
+    mQmlApplicationEngine.rootContext()->setContextProperty("nowPlayingMoviesResponses", mMovieViewManager.nowPlayingMoviesResponses() );
+    mQmlApplicationEngine.rootContext()->setContextProperty("sortedUpcomingMoviesResponses", mMovieViewManager.sortedUpcomingMoviesResponses() );
+    mQmlApplicationEngine.rootContext()->setContextProperty("sortedNowPlayingMoviesResponses", mMovieViewManager.sortedNowPlayingMoviesResponses() );
     mQmlApplicationEngine.rootContext()->setContextProperty("MovieViewManager",&mMovieViewManager);
     mQmlApplicationEngine.load(QUrl(QStringLiteral("qrc:/Qml/main.qml")));
 

@@ -18,15 +18,18 @@ SOURCES += main.cpp \
     Controller/movieviewmanager.cpp \
     Controller/shareclient.cpp \
     Controller/shareresponsesformatter.cpp \
-    Controller/tmdbresponseparser.cpp
+    Controller/moviesearchparser.cpp
+
 
 HEADERS += \
     initializer.hpp \
     Controller/movieviewmanager.hpp \
     Controller/shareclient.hpp \
     Controller/shareresponsesformatter.hpp \
-    Model/moviesearchresponse.hpp \
-    Controller/tmdbresponseparser.hpp
+    Controller/moviesearchparser.hpp \
+    Model/movieresponse.hpp \
+    Controller/networkrequestmovieattributes.hpp \
+    Model/sortedmovieresponsesmodel.hpp
 
 
 DISTFILES += \
