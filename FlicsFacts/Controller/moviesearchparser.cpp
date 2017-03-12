@@ -19,8 +19,8 @@ const QString nameKey {"name"};
 const QString resultsKey {"results"};
 const QString titleKey = "title";
 const QString idKey = "id";
-
-
+const QString genreIdsKey {"genre_ids"};
+const QString spokenLanguagesKey {"spoken_languages"};
 
 
 static QHash<int, QString> mGenres
@@ -46,61 +46,6 @@ static QHash<int, QString> mGenres
     {37, QObject::tr("Western")}
 };
 
-
-static QString getGenres(const QJsonObject& jsonObject)
-{
-    QString result;
-    if (jsonObject.contains(QStringLiteral("genre_ids")))
-    {
-        auto genreIds = jsonObject["genre_ids"];
-        if ( genreIds.isArray() )
-        {
-            QJsonArray genreIdsArray =genreIds.toArray();
-            if ( genreIdsArray.count() > 0)
-            {
-                int counter = 0;
-                for(auto genreId :genreIdsArray)
-                {
-                    bool addComma = !result.isEmpty();
-                    auto cit =  mGenres.constFind(genreId.toInt());
-                    if (cit != mGenres.cend())
-                    {
-                        result += (addComma)  ? ", " + cit.value()  :  cit.value();
-                    }
-                    if ( ++counter > 2)
-                        break;
-                }
-            }
-        }
-    }
-    return result.isEmpty() ? gNotDefined : result;
-}
-
-static QString getLanguages(const QJsonObject& jsonObject)
-{
-    QString result;
-    if (jsonObject.contains(QStringLiteral("spoken_languages")))
-    {
-        auto languages = jsonObject["spoken_languages"];
-        if ( languages.isArray() )
-        {
-            QJsonArray languagesArray = languages.toArray();
-            if ( languagesArray.count() > 0)
-            {
-                int counter = 0;
-                for(auto languageObject : languagesArray)
-                {
-                    bool addComma = !result.isEmpty();
-                    auto languageName = languageObject.toObject().value(QStringLiteral("name")).toString();
-                    result += (addComma)  ? ", " + languageName :  languageName;
-                    if ( ++counter > 2)
-                        break;
-                }
-            }
-        }
-    }
-    return result.isEmpty() ? gNotDefined : result;
-}
 
 static QString convertJsonDoubleToString( const QString& key, const QJsonObject& source )
 {
@@ -145,6 +90,65 @@ QString extractInt(const QJsonObject& jsonObject,  const QString& key )
     return nullptr;
 }
 
+static QString getLanguages(const QJsonObject& jsonObject)
+{
+    QString result;
+    if (jsonObject.contains(spokenLanguagesKey))
+    {
+        QJsonValue languages { jsonObject.value(spokenLanguagesKey)};
+        if ( languages.isArray() )
+        {
+            QJsonArray languagesArray = languages.toArray();
+            if ( languagesArray.count() > 0)
+            {
+                int counter = 0;
+                for(auto languageObject : languagesArray)
+                {
+                    bool addComma = !result.isEmpty();
+                    QString languageName {extractText(languageObject, nameKey) };
+                    if (languageName != nullptr)
+                    {
+                        result += (addComma)  ? ", " + languageName :  languageName;
+                        if ( ++counter > 2)
+                            break;
+                    }
+                }
+
+            }
+        }
+    }
+    return result.isEmpty() ? gNotDefined : result;
+}
+
+
+static QString getGenres(const QJsonObject& jsonObject)
+{
+    QString result;
+    if (jsonObject.contains(genreIdsKey))
+    {
+        QJsonValue genreIds { jsonObject.value(genreIdsKey)};
+        if ( genreIds.isArray() )
+        {
+            QJsonArray genreIdsArray =genreIds.toArray();
+            if ( genreIdsArray.count() > 0)
+            {
+                int counter = 0;
+                for(auto genreId : genreIdsArray)
+                {
+                    bool addComma = !result.isEmpty();
+                    auto cit {  mGenres.constFind(genreId.toInt()) };
+                    if (cit != mGenres.cend())
+                    {
+                        result += (addComma)  ? ", " + cit.value()  :  cit.value();
+                    }
+                    if ( ++counter > 2)
+                        break;
+                }
+            }
+        }
+    }
+    return result.isEmpty() ? gNotDefined : result;
+}
 
 MovieSearchParser::MovieSearchParser(QObject *parent) :
     QObject{parent}
