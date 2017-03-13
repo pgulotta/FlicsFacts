@@ -1,5 +1,6 @@
 #include "moviesearchparser.hpp"
 #include "../FlicsFacts/Controller/movieviewmanager.hpp"
+#include "../FlicsFacts/Model/movieresponse.hpp"
 #include <QDebug>
 #include <QString>
 #include <QJsonDocument>
@@ -179,7 +180,7 @@ void MovieSearchParser::parseMovieResponse(const QJsonObject &jsonObject, MovieR
 
         QString id { extractInt(jsonObject, idKey)};
         if (id == nullptr)
-            movieResponse->setMovieId( 0);
+            movieResponse->setMovieId(MovieResponse::invalidMovieId());
         else
             movieResponse->setMovieId( id.toInt());
 

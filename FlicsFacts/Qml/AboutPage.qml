@@ -42,7 +42,7 @@ Page {
     TextLabel {
         id: aboutDescriptionId
         text: qsTr("FlicsFacts v" + MovieViewManager.appVersion
-                   + " from 26Apps provides movie information for the selected Flic. Visit "
+                   + " from 26Apps provides movie details. Visit "
                    + "<a href=\"" + websiteLink + "\">website.</a>")
         onLinkActivated: Qt.openUrlExternally(websiteLink)
         anchors.top: aboutTitleId.bottom

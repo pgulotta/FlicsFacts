@@ -288,6 +288,10 @@ public:
         return m_genre;
     }
 
+    static int invalidMovieId() {
+        return 0;
+    }
+
 private:
     QString m_title;
     QString m_year;
