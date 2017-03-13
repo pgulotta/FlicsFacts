@@ -146,7 +146,7 @@ static QString getGenres(const QJsonObject& jsonObject)
                 for(auto genreId : genreIdsArray)
                 {
                     bool addComma = !result.isEmpty();
-                    auto cit {  mGenres.constFind(genreId.toInt()) };
+                    auto cit = mGenres.constFind(genreId.toInt());
                     if (cit != mGenres.cend())
                     {
                         result += (addComma)  ? ", " + cit.value()  :  cit.value();
@@ -354,7 +354,7 @@ void MovieSearchParser::parseMovieDetails(const QByteArray& source, QQmlObjectLi
                 QString homepage {extractText(jsonObject, homepageKey)};
                 if  (homepage  != nullptr)
                 {
-                    auto website {  QString("<a href=\"%1\">Go to ...</a>").arg(homepage)};
+                    QString website {  QString("<a href=\"%1\">Go to ...</a>").arg(homepage)};
                     movieResponse->setWebsite ( website);
                     movieResponse->setWebsiteUrl ( homepage);
                 }
