@@ -11,7 +11,7 @@
 
 const QString gAppName {"FlicsFacts"};
 
-const int gQueryTimerIntervalMs         {500};
+const int gQueryTimerIntervalMs         {1000};
 const QString gMovieSearchRequest       {"http://api.themoviedb.org/3/search/movie?api_key=2839bfb130659459d7d9972ad9aa3cd4&language=en-US&query=%1&page=1&include_adult=false"};
 const QString gMovieDetailsRequest      {"http://api.themoviedb.org/3/movie/%1?api_key=2839bfb130659459d7d9972ad9aa3cd4&language=en-US"};
 const QString gMovieCreditsRequest      {"http://api.themoviedb.org/3/movie/%1/credits?api_key=2839bfb130659459d7d9972ad9aa3cd4"};

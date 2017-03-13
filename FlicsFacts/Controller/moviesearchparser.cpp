@@ -17,10 +17,15 @@ const QString runtimeKey {"runtime"};
 const QString castKey {"cast"};
 const QString nameKey {"name"};
 const QString resultsKey {"results"};
-const QString titleKey = "title";
-const QString idKey = "id";
+const QString titleKey { "title"};
+const QString idKey { "id"};
 const QString genreIdsKey {"genre_ids"};
 const QString spokenLanguagesKey {"spoken_languages"};
+const QString releaseDateKey {"release_date"};
+const QString overviewKey { "overview"};
+const QString popularityKey { "popularity"};
+const QString voteAverageKey { "vote_average"};
+const QString posterPathKey { "poster_path"};
 
 
 static QHash<int, QString> mGenres
@@ -47,9 +52,15 @@ static QHash<int, QString> mGenres
 };
 
 
-static QString convertJsonDoubleToString( const QString& key, const QJsonObject& source )
+static QString convertJsonDoubleToString(const QJsonObject& jsonObject, const QString& key  )
 {
-    return QString("%1").arg(source.value(key).toDouble());
+    if (jsonObject.contains(key))
+    {
+        QJsonValue value { jsonObject.value(key)};
+        return (value  == QJsonValue::Null) ? nullptr : QString::number(value.toDouble());
+    }
+    else
+        return nullptr;
 }
 
 static QString extractYear( const QString& source)
@@ -102,10 +113,11 @@ static QString getLanguages(const QJsonObject& jsonObject)
             if ( languagesArray.count() > 0)
             {
                 int counter = 0;
+                QString languageName;
                 for(auto languageObject : languagesArray)
                 {
                     bool addComma = !result.isEmpty();
-                    QString languageName {extractText(languageObject, nameKey) };
+                    languageName  = extractText(languageObject, nameKey);
                     if (languageName != nullptr)
                     {
                         result += (addComma)  ? ", " + languageName :  languageName;
@@ -113,13 +125,11 @@ static QString getLanguages(const QJsonObject& jsonObject)
                             break;
                     }
                 }
-
             }
         }
     }
     return result.isEmpty() ? gNotDefined : result;
 }
-
 
 static QString getGenres(const QJsonObject& jsonObject)
 {
@@ -157,7 +167,6 @@ MovieSearchParser::MovieSearchParser(QObject *parent) :
 
 void MovieSearchParser::parseMovieResponse(const QJsonObject &jsonObject, MovieResponse* movieResponse) const
 {
-
     QString title = extractText(jsonObject, titleKey);
     if ( title  != nullptr)
     {
@@ -174,35 +183,43 @@ void MovieSearchParser::parseMovieResponse(const QJsonObject &jsonObject, MovieR
         else
             movieResponse->setMovieId( id.toInt());
 
-
-        if (jsonObject.contains(QStringLiteral("release_date")))
+        QString releaseDate {extractText(jsonObject, releaseDateKey)};
+        if (releaseDate == nullptr)
         {
-            QString releaseDate = jsonObject.value(QStringLiteral("release_date")).toString();
-            movieResponse->setReleased (  releaseDate);
-            movieResponse->setYear (  extractYear(releaseDate) );
+            movieResponse->setReleased (gDefaultField);
+            movieResponse->setYear (gDefaultField);
         }
         else
-            movieResponse->setReleased (   gDefaultField);
+        {
+            movieResponse->setReleased ( releaseDate);
+            movieResponse->setYear (  extractYear(releaseDate) );
+        }
 
-        if (jsonObject.contains(QStringLiteral("overview")))
-            movieResponse->setPlot (   jsonObject.value(QStringLiteral("overview")).toString());
-        else
+        QString overview {extractText(jsonObject, overviewKey)};
+        if (overview == nullptr)
             movieResponse->setPlot (  gDefaultField);
+        else
+            movieResponse->setPlot ( overview);
 
-        if (jsonObject.contains(QStringLiteral("popularity")))
-            movieResponse->setPopularity ( convertJsonDoubleToString (QStringLiteral("popularity"), jsonObject));
+        QString popularity {convertJsonDoubleToString (jsonObject,popularityKey)};
+        if (popularity == nullptr)
+            movieResponse->setPopularity ( gDefaultField);
         else
-            movieResponse->setPopularity (  gDefaultField);
+            movieResponse->setPopularity (popularity);
 
-        if (jsonObject.contains (QStringLiteral("vote_average")))
-            movieResponse->setRating(convertJsonDoubleToString(QStringLiteral("vote_average"), jsonObject));
+        QString voterAverage {convertJsonDoubleToString (jsonObject,voteAverageKey)};
+        if (voterAverage == nullptr)
+            movieResponse->setRating ( gDefaultField);
         else
-            movieResponse->setRating( gDefaultField);
-        if (jsonObject.contains(QStringLiteral("poster_path")))
-            movieResponse->setPoster ( jsonObject.value(QStringLiteral("poster_path")).toString());
+            movieResponse->setRating (voterAverage);
+
+        QString posterPath {convertJsonDoubleToString (jsonObject,posterPathKey)};
+        if (posterPath == nullptr)
+            movieResponse->setPoster ( gDefaultField);
         else
-            movieResponse->setPoster (  gDefaultField);
-        movieResponse->setGenre (   getGenres(jsonObject));
+            movieResponse->setPoster (posterPath);
+
+        movieResponse->setGenre ( getGenres(jsonObject));
     }
 }
 
@@ -218,7 +235,7 @@ void MovieSearchParser::parseMovieSearchResult( const QByteArray& source, QQmlOb
                 QJsonObject jsonObject = document.object();
                 if (jsonObject.contains(resultsKey))
                 {
-                    auto results = jsonObject["results"];
+                    auto results = jsonObject[resultsKey];
                     if ( results.isArray() )
                     {
                         QJsonArray resultsArray = results.toArray();
@@ -256,7 +273,7 @@ void MovieSearchParser::parseNowPlaying( const QByteArray& source, QQmlObjectLis
                 QJsonObject jsonObject = document.object();
                 if (jsonObject.contains(resultsKey))
                 {
-                    auto results = jsonObject["results"];
+                    auto results = jsonObject[resultsKey];
                     if ( results.isArray() )
                     {
                         QJsonArray resultsArray = results.toArray();
@@ -293,10 +310,10 @@ void MovieSearchParser::parseUpcomingMovies(const QByteArray &source, QQmlObject
             QJsonDocument document = QJsonDocument::fromJson(source);
             if ( !document.isNull() && !document.isEmpty())
             {
-                QJsonObject jsonObject = document.object();
+                QJsonObject jsonObject { document.object()};
                 if (jsonObject.contains(resultsKey))
                 {
-                    auto results = jsonObject["results"];
+                    QJsonValue results {jsonObject[resultsKey]};
                     if ( results.isArray() )
                     {
                         QJsonArray resultsArray = results.toArray();
@@ -378,12 +395,16 @@ void MovieSearchParser::parseMovieCredits(const QByteArray& source, QQmlObjectLi
                         if ( array.count() > 0)
                         {
                             int actorsCount =1;
+                            QString actor;
                             for(auto item :array)
                             {
-                                auto actor = item.toObject().value(QStringLiteral("name")).toString();
-                                result += (actorsCount > 1)  ? ", " + actor :  actor;
-                                if ( ++actorsCount >8 )
-                                    break;
+                                actor = extractText(item, nameKey);
+                                if (actor != nullptr)
+                                {
+                                    result += (actorsCount > 1)  ? ", " + actor :  actor;
+                                    if ( ++actorsCount >8 )
+                                        break;
+                                }
                             }
                         }
                     }
