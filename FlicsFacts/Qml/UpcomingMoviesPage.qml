@@ -8,9 +8,10 @@ import "../fam"
 
 Page {
     id: upcomingPageId
-    header: UpcomingMoviesToolBar {
-    }
 
+    header: TitledToolBar {
+        pageTitle: qsTr("Upcoming Movies")
+    }
     SwipeView {
         id: upcomingMoviesSwipeViewId
         anchors.fill: parent
@@ -36,14 +37,8 @@ Page {
 
     Connections {
         target: MovieViewManager
-        onResponseReceived: {
-            upcomingMoviesSwipeViewId.currentIndex = responseId
-        }
+        onResponseReceived: upcomingMoviesSwipeViewId.currentIndex = responseId
     }
 
     Component.onCompleted: MovieViewManager.queryUpcomongMovies()
-
-    function onBackButtonSelected() {
-        StackView.view.pop()
-    }
 }

@@ -39,8 +39,7 @@
         <file>Qml/NowPlayingMoviesPage.qml</file>
         <file>Qml/UpcomingMoviesPage.qml</file>
         <file>Qml/MainDrawer.qml</file>
-        <file>Qml/NowPlayingMoviesToolBar.qml</file>
-        <file>Qml/UpcomingMoviesToolBar.qml</file>
+        <file>Qml/TitledToolBar.qml</file>
         <file>Qml/MovieSearchToolBar.qml</file>
         <file>Qml/MovieResponseDelegate.qml</file>
     </qresource>

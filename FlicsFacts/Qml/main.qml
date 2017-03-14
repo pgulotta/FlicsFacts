@@ -40,6 +40,9 @@ ApplicationWindow {
         anchors.fill: parent
         initialItem: MainPage {
         }
+    }
 
+    function onBackSelected() {
+        stackViewId.pop()
     }
 }

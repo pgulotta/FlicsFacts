@@ -20,7 +20,7 @@ Page {
                 verticalAlignment: Image.AlignVCenter
                 source: "qrc:/Images/back.png"
             }
-            onClicked: onBackButtonSelected()
+            onClicked: onBackSelected()
         }
         Label {
             text: MovieViewManager.appName
@@ -91,10 +91,5 @@ Page {
             width: gridControlsWidth
             text: qsTr("FlicFacts does not request or share any personal information with third parties.It does not request or know the user's physical location.")
         }
-    }
-
-    function onBackButtonSelected()
-    {
-        StackView.view.pop()
     }
 }

@@ -16,7 +16,6 @@ Page {
 
     Component.onCompleted: MovieViewManager.tryQueryMovieSearch(0)
 
-
     SwipeView {
         id: movieSwipeViewId
         anchors.fill: parent
@@ -88,13 +87,7 @@ Page {
         onDisplayTextMessage: messagePopupId.show(title, message)
     }
 
-
     MessagePopup {
         id: messagePopupId
-    }
-
-    function onBackButtonSelected() {
-        StackView.view.pop()
-
     }
 }

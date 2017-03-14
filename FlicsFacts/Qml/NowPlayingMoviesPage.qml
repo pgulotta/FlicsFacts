@@ -9,7 +9,8 @@ import "../fam"
 Page {
     id: movieResponsePageId
 
-    header: NowPlayingMoviesToolBar {
+    header: TitledToolBar {
+        pageTitle: qsTr("Movies Now Playing")
     }
 
     SwipeView {
@@ -36,14 +37,8 @@ Page {
 
     Connections {
         target: MovieViewManager
-        onResponseReceived: {
-            nowPlayingMoviesSwipeViewId.currentIndex = responseId
-        }
+        onResponseReceived: nowPlayingMoviesSwipeViewId.currentIndex = responseId
     }
 
     Component.onCompleted: MovieViewManager.queryNowPlayingMovies()
-
-    function onBackButtonSelected() {
-        StackView.view.pop()
-    }
 }

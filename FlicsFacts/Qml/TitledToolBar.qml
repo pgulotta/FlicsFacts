@@ -7,6 +7,8 @@ import QtQuick.Controls.Material 2.1
 import "../fam"
 
 ToolBar {
+    property string pageTitle: MovieViewManager.appName
+
     Material.elevation: 4
     ToolButton {
         id: backToolButtonId
@@ -19,10 +21,10 @@ ToolBar {
             verticalAlignment: Image.AlignVCenter
             source: "qrc:/Images/back.png"
         }
-        onClicked: onBackButtonSelected()
+        onClicked: onBackSelected()
     }
     Label {
-        text:qsTr("Movies Now Playing")
+        text:pageTitle
         color: "white"
         font.pixelSize: fontSizeXLarge
         anchors.centerIn: parent

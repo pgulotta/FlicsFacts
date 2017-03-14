@@ -9,7 +9,7 @@ import "../fam"
 ToolBar {
     id: movieSearchToolBarId
     Material.elevation: 4
-    
+
     Component.onCompleted: {
         titleRequestId.forceActiveFocus()
         Qt.inputMethod.hide()
@@ -26,9 +26,7 @@ ToolBar {
             verticalAlignment: Image.AlignVCenter
             source: "qrc:/Images/back.png"
         }
-        onClicked: {
-            onBackButtonSelected()
-        }
+        onClicked: rootId.onBackSelected()
     }
     Rectangle {
         id: searchTextRectId
@@ -88,8 +86,7 @@ ToolBar {
             source: "qrc:/Images/remove.png"
         }
         onClicked: {
-            MovieViewManager.removeSelectedMovie(
-                        movieSearchPageId.movieIndex)
+            MovieViewManager.removeSelectedMovie(movieSearchPageId.movieIndex)
             onFocusChanged: Qt.inputMethod.hide()
         }
     }
@@ -98,5 +95,4 @@ ToolBar {
         MovieViewManager.findFlicSelected(titleRequestId.text)
         titleRequestId.text = ""
     }
-
 }
