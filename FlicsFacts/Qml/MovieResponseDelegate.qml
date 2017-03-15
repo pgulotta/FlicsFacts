@@ -18,6 +18,7 @@ Component {
         property int firstColumnWidth: isPortraitMode ? windowWidth
                                                         / (gridColumnCount + 2) : windowWidth
                                                         / (gridColumnCount + 2)
+
         Grid {
             id: gridTopId
             anchors.top: movieResponseItemId.top
@@ -156,6 +157,16 @@ Component {
                 font.pointSize: fontSizeMedium
                 text: model.status
             }
+        }
+        Image {
+            id: posterImageId
+            width: firstColumnWidth-20
+            height: width
+            source: model.poster
+            anchors.bottom: parent.bottom
+            anchors.bottomMargin: textMargin
+            anchors.left: parent.left
+            anchors.leftMargin: textMargin
         }
     }
 }

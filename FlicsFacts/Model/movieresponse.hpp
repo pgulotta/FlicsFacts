@@ -33,98 +33,66 @@ public slots:
 
     void setMovieId(int movieId)
     {
-        if (m_movieId == movieId)
-            return;
-
         m_movieId = movieId;
         emit movieIdChanged(movieId);
     }
 
     void setTitle(QString title)
     {
-        if (m_title == title)
-            return;
         m_title= (title.length() >mMaxValueLength ) ? title.left(mTruncateLength) + elideText : title;
         emit titleChanged(title);
     }
 
     void setYear(QString year)
     {
-        if (m_year == year)
-            return;
-
         m_year = year;
         emit yearChanged(year);
     }
 
     void setRating(QString rating)
     {
-        if (m_rating == rating)
-            return;
-
         m_rating = rating;
         emit ratingChanged(rating);
     }
 
     void setReleased(QString released)
     {
-        if (m_released == released)
-            return;
-
         m_released = released;
         emit releasedChanged(released);
     }
 
     void setRuntime(QString runtime)
     {
-        if (m_runtime == runtime)
-            return;
-
         m_runtime = runtime;
         emit runtimeChanged(runtime);
     }
 
     void setActors(QString actors)
     {
-        if (m_actors == actors)
-            return;
-
         m_actors = actors;
         emit actorsChanged(actors);
     }
 
     void setPlot(QString plot)
     {
-        if (m_plot == plot)
-            return;
-
         m_plot = plot;
         emit plotChanged(plot);
     }
 
     void setPopularity(QString popularity)
     {
-        if (m_popularity == popularity)
-            return;
-
         m_popularity = popularity;
         emit popularityChanged(popularity);
     }
 
     void setLanguages(QString languages)
     {
-        if (m_languages == languages)
-            return;
-
         m_languages = languages;
         emit languagesChanged(languages);
     }
 
     void setWebsite(QString website)
     {
-        if (m_website == website)
-            return;
-
         m_website = website;
         emit websiteChanged(website);
     }
@@ -140,18 +108,12 @@ public slots:
 
     void setPoster(QString poster)
     {
-        if (m_poster == poster)
-            return;
-
         m_poster = poster;
         emit posterChanged(poster);
     }
 
     void setStatus(QString status)
     {
-        if (m_status == status)
-            return;
-
         m_status = status;
         emit statusChanged(status);
     }

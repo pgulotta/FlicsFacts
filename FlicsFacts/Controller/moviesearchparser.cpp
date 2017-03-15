@@ -27,7 +27,7 @@ const QString overviewKey { "overview"};
 const QString popularityKey { "popularity"};
 const QString voteAverageKey { "vote_average"};
 const QString posterPathKey { "poster_path"};
-
+const QString posterUrlPrefix {"http://image.tmdb.org/t/p/w500/%1" };
 
 static QHash<int, QString> mGenres
 {
@@ -214,11 +214,11 @@ void MovieSearchParser::parseMovieResponse(const QJsonObject &jsonObject, MovieR
         else
             movieResponse->setRating (voterAverage);
 
-        QString posterPath {convertJsonDoubleToString (jsonObject,posterPathKey)};
+        QString posterPath {extractText(jsonObject, posterPathKey)};
         if (posterPath == nullptr)
             movieResponse->setPoster ( gDefaultField);
         else
-            movieResponse->setPoster (posterPath);
+            movieResponse->setPoster (QString(posterUrlPrefix).arg(posterPath));
 
         movieResponse->setGenre ( getGenres(jsonObject));
     }
@@ -289,7 +289,6 @@ void MovieSearchParser::parseNowPlaying( const QByteArray& source, QQmlObjectLis
                                 parseMovieResponse(arrayItem.toObject(), destination.at(responseId));
                                 emit nowPlayingParsingComplete( responseId, success);
                             }
-
                         }
                     }
                 }
