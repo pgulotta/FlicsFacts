@@ -11,7 +11,6 @@ Component {
     Item {
         id: movieResponseItemId
 
-        readonly property string expandPosterImage: "expandImage"
         property int gridColumnCount: isPortraitMode ? 2 : 4
         property int flickableItemWidth: isPortraitMode ? windowWidth * .65 : windowWidth * .75
         property int plotItemHeight: isPortraitMode ? windowHeight * .35 : windowHeight * .2
@@ -19,8 +18,11 @@ Component {
         property int firstColumnWidth: isPortraitMode ? windowWidth
                                                         / (gridColumnCount + 2) : windowWidth
                                                         / (gridColumnCount + 2)
-
-        property int imageDimension: isPortraitMode ? windowHeight : windowHeight
+        property int imageDimension: firstColumnWidth - spacingIndent
+        property int imageExpandedDimension: isPortraitMode ? windowWidth - spacingIndent : windowHeight - (4 * spacingIndent)
+        readonly property int imageTransitionInteralMS: 500
+        readonly property string expandPosterImage: "expandPosterImage"
+        property string expandPosterImageState: ""
 
         Grid {
             id: gridTopId
@@ -34,7 +36,6 @@ Component {
             verticalItemAlignment: Grid.AlignBottom
             visible: model.runtime !== ""
             opacity: 1
-            state: ""
 
             GridTitleLabel {
                 text: qsTr("Title")
@@ -155,10 +156,10 @@ Component {
         }
         Image {
             id: posterImageId
-            state: ""
-            width: firstColumnWidth - 20
-            height: firstColumnWidth - 20
-            opacity: 1
+            state: expandPosterImageState
+            width: imageDimension
+            height: imageDimension
+            fillMode: Image.PreserveAspectCrop
             source: model.poster
             anchors.bottom: parent.bottom
             anchors.bottomMargin: textMargin
@@ -167,14 +168,35 @@ Component {
             MouseArea {
                 anchors.fill: parent
                 onClicked: {
-                    posterImageId.state = posterImageId.state
-                            === expandPosterImage ? "" : expandPosterImage
-                    console.log(" posterImageId.state=" + posterImageId.state)
+                    if (model.poster !== "") {
+                        expandPosterImageState = (expandPosterImageState
+                                                  === expandPosterImage) ? "" : expandPosterImage
+                    }
                 }
             }
             states: [
                 State {
                     name: expandPosterImage
+                    PropertyChanges {
+                        target: posterImageId
+                        width: imageExpandedDimension
+                    }
+                    PropertyChanges {
+                        target: posterImageId
+                        height: imageExpandedDimension
+                    }
+                    PropertyChanges {
+                        target: gridTopId
+                        opacity: 0.25
+                    }
+                    PropertyChanges {
+                        target: gridBottomId
+                        opacity: 0.25
+                    }
+                },
+
+                State {
+                    name: ""
                     PropertyChanges {
                         target: posterImageId
                         width: imageDimension
@@ -185,22 +207,10 @@ Component {
                     }
                     PropertyChanges {
                         target: gridTopId
-                        opacity: 0
-                    }
-                },
-
-                State {
-                    name: ""
-                    PropertyChanges {
-                        target: posterImageId
-                        width: firstColumnWidth - 20
+                        opacity: 1
                     }
                     PropertyChanges {
-                        target: posterImageId
-                        height: firstColumnWidth - 20
-                    }
-                    PropertyChanges {
-                        target: gridTopId
+                        target: gridBottomId
                         opacity: 1
                     }
                 }
@@ -210,12 +220,17 @@ Component {
                     NumberAnimation {
                         target: posterImageId
                         properties: "width, height"
-                        duration: 1000
+                        duration: imageTransitionInteralMS
                     }
                     NumberAnimation {
                         target: gridTopId
                         properties: "opacity"
-                        duration: 1000
+                        duration: imageTransitionInteralMS
+                    }
+                    NumberAnimation {
+                        target: gridBottomId
+                        properties: "opacity"
+                        duration: imageTransitionInteralMS
                     }
                 }
             ]

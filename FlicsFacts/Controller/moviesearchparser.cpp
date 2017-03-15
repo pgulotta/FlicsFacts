@@ -216,9 +216,11 @@ void MovieSearchParser::parseMovieResponse(const QJsonObject &jsonObject, MovieR
 
         QString posterPath {extractText(jsonObject, posterPathKey)};
         if (posterPath == nullptr)
-            movieResponse->setPoster ( gDefaultField);
+            movieResponse->setPoster ( "");
         else
             movieResponse->setPoster (QString(posterUrlPrefix).arg(posterPath));
+
+        qDebug() << "poster path = " << movieResponse->poster();
 
         movieResponse->setGenre ( getGenres(jsonObject));
     }
