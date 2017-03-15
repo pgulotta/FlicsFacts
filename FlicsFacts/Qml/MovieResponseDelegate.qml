@@ -20,7 +20,7 @@ Component {
                                                         / (gridColumnCount + 2) : windowWidth
                                                         / (gridColumnCount + 2)
 
-
+        property int imageDimension: isPortraitMode ? windowHeight : windowHeight
 
         Grid {
             id: gridTopId
@@ -33,6 +33,34 @@ Component {
             columnSpacing: textMargin
             verticalItemAlignment: Grid.AlignBottom
             visible: model.runtime !== ""
+            opacity: 1
+//            state: ""
+//            states: [
+//                State {
+//                    name: expandPosterImage
+//                    PropertyChanges {
+//                        target: gridTopId
+//                        opacity: 0
+//                    }
+//                },
+
+//                State {
+//                    name: ""
+//                    PropertyChanges {
+//                        target: gridTopId
+//                        opacity: 1
+//                    }
+//                }
+//            ]
+//            transitions: [
+//                Transition {
+//                    NumberAnimation {
+//                        target: gridTopId
+//                        properties: "opacity"
+//                        duration: 1000
+//                    }
+//                }
+//            ]
             GridTitleLabel {
                 text: qsTr("Title")
             }
@@ -154,7 +182,7 @@ Component {
             id: posterImageId
             state: ""
             width: firstColumnWidth - 20
-            height: width
+            height: firstColumnWidth - 20
             opacity: 1
             source: model.poster
             anchors.bottom: parent.bottom
@@ -164,8 +192,9 @@ Component {
             MouseArea {
                 anchors.fill: parent
                 onClicked: {
-                    posterImageId.state =  posterImageId.state === expandPosterImage ? "" : expandPosterImage
-                    console.log( " posterImageId.state="+  posterImageId.state)
+                    posterImageId.state = posterImageId.state
+                            === expandPosterImage ? "" : expandPosterImage
+                    console.log(" posterImageId.state=" + posterImageId.state)
                 }
             }
             states: [
@@ -173,7 +202,11 @@ Component {
                     name: expandPosterImage
                     PropertyChanges {
                         target: posterImageId
-                        opacity: 0
+                        width: imageDimension
+                    }
+                    PropertyChanges {
+                        target: posterImageId
+                        height: imageDimension
                     }
                 },
 
@@ -181,7 +214,11 @@ Component {
                     name: ""
                     PropertyChanges {
                         target: posterImageId
-                        opacity: 1
+                        width: firstColumnWidth - 20
+                    }
+                    PropertyChanges {
+                        target: posterImageId
+                        height: firstColumnWidth - 20
                     }
                 }
             ]
@@ -189,14 +226,11 @@ Component {
                 Transition {
                     NumberAnimation {
                         target: posterImageId
-                        properties: "opacity"
+                        properties: "width, height"
                         duration: 1000
-                        easing.type: Easing.Linear
                     }
                 }
             ]
         }
-
-
     }
 }
