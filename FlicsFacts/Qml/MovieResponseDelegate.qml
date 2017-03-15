@@ -34,33 +34,8 @@ Component {
             verticalItemAlignment: Grid.AlignBottom
             visible: model.runtime !== ""
             opacity: 1
-//            state: ""
-//            states: [
-//                State {
-//                    name: expandPosterImage
-//                    PropertyChanges {
-//                        target: gridTopId
-//                        opacity: 0
-//                    }
-//                },
+            state: ""
 
-//                State {
-//                    name: ""
-//                    PropertyChanges {
-//                        target: gridTopId
-//                        opacity: 1
-//                    }
-//                }
-//            ]
-//            transitions: [
-//                Transition {
-//                    NumberAnimation {
-//                        target: gridTopId
-//                        properties: "opacity"
-//                        duration: 1000
-//                    }
-//                }
-//            ]
             GridTitleLabel {
                 text: qsTr("Title")
             }
@@ -208,6 +183,10 @@ Component {
                         target: posterImageId
                         height: imageDimension
                     }
+                    PropertyChanges {
+                        target: gridTopId
+                        opacity: 0
+                    }
                 },
 
                 State {
@@ -220,6 +199,10 @@ Component {
                         target: posterImageId
                         height: firstColumnWidth - 20
                     }
+                    PropertyChanges {
+                        target: gridTopId
+                        opacity: 1
+                    }
                 }
             ]
             transitions: [
@@ -227,6 +210,11 @@ Component {
                     NumberAnimation {
                         target: posterImageId
                         properties: "width, height"
+                        duration: 1000
+                    }
+                    NumberAnimation {
+                        target: gridTopId
+                        properties: "opacity"
                         duration: 1000
                     }
                 }
