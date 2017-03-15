@@ -10,7 +10,8 @@ Component {
     id: movieResponseDelegateId
     Item {
         id: movieResponseItemId
-        readonly property int tabAnimationDuration: 1000
+
+        readonly property string expandPosterImage: "expandImage"
         property int gridColumnCount: isPortraitMode ? 2 : 4
         property int flickableItemWidth: isPortraitMode ? windowWidth * .65 : windowWidth * .75
         property int plotItemHeight: isPortraitMode ? windowHeight * .35 : windowHeight * .2
@@ -18,6 +19,8 @@ Component {
         property int firstColumnWidth: isPortraitMode ? windowWidth
                                                         / (gridColumnCount + 2) : windowWidth
                                                         / (gridColumnCount + 2)
+
+
 
         Grid {
             id: gridTopId
@@ -30,12 +33,6 @@ Component {
             columnSpacing: textMargin
             verticalItemAlignment: Grid.AlignBottom
             visible: model.runtime !== ""
-            NumberAnimation on y {
-                easing.type: Easing.Linear
-                from: -windowHeight
-                to: 0
-                duration: 10
-            }
             GridTitleLabel {
                 text: qsTr("Title")
             }
@@ -103,12 +100,7 @@ Component {
             columnSpacing: textMargin
             rowSpacing: gridTopId.rowSpacing
             visible: gridTopId.visible
-            NumberAnimation on y {
-                easing.type: Easing.Linear
-                from: -windowHeight
-                to: 0
-                duration: tabAnimationDuration
-            }
+
             GridTitleLabel {
                 text: qsTr("Genre")
             }
@@ -160,13 +152,51 @@ Component {
         }
         Image {
             id: posterImageId
-            width: firstColumnWidth-20
+            state: ""
+            width: firstColumnWidth - 20
             height: width
+            opacity: 1
             source: model.poster
             anchors.bottom: parent.bottom
             anchors.bottomMargin: textMargin
             anchors.left: parent.left
             anchors.leftMargin: textMargin
+            MouseArea {
+                anchors.fill: parent
+                onClicked: {
+                    posterImageId.state =  posterImageId.state === expandPosterImage ? "" : expandPosterImage
+                    console.log( " posterImageId.state="+  posterImageId.state)
+                }
+            }
+            states: [
+                State {
+                    name: expandPosterImage
+                    PropertyChanges {
+                        target: posterImageId
+                        opacity: 0
+                    }
+                },
+
+                State {
+                    name: ""
+                    PropertyChanges {
+                        target: posterImageId
+                        opacity: 1
+                    }
+                }
+            ]
+            transitions: [
+                Transition {
+                    NumberAnimation {
+                        target: posterImageId
+                        properties: "opacity"
+                        duration: 1000
+                        easing.type: Easing.Linear
+                    }
+                }
+            ]
         }
+
+
     }
 }
