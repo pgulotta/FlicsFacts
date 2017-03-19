@@ -2,12 +2,14 @@ import QtQuick 2.7
 import QtQuick.Layouts 1.3
 import QtQuick.Window 2.2
 import QtQuick.Controls 2.1
+import QtQuick.Particles 2.0
 import QtQuick.Controls.Material 2.1
 
 Page {
     id: mainPageId
     property int animationDuration: 1000
 
+    property real emitterSizeVariation: isPortraitMode? windowHeight *.05 : windowWidth *.05
     signal menuSelected(string contextId, bool isClosed)
     signal buttonSelected(string contextId, int modelIndex)
 
@@ -75,6 +77,43 @@ Page {
                 to: 1.0
                 duration: animationDuration
             }
+        }
+    }
+    ParticleSystem {
+        anchors.fill: parent
+        ImageParticle {
+            anchors.fill: parent
+            source: "qrc:///particleresources/star.png"
+            color: "indigo"
+            greenVariation: 0.8
+        }
+
+        Emitter {
+            emitRate: 32
+            lifeSpan: 2800
+            size:  64
+            sizeVariation: emitterSizeVariation
+            velocity: PointDirection {
+                y: 0
+                yVariation:  -emitterSizeVariation
+            }
+            x: 0
+            width: windowWidth
+            height: windowHeight
+        }
+
+        Emitter {
+            emitRate: 32
+            lifeSpan: 2800
+            size:  32
+            sizeVariation: emitterSizeVariation
+            velocity: PointDirection {
+                x: 0
+                xVariation:  emitterSizeVariation
+            }
+            y: 0
+            width: windowWidth
+            height: windowHeight
         }
     }
 }

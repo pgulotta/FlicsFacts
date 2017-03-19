@@ -20,8 +20,8 @@ Component {
                                                         / (gridColumnCount + 2)
         property int imageDimension: firstColumnWidth - spacingIndent
         property int imageExpandedDimension: isPortraitMode ? windowWidth - spacingIndent : windowHeight - (4 * spacingIndent)
-        readonly property int imageTransitionInteralMS: 500
-        readonly property string expandPosterImage: "expandPosterImage"
+        property int imageTransitionInteralMS: 500
+        property string expandPosterImage: "expandPosterImage"
         property string expandPosterImageState: ""
 
         Grid {
@@ -160,7 +160,7 @@ Component {
             height: imageDimension
             color: "indigo"
             anchors.bottom: parent.bottom
-            anchors.bottomMargin: textMargin
+            anchors.bottomMargin: textMargin * 2
             anchors.left: parent.left
             anchors.leftMargin: textMargin
             visible: model.poster !== ""

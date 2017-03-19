@@ -220,8 +220,6 @@ void MovieSearchParser::parseMovieResponse(const QJsonObject &jsonObject, MovieR
         else
             movieResponse->setPoster (QString(posterUrlPrefix).arg(posterPath));
 
-        qDebug() << "poster path = " << movieResponse->poster();
-
         movieResponse->setGenre ( getGenres(jsonObject));
     }
 }
