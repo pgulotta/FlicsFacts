@@ -154,86 +154,92 @@ Component {
                 text: model.status
             }
         }
-        Image {
+        Rectangle {
             id: posterImageId
-            state: expandPosterImageState
             width: imageDimension
             height: imageDimension
-            fillMode: Image.PreserveAspectCrop
-            source: model.poster
+            color: "indigo"
             anchors.bottom: parent.bottom
             anchors.bottomMargin: textMargin
             anchors.left: parent.left
             anchors.leftMargin: textMargin
+            visible: model.poster !== ""
             MouseArea {
                 anchors.fill: parent
                 onClicked: {
-                    if (model.poster !== "") {
-                        expandPosterImageState = (expandPosterImageState
-                                                  === expandPosterImage) ? "" : expandPosterImage
-                    }
+                    expandPosterImageState = (expandPosterImageState
+                                              === expandPosterImage) ? "" : expandPosterImage
                 }
             }
-            states: [
-                State {
-                    name: expandPosterImage
-                    PropertyChanges {
-                        target: posterImageId
-                        width: imageExpandedDimension
-                    }
-                    PropertyChanges {
-                        target: posterImageId
-                        height: imageExpandedDimension
-                    }
-                    PropertyChanges {
-                        target: gridTopId
-                        opacity: 0.25
-                    }
-                    PropertyChanges {
-                        target: gridBottomId
-                        opacity: 0.25
-                    }
-                },
+            Image {
+                state: expandPosterImageState
+                width: imageDimension
+                height: imageDimension
+                fillMode: Image.PreserveAspectCrop
+                source: model.poster
+                anchors.fill: parent
+                anchors.margins: 4
+                states: [
+                    State {
+                        name: expandPosterImage
+                        PropertyChanges {
+                            target: posterImageId
+                            width: imageExpandedDimension
+                        }
+                        PropertyChanges {
+                            target: posterImageId
+                            height: imageExpandedDimension
+                        }
+                        PropertyChanges {
+                            target: gridTopId
+                            opacity: 0.25
+                        }
+                        PropertyChanges {
+                            target: gridBottomId
+                            opacity: 0.25
+                        }
+                    },
 
-                State {
-                    name: ""
-                    PropertyChanges {
-                        target: posterImageId
-                        width: imageDimension
+                    State {
+                        name: ""
+                        PropertyChanges {
+                            target: posterImageId
+                            width: imageDimension
+                        }
+                        PropertyChanges {
+                            target: posterImageId
+                            height: imageDimension
+                        }
+                        PropertyChanges {
+                            target: gridTopId
+                            opacity: 1
+                        }
+                        PropertyChanges {
+                            target: gridBottomId
+                            opacity: 1
+                        }
                     }
-                    PropertyChanges {
-                        target: posterImageId
-                        height: imageDimension
+                ]
+                transitions: [
+                    Transition {
+                        NumberAnimation {
+                            target: posterImageId
+                            properties: "width, height"
+                            duration: imageTransitionInteralMS
+                        }
+                        NumberAnimation {
+                            target: gridTopId
+                            properties: "opacity"
+                            duration: imageTransitionInteralMS
+                        }
+                        NumberAnimation {
+                            target: gridBottomId
+                            properties: "opacity"
+                            duration: imageTransitionInteralMS
+                        }
                     }
-                    PropertyChanges {
-                        target: gridTopId
-                        opacity: 1
-                    }
-                    PropertyChanges {
-                        target: gridBottomId
-                        opacity: 1
-                    }
-                }
-            ]
-            transitions: [
-                Transition {
-                    NumberAnimation {
-                        target: posterImageId
-                        properties: "width, height"
-                        duration: imageTransitionInteralMS
-                    }
-                    NumberAnimation {
-                        target: gridTopId
-                        properties: "opacity"
-                        duration: imageTransitionInteralMS
-                    }
-                    NumberAnimation {
-                        target: gridBottomId
-                        properties: "opacity"
-                        duration: imageTransitionInteralMS
-                    }
-                }
-            ]
+                ]
+            }
         }
     }
 }
