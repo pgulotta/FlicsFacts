@@ -26,8 +26,8 @@ ApplicationWindow {
 
     id: rootId
     visible: true
-    width: windowWidth
-    height: windowHeight
+    minimumWidth: windowWidth
+    minimumHeight: windowHeight
     color: Material.background
     title: MovieViewManager.appNameVersion
 

@@ -38,7 +38,7 @@ MovieViewManager::MovieViewManager(QObject *parent) :
     QObject{parent},
     m_networkFailureMessage{tr("Unable to access the internet at this time.\nYou may want to try again shortly.")},
     m_appName{gAppName},
-    m_appVersion{"1.14"},
+    m_appVersion{"1.15"},
     mShareResponsesFormatterformatter{parent},
     mShareResponsesWatcher{parent},
     mResponseParser{parent},

@@ -13,13 +13,13 @@ Component {
 
         property int gridColumnCount: isPortraitMode ? 2 : 4
         property int flickableItemWidth: isPortraitMode ? windowWidth * .65 : windowWidth * .75
-        property int plotItemHeight: isPortraitMode ? windowHeight * .35 : windowHeight * .2
-        property int actorsItemHeight: isPortraitMode ? plotItemHeight * .3 : plotItemHeight * .5
+        property int plotItemHeight: isPortraitMode ? windowHeight * .4 : windowHeight * .2
+        property int actorsItemHeight: isPortraitMode ? plotItemHeight * .35 : plotItemHeight * .5
         property int firstColumnWidth: isPortraitMode ? windowWidth
                                                         / (gridColumnCount + 2) : windowWidth
                                                         / (gridColumnCount + 2)
         property int imageDimension: firstColumnWidth - spacingIndent
-        property int imageExpandedDimension: isPortraitMode ? windowWidth - spacingIndent : windowHeight - (4 * spacingIndent)
+        property int imageExpandedDimension: isPortraitMode ? windowWidth - spacingIndent : windowHeight *.75
         property int imageTransitionInteralMS: 500
         property string expandPosterImage: "expandPosterImage"
         property string expandPosterImageState: ""
