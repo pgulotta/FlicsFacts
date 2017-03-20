@@ -13,8 +13,8 @@ Component {
 
         property int gridColumnCount: isPortraitMode ? 2 : 4
         property int flickableItemWidth: isPortraitMode ? windowWidth * .65 : windowWidth * .75
-        property int plotItemHeight: isPortraitMode ? windowHeight * .4 : windowHeight * .2
-        property int actorsItemHeight: isPortraitMode ? plotItemHeight * .35 : plotItemHeight * .5
+        property int plotItemHeight: isPortraitMode ? windowHeight * .3 : windowHeight * .2
+        property int actorsItemHeight: isPortraitMode ? windowHeight * .15 : windowHeight * .10
         property int firstColumnWidth: isPortraitMode ? windowWidth
                                                         / (gridColumnCount + 2) : windowWidth
                                                         / (gridColumnCount + 2)
