@@ -9,7 +9,7 @@
 
 class QString;
 
-class ShareResponsesFormatter : public QObject
+class ShareResponsesFormatter final : public QObject
 {
 Q_OBJECT
 

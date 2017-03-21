@@ -3,7 +3,7 @@
 #include "../FlicsFacts/Model/movieresponse.hpp"
 #include <QSortFilterProxyModel>
 
-class SortedMovieResponsesModel : public QSortFilterProxyModel
+class SortedMovieResponsesModel final : public QSortFilterProxyModel
 {
 Q_OBJECT
 

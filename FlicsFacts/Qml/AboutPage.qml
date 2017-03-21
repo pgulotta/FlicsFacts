@@ -5,10 +5,10 @@ import QtQuick.Controls.Material 2.1
 
 Page {
     id: aboutPageId
+
     property int gridControlsWidth: aboutPageId.availableWidth * .9
 
     header: ToolBar {
-        Material.elevation: 4
         ToolButton {
             id: backToolButtonId
             visible: true

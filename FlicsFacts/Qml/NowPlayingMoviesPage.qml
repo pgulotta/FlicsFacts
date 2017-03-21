@@ -16,12 +16,12 @@ Page {
     SwipeView {
         id: nowPlayingMoviesSwipeViewId
         anchors.fill: parent
-        clip: true
         currentIndex: 0
         Repeater {
             id: movieResponseModelId
             model: sortedNowPlayingMoviesResponses
-            delegate: movieResponseDelegateId
+            delegate: MovieResponseDelegate {
+            }
         }
     }
     PageIndicator {
@@ -29,10 +29,6 @@ Page {
         currentIndex: nowPlayingMoviesSwipeViewId.currentIndex
         anchors.bottom: parent.bottom
         anchors.horizontalCenter: parent.horizontalCenter
-    }
-
-    MovieResponseDelegate {
-        id: movieResponseDelegateId
     }
 
     Connections {

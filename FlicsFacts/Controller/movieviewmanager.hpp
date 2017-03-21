@@ -19,7 +19,7 @@ class QTimer;
 class NetworkQueryDetails;
 
 
-class MovieViewManager : public QObject
+class MovieViewManager final : public QObject
 {
 Q_OBJECT
 Q_PROPERTY(QString requestFailed READ requestFailed CONSTANT )

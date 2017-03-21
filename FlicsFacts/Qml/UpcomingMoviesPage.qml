@@ -15,13 +15,12 @@ Page {
     SwipeView {
         id: upcomingMoviesSwipeViewId
         anchors.fill: parent
-        clip: true
-
         currentIndex: 0
         Repeater {
             id: upcoingMoviesModelId
             model: sortedUpcomingMoviesResponses
-            delegate: movieResponseDelegateId
+            delegate: MovieResponseDelegate {
+            }
         }
     }
     PageIndicator {
@@ -29,10 +28,6 @@ Page {
         currentIndex: upcomingMoviesSwipeViewId.currentIndex
         anchors.bottom: parent.bottom
         anchors.horizontalCenter: parent.horizontalCenter
-    }
-
-    MovieResponseDelegate {
-        id: movieResponseDelegateId
     }
 
     Connections {

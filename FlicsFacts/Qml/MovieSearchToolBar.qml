@@ -8,7 +8,6 @@ import "../fam"
 
 ToolBar {
     id: movieSearchToolBarId
-    Material.elevation: 4
 
     Component.onCompleted: {
         titleRequestId.forceActiveFocus()

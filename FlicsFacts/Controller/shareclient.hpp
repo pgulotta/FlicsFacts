@@ -3,7 +3,7 @@
 
 
 
-class ShareClient : public QObject
+class ShareClient final : public QObject
 {
 Q_OBJECT
 

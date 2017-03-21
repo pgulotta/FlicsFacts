@@ -15,7 +15,6 @@ Page {
 
     header: ToolBar {
         id: mainToolBarId
-        Material.elevation: 4
         ToolButton {
             id: mainToolButtonId
             visible: true

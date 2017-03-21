@@ -38,14 +38,16 @@ MovieViewManager::MovieViewManager(QObject *parent) :
     QObject{parent},
     m_networkFailureMessage{tr("Unable to access the internet at this time.\nYou may want to try again shortly.")},
     m_appName{gAppName},
-    m_appVersion{"1.15"},
+    m_appVersion{"1.16"},
     mShareResponsesFormatterformatter{parent},
     mShareResponsesWatcher{parent},
     mResponseParser{parent},
     mNetworkQueryTimer{ new QTimer {
         parent
     }},
-    mMovieSearchResponses { parent},mNowPlayingMoviesResponses {parent},mUpcomingMoviesResponses { parent},
+    mMovieSearchResponses {parent},
+mNowPlayingMoviesResponses {parent},
+mUpcomingMoviesResponses { parent},
 mSortedNowPlayingMoviesResponses { &mNowPlayingMoviesResponses, parent},
 mSortedUpcomingMoviesResponses { &mUpcomingMoviesResponses, parent}
 

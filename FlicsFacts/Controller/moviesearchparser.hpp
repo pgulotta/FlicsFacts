@@ -9,7 +9,7 @@ class QByteArray;
 class MovieViewManager;
 
 
-class MovieSearchParser : public QObject
+class MovieSearchParser final : public QObject
 {
 Q_OBJECT
 

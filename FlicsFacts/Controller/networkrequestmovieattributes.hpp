@@ -19,7 +19,7 @@ enum class queryType
 };
 
 
-class NetworkRequestMovieAttributes
+class NetworkRequestMovieAttributes final
 {
 public:
     const int NoResourceId = -1;

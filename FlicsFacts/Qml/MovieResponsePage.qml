@@ -19,13 +19,11 @@ Page {
     SwipeView {
         id: movieSwipeViewId
         anchors.fill: parent
-        clip: true
-
         currentIndex: 0
         Repeater {
             id: movieResponseModelId
             model: movieSearchResponses
-            delegate: movieResponseDelegateId
+            delegate: MovieResponseDelegate{}
         }
         onCurrentIndexChanged: MovieViewManager.tryQueryMovieSearch(
                                    currentIndex)
@@ -35,10 +33,6 @@ Page {
         currentIndex: movieSwipeViewId.currentIndex
         anchors.bottom: parent.bottom
         anchors.horizontalCenter: parent.horizontalCenter
-    }
-
-    MovieResponseDelegate {
-        id: movieResponseDelegateId
     }
 
     FloatingActionMenu {

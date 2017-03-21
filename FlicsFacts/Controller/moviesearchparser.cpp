@@ -13,6 +13,8 @@
 
 static QString gNotDefined { QObject::tr("Not Defined")};
 static QString gDefaultField { "        "};
+static QDate upcomingMovieDateFloor {QDate::currentDate().addDays(-5)};
+static QDate nowPlayingMovieDateFloor {QDate::currentDate().addDays(-120)};
 const QString homepageKey {"homepage"};
 const QString runtimeKey {"runtime"};
 const QString castKey {"cast"};
@@ -51,7 +53,6 @@ static QHash<int, QString> mGenres
     {10752, QObject::tr("War")},
     {37, QObject::tr("Western")}
 };
-
 
 static QString convertJsonDoubleToString(const QJsonObject& jsonObject, const QString& key  )
 {
@@ -100,6 +101,26 @@ QString extractInt(const QJsonObject& jsonObject,  const QString& key )
         }
     }
     return nullptr;
+}
+
+static bool isUpcomingMovieValid(const QJsonObject& jsonObject)
+{
+    QString releaseDate {extractText(jsonObject, releaseDateKey)};
+    if (releaseDate == nullptr)
+        return false;
+
+    auto date = QDate::fromString(releaseDate, Qt::ISODate);
+    return date > upcomingMovieDateFloor;
+}
+
+static bool isNowPlayingMovieValid(const QJsonObject& jsonObject)
+{
+    QString releaseDate {extractText(jsonObject, releaseDateKey)};
+    if (releaseDate == nullptr)
+        return false;
+
+    auto date = QDate::fromString(releaseDate, Qt::ISODate);
+    return date > nowPlayingMovieDateFloor;
 }
 
 static QString getLanguages(const QJsonObject& jsonObject)
@@ -284,10 +305,14 @@ void MovieSearchParser::parseNowPlaying( const QByteArray& source, QQmlObjectLis
                             destination.clear();
                             for(auto arrayItem : resultsArray)
                             {
-                                destination.append( new MovieResponse( this));
-                                responseId = destination.count()-1;
-                                parseMovieResponse(arrayItem.toObject(), destination.at(responseId));
-                                emit nowPlayingParsingComplete( responseId, success);
+                                auto itemObject = arrayItem.toObject();
+                                if ( isNowPlayingMovieValid(itemObject))
+                                {
+                                    destination.append( new MovieResponse( this));
+                                    responseId = destination.count()-1;
+                                    parseMovieResponse(itemObject, destination.at(responseId));
+                                    emit nowPlayingParsingComplete( responseId, success);
+                                }
                             }
                         }
                     }
@@ -300,6 +325,7 @@ void MovieSearchParser::parseNowPlaying( const QByteArray& source, QQmlObjectLis
         }
     }
 }
+
 
 void MovieSearchParser::parseUpcomingMovies(const QByteArray &source, QQmlObjectListModel<MovieResponse>& destination,  int responseId)
 {
@@ -323,10 +349,14 @@ void MovieSearchParser::parseUpcomingMovies(const QByteArray &source, QQmlObject
                             destination.clear();
                             for(auto arrayItem : resultsArray)
                             {
-                                destination.append( new MovieResponse( this));
-                                responseId = destination.count()-1;
-                                parseMovieResponse(arrayItem.toObject(), destination.at(responseId));
-                                emit upcomingMoviesParsingComplete(responseId, success);
+                                auto itemObject = arrayItem.toObject();
+                                if ( isUpcomingMovieValid(itemObject))
+                                {
+                                    destination.append( new MovieResponse( this));
+                                    responseId = destination.count()-1;
+                                    parseMovieResponse(itemObject, destination.at(responseId));
+                                    emit upcomingMoviesParsingComplete(responseId, success);
+                                }
                             }
                         }
                     }
@@ -339,6 +369,7 @@ void MovieSearchParser::parseUpcomingMovies(const QByteArray &source, QQmlObject
         }
     }
 }
+
 
 void MovieSearchParser::parseMovieDetails(const QByteArray& source, QQmlObjectListModel<MovieResponse>& destination,  int responseId)
 {

@@ -5,7 +5,6 @@ import QtQuick.Controls 2.1
 import QtQuick.Controls.Material 2.1
 
 ApplicationWindow {
-
     readonly property bool isAndroidPlatform: Qt.platform.os === "android"
     readonly property int tabHeight: 30
     readonly property int columnItemIndent: 100

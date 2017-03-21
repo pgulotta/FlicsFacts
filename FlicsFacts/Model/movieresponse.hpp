@@ -10,7 +10,7 @@
 #include <QSortFilterProxyModel>
 
 
-class MovieResponse : public QObject
+class MovieResponse final : public QObject
 {
 Q_OBJECT
 Q_PROPERTY(QString title READ title WRITE setTitle NOTIFY titleChanged )

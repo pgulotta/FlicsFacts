@@ -4,7 +4,7 @@
 #include <QQmlApplicationEngine>
 #include <QObject>
 
-class Initializer : public QObject
+class Initializer final : public QObject
 {
 public:
     Q_OBJECT

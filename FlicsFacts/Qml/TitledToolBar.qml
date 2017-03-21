@@ -7,9 +7,8 @@ import QtQuick.Controls.Material 2.1
 import "../fam"
 
 ToolBar {
+    id: titleToolBarId
     property string pageTitle: MovieViewManager.appName
-
-    Material.elevation: 4
     ToolButton {
         id: backToolButtonId
         visible: true
@@ -24,10 +23,9 @@ ToolBar {
         onClicked: onBackSelected()
     }
     Label {
-        text:pageTitle
+        text: pageTitle
         color: "white"
         font.pixelSize: fontSizeXLarge
         anchors.centerIn: parent
     }
-
 }

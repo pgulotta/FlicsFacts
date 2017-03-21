@@ -7,7 +7,6 @@ import QtQuick.Controls.Material 2.1
 import "../fam"
 
 Component {
-    id: movieResponseDelegateId
     Item {
         id: movieResponseItemId
 
