@@ -158,8 +158,8 @@ Component {
             id: posterImageId
             width: imageDimension
             height: imageDimension
-            color: "indigo"
-            radius: 4
+            color: "white"
+            radius: 2
             anchors.bottom: parent.bottom
             anchors.bottomMargin: textMargin * 2
             anchors.left: parent.left
@@ -179,7 +179,7 @@ Component {
                 fillMode: Image.PreserveAspectCrop
                 source: model.poster
                 anchors.fill: parent
-                anchors.margins: 4
+                anchors.margins: 2
                 states: [
                     State {
                         name: expandPosterImage

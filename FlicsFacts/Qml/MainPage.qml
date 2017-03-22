@@ -8,8 +8,8 @@ import QtQuick.Controls.Material 2.1
 Page {
     id: mainPageId
     property int animationDuration: 1000
-
-    property real emitterSizeVariation: isPortraitMode? windowHeight *.05 : windowWidth *.05
+    property int emiitterSize: 64
+    property real emitterSizeVariation: emiitterSize * .5
     signal menuSelected(string contextId, bool isClosed)
     signal buttonSelected(string contextId, int modelIndex)
 
@@ -84,33 +84,19 @@ Page {
             anchors.fill: parent
             source: "qrc:///particleresources/star.png"
             color: "indigo"
-            greenVariation: 0.8
+            blueVariation: 0.5
         }
 
         Emitter {
             emitRate: 32
-            lifeSpan: 2800
-            size:  64
+            lifeSpan: 3000
+            size: emiitterSize
             sizeVariation: emitterSizeVariation
             velocity: PointDirection {
                 y: 0
-                yVariation:  -emitterSizeVariation
+                yVariation: -emitterSizeVariation
             }
             x: 0
-            width: windowWidth
-            height: windowHeight
-        }
-
-        Emitter {
-            emitRate: 32
-            lifeSpan: 2800
-            size:  32
-            sizeVariation: emitterSizeVariation
-            velocity: PointDirection {
-                x: 0
-                xVariation:  emitterSizeVariation
-            }
-            y: 0
             width: windowWidth
             height: windowHeight
         }
