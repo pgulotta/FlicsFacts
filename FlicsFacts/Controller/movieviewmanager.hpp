@@ -131,7 +131,7 @@ private:
     ShareResponsesFormatter mShareResponsesFormatterformatter;
     QFutureWatcher<QString> mShareResponsesWatcher;
     MovieSearchParser mResponseParser;
-    QTimer* mNetworkQueryTimer;
+    QPointer<QTimer> mNetworkQueryTimer = new QTimer;
     QQmlObjectListModel<MovieResponse> mMovieSearchResponses;
     QQmlObjectListModel<MovieResponse> mNowPlayingMoviesResponses;
     QQmlObjectListModel<MovieResponse> mUpcomingMoviesResponses;

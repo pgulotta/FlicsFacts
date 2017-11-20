@@ -9,8 +9,6 @@
 #include <QTimer>
 
 
-const QString gAppName {"FlicsFacts"};
-
 const int gQueryTimerIntervalMs         {1000};
 const QString gMovieSearchRequest       {"http://api.themoviedb.org/3/search/movie?api_key=2839bfb130659459d7d9972ad9aa3cd4&language=en-US&query=%1&page=1&include_adult=false"};
 const QString gMovieDetailsRequest      {"http://api.themoviedb.org/3/movie/%1?api_key=2839bfb130659459d7d9972ad9aa3cd4&language=en-US"};
@@ -37,19 +35,16 @@ QString formatMovieCreditsUrl(int movieId)
 MovieViewManager::MovieViewManager(QObject *parent) :
     QObject{parent},
     m_networkFailureMessage{tr("Unable to access the internet at this time.\nYou may want to try again shortly.")},
-    m_appName{gAppName},
-    m_appVersion{"1.17"},
+    m_appName{QCoreApplication::applicationName()},
+    m_appVersion{QCoreApplication::applicationVersion()},
     mShareResponsesFormatterformatter{parent},
     mShareResponsesWatcher{parent},
     mResponseParser{parent},
-    mNetworkQueryTimer{ new QTimer {
-        parent
-    }},
     mMovieSearchResponses {parent},
-mNowPlayingMoviesResponses {parent},
-mUpcomingMoviesResponses { parent},
-mSortedNowPlayingMoviesResponses { &mNowPlayingMoviesResponses, parent},
-mSortedUpcomingMoviesResponses { &mUpcomingMoviesResponses, parent}
+    mNowPlayingMoviesResponses {parent},
+    mUpcomingMoviesResponses { parent},
+    mSortedNowPlayingMoviesResponses { &mNowPlayingMoviesResponses, parent},
+    mSortedUpcomingMoviesResponses { &mUpcomingMoviesResponses, parent}
 
 {
     connect(&mNetworkAccessManager, &QNetworkAccessManager::finished, this, &MovieViewManager::onNetworkReply);
@@ -407,7 +402,6 @@ void MovieViewManager::onNetworkQueryTimer()
             queryMovieCredits(networkQueryDetails.movieId, networkQueryDetails.creditsAttributes);
             queryMovieDetails (networkQueryDetails.movieId, networkQueryDetails.detailsAttributes );
             mNetworkQueryTimer->start(gQueryTimerIntervalMs);
-            mNetworkQueryTimer->start(gQueryTimerIntervalMs);
         }
     }
     catch(std::exception const & e)
@@ -449,6 +443,7 @@ void MovieViewManager::onNowPlayingParsingComplete(int responseId, bool successf
 {
     try
     {
+        //qDebug() << "MovieViewManager::onNowPlayingParsingComplete for responseId: " << responseId;
         auto movieResponse = mNowPlayingMoviesResponses.at(responseId);
         if (successful)
         {

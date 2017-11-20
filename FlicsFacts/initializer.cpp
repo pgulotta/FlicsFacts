@@ -2,7 +2,6 @@
 
 #include <QApplication>
 #include <QQmlContext>
-#include <QQuickStyle>
 
 #ifdef Q_OS_ANDROID
 #include <QtAndroid>
@@ -14,10 +13,6 @@ Initializer::Initializer(QObject *parent) :
     QObject{parent},
     mMovieViewManager{parent}
 {
-
-    QApplication::setApplicationName(tr("FlicsFacts"));
-    QApplication::setOrganizationName("26Apps");
-    QQuickStyle::setStyle("Material");
     QQmlApplicationEngine engine;
 
     FloatingActions::initialize(engine.rootContext(), &mQmlApplicationEngine);

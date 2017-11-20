@@ -1,0 +1,15 @@
+INPUT(
+./release\testflicsfacts.o
+./release\moviesearchparser.o
+./release\shareresponsesformatter.o
+./release\movieviewmanager.o
+./release\shareclient.o
+./release\qrc_resources.o
+./release\moc_movieresponse.o
+./release\moc_sortedmovieresponsesmodel.o
+./release\moc_moviesearchparser.o
+./release\moc_shareresponsesformatter.o
+./release\moc_movieviewmanager.o
+./release\moc_shareclient.o
+./release\moc_qqmlobjectlistmodel.o
+);

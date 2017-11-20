@@ -67,6 +67,16 @@ Page {
             text: " "
         }
         HeadingLabel {
+            text: qsTr("Privacy")
+        }
+        TextLabel {
+            width: gridControlsWidth
+            text: qsTr("FlicFacts does not request or share any personal information with third parties. It does not request or know the user's physical location.")
+        }
+        Label {
+            text: " "
+        }
+        HeadingLabel {
             text: qsTr("Credits")
         }
         TextLabel {
@@ -78,18 +88,18 @@ Page {
         TextLabel {
             width: gridControlsWidth
             text: "<a href=\"" + qtLink + "\">Qt Company</a>"
-                  + " software is used to develop FlicFacts."
+                  + " software is used to develop FlicFacts.  FlicFacts is developed under the Qt Company GNU Lesser General Public License v. 3 (“LGPL”) open-source license."
             onLinkActivated: Qt.openUrlExternally(qtLink)
         }
         Label {
             text: " "
         }
         HeadingLabel {
-            text: qsTr("Privacy")
+            text: qsTr("Disclaimer")
         }
         TextLabel {
             width: gridControlsWidth
-            text: qsTr("FlicFacts does not request or share any personal information with third parties.It does not request or know the user's physical location.")
+            text: qsTr("FlicFacts provided by 26Apps is supplied 'AS IS' without any warranties and support. ")
         }
     }
 }
